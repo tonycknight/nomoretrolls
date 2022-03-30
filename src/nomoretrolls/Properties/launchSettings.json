@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "nomoretrolls": {
+      "commandName": "Project",
+      "commandLineArgs": "start  C:\\Projects\\nomoretrolls\\config_dev.json"
+    }
+  }
+}

@@ -1,0 +1,81 @@
+name: Build & Release
+
+
+on:
+  push:
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v1.9.0
+        with:
+          dotnet-version: "6.0.x"
+        
+      - name: dotnet tool restore
+        run: dotnet tool restore
+              
+      - name: Run build
+        run: dotnet fake run "build.fsx" -t "All"
+
+      - name: Archive Test results
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: tests.results
+          path: |
+            ./tests/**/TestResults/*
+            
+      - name: Archive Stryker results
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: stryker.results
+          path: |
+            ./StrykerOutput/**
+
+      - name: Archive Code coverage
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: codecoverage
+          path: ./publish/codecoverage/*.*
+
+      - name: Archive Ubuntu build
+        uses: actions/upload-artifact@v2
+        with:
+          name: nomoretrolls-ubuntu-x64
+          path: ./publish/ubuntu-x64/nomoretrolls/*.*
+
+      - name: Unit test results
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: unit test results
+          path: ${{ github.workspace }}/tests/nomoretrolls.tests/TestResults/test_results.trx
+          reporter: dotnet-trx
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Code coverage results
+        uses: 5monkeys/cobertura-action@master
+        if: always()
+        with:
+          path: ${{ github.workspace }}/tests/nomoretrolls.tests/TestResults/coverage.info
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          minimum_coverage: 0
+          fail_below_threshold: true
+          show_line: true
+          show_branch: true
+          show_missing: true
+          show_class_names: true
+          link_missing_lines: true
+          report_name: code coverage results
+
+  

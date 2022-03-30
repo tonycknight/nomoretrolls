@@ -1,0 +1,8 @@
+Microsoft.NET.Test.Sdk
+coverlet.collector
+coverlet.msbuild
+xunit
+xunit.runner.visualstudio
+NSubstitute
+FluentAssertions
+FsCheck.Xunit

@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32126.317
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "nomoretrolls", "src\nomoretrolls\nomoretrolls.csproj", "{7869D856-682A-4417-A471-A6F32EEAAA60}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{F4D6324A-EFAF-4019-914E-E0EE90AA1B15}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{9BCCB933-30FC-455B-AD78-5ED71577BE00}"
+	ProjectSection(SolutionItems) = preProject
+		build.bat = build.bat
+		build.fsx = build.fsx
+		.github\workflows\build.yml = .github\workflows\build.yml
+		paket.dependencies = paket.dependencies
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D4BBA103-1AA7-4F97-9257-14A89E816E4F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{D3419E54-F3FD-4B97-A667-91C3E405234A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "nomoretrolls.tests", "tests\nomoretrolls.tests\nomoretrolls.tests.csproj", "{7EEA942F-4628-468F-B884-CD50F7ADF6A9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7869D856-682A-4417-A471-A6F32EEAAA60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7869D856-682A-4417-A471-A6F32EEAAA60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7869D856-682A-4417-A471-A6F32EEAAA60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7869D856-682A-4417-A471-A6F32EEAAA60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EEA942F-4628-468F-B884-CD50F7ADF6A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EEA942F-4628-468F-B884-CD50F7ADF6A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EEA942F-4628-468F-B884-CD50F7ADF6A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EEA942F-4628-468F-B884-CD50F7ADF6A9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7869D856-682A-4417-A471-A6F32EEAAA60} = {D4BBA103-1AA7-4F97-9257-14A89E816E4F}
+		{7EEA942F-4628-468F-B884-CD50F7ADF6A9} = {D3419E54-F3FD-4B97-A667-91C3E405234A}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A5288102-8AF7-4EEF-86CC-CE45CBF30290}
+	EndGlobalSection
+EndGlobal
