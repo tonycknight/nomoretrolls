@@ -61,7 +61,7 @@ namespace nomoretrolls.tests.Workflows
         }
 
         [Fact]
-        public void MessageIsCapitalsFilter()
+        public void MessageIsShoutingFilter()
         {
             var sp = CreateMockServiceProvider();
             sp.GetService(typeof(IEmoteGenerator)).Returns(Substitute.For<IEmoteGenerator>());
@@ -69,12 +69,12 @@ namespace nomoretrolls.tests.Workflows
 
             var builder = new MessageWorkflowBuilder(sp)
                                     .Receiver(Substitute.For<IMessageContextReceiver>())
-                                    .MessageIsCapitalsFilter();
+                                    .MessageIsShoutingFilter();
 
 
             var result = builder.Build().Parts.ToList();
 
-            result[0].Should().BeOfType<MessageIsCapitalsFilter>();
+            result[0].Should().BeOfType<MessageIsShoutingFilter>();
         }
 
         [Fact]
