@@ -1,0 +1,6 @@
+McMaster.Extensions.CommandLineUtils
+Microsoft.Extensions.DependencyInjection
+crayon
+Discord.Net
+Newtonsoft.Json
+MongoDB.Driver
