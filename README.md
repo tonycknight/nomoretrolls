@@ -1,6 +1,6 @@
 # nomoretrolls - A Discord bot to counter the awkward
 
-## **This is a work in progress!**
+## ** :warning: This is a work in progress! **
 
 
 [![Build & Release](https://github.com/tonycknight/nomoretrolls/actions/workflows/build.yml/badge.svg)](https://github.com/tonycknight/nomoretrolls/actions/workflows/build.yml)
@@ -18,7 +18,7 @@ Discord getting unruly? Some folks don't know when to shut up? Tired of long fir
 
 * You'll need access to a Mongo DB server. [MongoDB Atlas](https://www.mongodb.com/atlas/database) will be useful for initial trials.
 
-* To build, run [build.bat](./build.bat) 
+* To build, run [``build.bat``](./build.bat) 
 
   or 
 
@@ -32,7 +32,7 @@ Discord getting unruly? Some folks don't know when to shut up? Tired of long fir
 
 # Configuration
 
-**Work in progress! This is not sufficiently secure for a production environment. Please make sure this is in a secure folder!**
+** :warning: Work in progress! This is not sufficiently secure for a production environment!**
 
 ```json
 {
@@ -61,7 +61,7 @@ You'll need to set up 2 Discord bot accounts, and these will need configuration.
 
 ## Chat bot
 
-The Chat bot will scan discord users' messages and react. 
+The Chat bot will scan discord users' messages and react to them accordingly. 
 
 You'll need the bot's client ID, secret and token in the configuration, and give the bot the following permissions:
 
@@ -78,7 +78,7 @@ You'll need the bot's client ID, secret and token in the configuration, and give
 
 ## Admin bot
 
-The bot is managed by a discrete bot. You'll want to register this bot to a private channel where only authorised admins have access.
+The bot is managed by another, discrete bot. You'll want to register this bot to a private channel where only authorised admins have access.
 
 You'll need the bot's client ID, secret and token in the configuration, and give the bot the following permissions:
 
