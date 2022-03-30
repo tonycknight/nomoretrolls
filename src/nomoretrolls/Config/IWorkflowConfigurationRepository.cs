@@ -2,7 +2,7 @@
 {
     internal interface IWorkflowConfigurationRepository
     {
-        public const string CapitalsWorkflow = "capitals";
+        public const string ShoutingWorkflow = "shouting";
         public const string BlacklistWorkflow = "blacklist";
 
         public Task<IList<WorkflowConfiguration>> GetWorkflowConfigsAsync();

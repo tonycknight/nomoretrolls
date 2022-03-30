@@ -1,12 +1,11 @@
 ﻿using nomoretrolls.Parsing;
-using nomoretrolls.Workflows.Reactions;
 
 namespace nomoretrolls.Workflows.Parts
 {
-    internal class MessageIsCapitalsFilter : IMessageWorkflowPart
+    internal class MessageIsShoutingFilter : IMessageWorkflowPart
     {
         
-        public MessageIsCapitalsFilter()
+        public MessageIsShoutingFilter()
         {
         }
 

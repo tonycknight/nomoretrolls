@@ -5,10 +5,17 @@
 
 [![Build & Release](https://github.com/tonycknight/nomoretrolls/actions/workflows/build.yml/badge.svg)](https://github.com/tonycknight/nomoretrolls/actions/workflows/build.yml)
 
-Discord getting unruly? Some folks don't know when to shut up? Tired of long fireside chats, and being ignored?
+Discord getting unruly? Some folks don't know how to read rooms, nor when to shut up? Tired of long fireside chats, and being ignored? **Then it's time to troll the trolls!**
 
-**Then it's time to out-troll the trolls!**
+--- 
 
+# Features
+
+* Ramped-up annoyance of blacklisted users
+
+* Ramped-up silencing of shouting users
+
+Details can be found [here](./docs/bot_actions.md).
 
 --- 
 
@@ -18,7 +25,9 @@ Discord getting unruly? Some folks don't know when to shut up? Tired of long fir
 
 * You'll need access to a Mongo DB server. [MongoDB Atlas](https://www.mongodb.com/atlas/database) will be useful for initial trials.
 
-* To build, run [``build.bat``](./build.bat) 
+* To build, run
+
+  ``build.bat``
 
   or 
 
@@ -30,58 +39,13 @@ Discord getting unruly? Some folks don't know when to shut up? Tired of long fir
 
   ``.\nomoretrolls.exe start <path to config file>``
 
-# Configuration
+  See [discord configuration](./docs/discord_config.md) for details on configuration.
 
-** :warning: Work in progress! This is not sufficiently secure for a production environment!**
+--- 
 
-```json
-{
-  "discord": {
-    "clientToken": "<bot token>",
-    "clientId": "<client id>",
-    "clientSecret": "<client secret>"
-  },
-  "discordAdmin": {
-    "clientToken": "<bot token>",
-    "clientId": "<client id>",
-    "clientSecret": "<client secret>"
-  },
-  "mongoDb": {
-    "connection": "<mongo DB connection name>"
-  },
-  "telemetry": {
-    "logMessageContent": false
-  }
-}
-```
+# Installation
 
-# Discord Integration
+Discord Configuration: see [discord configuration](./docs/discord_config.md).
 
-You'll need to set up 2 Discord bot accounts, and these will need configuration. You can register your own [Discord bots here](https://discord.com/developers/applications/), and [Discord.Net gives a good introduction guide](https://discordnet.dev/guides/getting_started/first-bot.html).
-
-## Chat bot
-
-The Chat bot will scan discord users' messages and react to them accordingly. 
-
-You'll need the bot's client ID, secret and token in the configuration, and give the bot the following permissions:
-
-* send messages
-* create public threads
-* create private threads
-* send messages in threads
-* manage messages
-* manage threads
-* embed links
-* attach files
-* read message history
-* add reactions
-
-## Admin bot
-
-The bot is managed by another, discrete bot. You'll want to register this bot to a private channel where only authorised admins have access.
-
-You'll need the bot's client ID, secret and token in the configuration, and give the bot the following permissions:
-
-* send messages
-* read message history
+Bot Configuration: see [bot configuration](./docs/bot_config.md).
 

@@ -39,8 +39,8 @@ namespace nomoretrolls.Workflows
             return this;
         }
 
-        public IMessageWorkflowBuilder IfCapitalsFilterEnabled()
-            => this.Part(new Parts.WorkflowConfigEnabled(_serviceProvider.GetService<Config.IWorkflowConfigurationRepository>(), Config.IWorkflowConfigurationRepository.CapitalsWorkflow));
+        public IMessageWorkflowBuilder IfShoutingFilterEnabled()
+            => this.Part(new Parts.WorkflowConfigEnabled(_serviceProvider.GetService<Config.IWorkflowConfigurationRepository>(), Config.IWorkflowConfigurationRepository.ShoutingWorkflow));
 
         public IMessageWorkflowBuilder IfBlacklistFilterEnabled()
             => this.Part(new Parts.WorkflowConfigEnabled(_serviceProvider.GetService<Config.IWorkflowConfigurationRepository>(), Config.IWorkflowConfigurationRepository.BlacklistWorkflow));
@@ -65,8 +65,8 @@ namespace nomoretrolls.Workflows
             return this.Part(part);
         }
 
-        public IMessageWorkflowBuilder MessageIsCapitalsFilter() 
-            => this.Part(new Parts.MessageIsCapitalsFilter());
+        public IMessageWorkflowBuilder MessageIsShoutingFilter() 
+            => this.Part(new Parts.MessageIsShoutingFilter());
 
 
         public IMessageWorkflowBuilder Noop()

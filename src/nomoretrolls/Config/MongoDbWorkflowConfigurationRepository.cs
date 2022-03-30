@@ -27,7 +27,7 @@ namespace nomoretrolls.Config
                               .ToDictionary(dto => dto.Name, dto => dto.FromDto(), StringComparer.InvariantCultureIgnoreCase);
 
             var names = new[] {
-                IWorkflowConfigurationRepository.CapitalsWorkflow,
+                IWorkflowConfigurationRepository.ShoutingWorkflow,
                 IWorkflowConfigurationRepository.BlacklistWorkflow,
             };
 

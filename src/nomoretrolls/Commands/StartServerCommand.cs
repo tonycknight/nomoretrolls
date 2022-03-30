@@ -36,8 +36,8 @@ namespace nomoretrolls.Commands
             var wfProvider = new MessageWorkflowProvider(wfFactory);
 
             _clientMessageWorkflows = new[] { wfProvider.CreateBlacklistedUserWorkflow(),
-                                              wfProvider.CreateNoCapitalsWorkflow(),
-                                              wfProvider.CreateNoCapitalsPersonalReplyWorkflow() };
+                                              wfProvider.CreateShoutingWorkflow(),
+                                              wfProvider.CreateShoutingPersonalReplyWorkflow() };
         }
 
         [Argument(0, Name ="configFile", Description = "The path to the configuration file.")]
