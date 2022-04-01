@@ -65,7 +65,7 @@ namespace nomoretrolls.Commands
                 if(guildChannels.Count > 0)
                 {
                     var header = new[] { "Servers the bot is watching:", "" };
-                    var lines = guildChannels.Select(gc => $"{gc.Guild.ToBold()}: {gc.Channels.Join(", ")}{Environment.NewLine}");
+                    var lines = guildChannels.Select(gc => $"{gc.Guild.ToBold()}: {gc.Channels.Join(" ")}{Environment.NewLine}");
                     line = header.Concat(lines).Join(Environment.NewLine);
                 }
                                 
