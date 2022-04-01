@@ -8,6 +8,7 @@ namespace nomoretrolls.Commands
 {
     [ExcludeFromCodeCoverage] // Excluded until Discord.Net provides complete interfaces
     [Group("workflow")]
+    [RequireUserPermission(Discord.GuildPermission.Administrator)]
     internal class WorkflowAdminCommands : ModuleBase<SocketCommandContext>
     {
         private readonly ITelemetry _telemetry;
@@ -88,7 +89,7 @@ namespace nomoretrolls.Commands
                 $"{"!workflow enable <workflow name>".ToCode()}",
                 "Enables a workflow.",
                 "",
-                $"{"!user disable <workflow name>".ToCode()}",
+                $"{"!workflow disable <workflow name>".ToCode()}",
                 "Disables a workflow.",
                 "",
                 $"{"!workflow list".ToCode()}",

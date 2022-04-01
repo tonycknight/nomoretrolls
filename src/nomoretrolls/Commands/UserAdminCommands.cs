@@ -7,7 +7,7 @@ using nomoretrolls.Telemetry;
 namespace nomoretrolls.Commands
 {
     [ExcludeFromCodeCoverage] // Excluded until Discord.Net provides complete interfaces
-    [Group("user")]
+    [RequireUserPermission(Discord.GuildPermission.Administrator)]
     internal class UserAdminCommands : ModuleBase<SocketCommandContext>
     {
         private readonly ITelemetry _telemetry;
@@ -27,7 +27,7 @@ namespace nomoretrolls.Commands
                 var user = await Context.GetUserAsync(userName);
                 if (user == null)
                 {
-                    await SendMessageAsync("User not found in this server.");
+                    await SendMessageAsync("The user was not found on any allowed servers.");
                 }
                 else
                 {
@@ -47,10 +47,11 @@ namespace nomoretrolls.Commands
         {
             try
             {
+                userName = userName.Trim('"');
                 var user = await Context.GetUserAsync(userName);
                 if (user == null)
                 {
-                    await SendMessageAsync("User not found in this server.");
+                    await SendMessageAsync("The user was not found on any allowed servers.");
                 }
                 else
                 {
@@ -65,7 +66,7 @@ namespace nomoretrolls.Commands
             }
         }
 
-        [Command("list")]
+        [Command("users")]
         public async Task ListtUsersAsync()
         {
             try
@@ -94,26 +95,6 @@ namespace nomoretrolls.Commands
             {
                 await SendMessageAsync(ex.Message);
             }
-        }
-
-        [Command("help")]
-        public async Task HelpAsync()
-        {
-            var line = new[]
-            {
-                $"{"!user allow <user name>".ToCode()}",
-                "Clears a user from the blacklist.",
-                "The user name is the Discord username & discriminator, e.g. ``joebloggs#1234``",
-                "",
-                $"{"!user blacklist <user name> <duration>".ToCode()}",
-                "Sets a user's blacklist for a given duration in minutes. Default is 5 minutes.",
-                $"The user name is the Discord username & discriminator, e.g. {"joebloggs#1234".ToCode()}",
-                "",
-                $"{"!user list".ToCode()}",
-                "Lists users' details."
-            }.Join(Environment.NewLine);
-
-            await SendMessageAsync(line);
         }
 
         private Task SendMessageAsync(string message)

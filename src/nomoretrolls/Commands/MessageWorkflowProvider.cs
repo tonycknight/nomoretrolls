@@ -22,8 +22,8 @@ namespace nomoretrolls.Commands
 
             return _wfFactory.CreateBuilder()
                     .Receiver(new MessageReceiver())
-                    .IfBlacklistFilterEnabled()
-                    .UserBlacklistFilter()
+                    .IfBlacklistWorkflowEnabled()
+                    .UserIsBlacklisted()
                     .BumpUserWarnings(blacklistStatsName)
                     .If(b2 => b2.UserWarningsFilter(blacklistStatsName, PeriodRange.AtLeast(5, duration)),
                         b2 => b2.DeleteUserMessage(),
@@ -41,8 +41,8 @@ namespace nomoretrolls.Commands
 
             return _wfFactory.CreateBuilder()
                     .Receiver(new MessageReceiver())
-                    .IfShoutingFilterEnabled()
-                    .MessageIsShoutingFilter()
+                    .IfShoutingWorkflowEnabled()
+                    .MessageIsShouting()
                     .BumpUserWarnings(shoutingStatsName)
                     .If(b2 => b2.UserWarningsFilter(shoutingStatsName, PeriodRange.AtLeast(8, duration)),
                         b2 => b2.DeleteUserMessage(),
@@ -61,8 +61,8 @@ namespace nomoretrolls.Commands
 
             return _wfFactory.CreateBuilder()
                     .Receiver(new MessageReceiver())
-                    .IfShoutingFilterEnabled()
-                    .MessageIsShoutingFilter()
+                    .IfShoutingWorkflowEnabled()
+                    .MessageIsShouting()
                     .UserWarningsFilter(shoutingStatsName, PeriodRange.AtLeast(1, window))
                     .UserWarningsFilter(shoutingStatsNotificationName, PeriodRange.AtMost(0, window))
                     .BumpUserWarnings(shoutingStatsNotificationName)

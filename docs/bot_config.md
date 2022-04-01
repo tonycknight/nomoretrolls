@@ -9,11 +9,6 @@ The bot's configured by a single JSON configuration file. The schema is:
     "clientId": "<client id>",
     "clientSecret": "<client secret>"
   },
-  "discordAdmin": {
-    "clientToken": "<bot token>",
-    "clientId": "<client id>",
-    "clientSecret": "<client secret>"
-  },
   "mongoDb": {
     "connection": "<mongo DB connection name>"
   },

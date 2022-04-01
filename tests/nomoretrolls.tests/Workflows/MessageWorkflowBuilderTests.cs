@@ -69,7 +69,7 @@ namespace nomoretrolls.tests.Workflows
 
             var builder = new MessageWorkflowBuilder(sp)
                                     .Receiver(Substitute.For<IMessageContextReceiver>())
-                                    .MessageIsShoutingFilter();
+                                    .MessageIsShouting();
 
 
             var result = builder.Build().Parts.ToList();
@@ -167,7 +167,7 @@ namespace nomoretrolls.tests.Workflows
 
             var builder = new MessageWorkflowBuilder(sp)
                                     .Receiver(Substitute.For<IMessageContextReceiver>())
-                                    .UserBlacklistFilter();
+                                    .UserIsBlacklisted();
 
 
             var result = builder.Build().Parts.ToList();
@@ -220,7 +220,7 @@ namespace nomoretrolls.tests.Workflows
                                     b => b.If(b1 => b1.UserWarningsFilter("test", PeriodRange.AtLeast(5, TimeSpan.FromMinutes(1))),
                                               b1 => b1.Noop(),
                                               b1 => b1.DeleteUserMessage()),    
-                                    b => b.If(b2 => b2.UserBlacklistFilter(),
+                                    b => b.If(b2 => b2.UserIsBlacklisted(),
                                               b2 => b2.DeleteUserMessage(),
                                               b2 => b2.Noop()));
 
@@ -252,7 +252,7 @@ namespace nomoretrolls.tests.Workflows
                                 .Receiver(receiver)
                                 .If(b => b.UserWarningsFilter("blacklisted_user", PeriodRange.AtLeast(3, TimeSpan.FromMinutes(5))),
                                     b => b.SendUserReplyMessage(),
-                                    b => b.If(b2 => b2.UserBlacklistFilter(),
+                                    b => b.If(b2 => b2.UserIsBlacklisted(),
                                               b2 => b2.DeleteUserMessage(),
                                               b2 => b2.Noop()));
 

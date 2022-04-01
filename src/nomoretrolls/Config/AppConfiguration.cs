@@ -7,9 +7,6 @@ namespace nomoretrolls.Config
         [JsonProperty("discord")]
         public DiscordConfiguration? Discord { get; set; }
 
-        [JsonProperty("discordAdmin")]
-        public DiscordConfiguration? DiscordAdmin { get; set; }
-
         [JsonProperty("mongoDb")]
         public MongoDbConfiguration? MongoDb { get; set; }
 

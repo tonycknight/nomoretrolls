@@ -7,6 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "nomoretrolls", "src\nomoret
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{F4D6324A-EFAF-4019-914E-E0EE90AA1B15}"
 	ProjectSection(SolutionItems) = preProject
+		docs\bot_actions.md = docs\bot_actions.md
+		docs\bot_config.md = docs\bot_config.md
+		docs\discord_config.md = docs\discord_config.md
 		README.md = README.md
 	EndProjectSection
 EndProject

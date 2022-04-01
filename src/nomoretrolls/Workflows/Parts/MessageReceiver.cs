@@ -1,4 +1,5 @@
-﻿using nomoretrolls.Messaging;
+﻿using Discord.WebSocket;
+using nomoretrolls.Messaging;
 
 namespace nomoretrolls.Workflows.Parts
 {
@@ -8,6 +9,12 @@ namespace nomoretrolls.Workflows.Parts
         {
             context.ArgNotNull(nameof(context));
 
+            var a = context.Message.Author as SocketGuildUser;
+            if (a?.GuildPermissions.Administrator == true)
+            {
+                return Task.FromResult((MessageWorkflowContext)null);
+            }
+            
             var result = new MessageWorkflowContext(context);
 
             return Task.FromResult(result);

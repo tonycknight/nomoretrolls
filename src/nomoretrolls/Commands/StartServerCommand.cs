@@ -57,7 +57,10 @@ namespace nomoretrolls.Commands
             _telemetry.Message("Starting services...");
 
             _telemetry.Message("Starting client...");
-            var client = new Messaging.DiscordMessagingClient(config, _telemetry, c => c.Discord?.DiscordClientToken);
+            var client = new Messaging.DiscordMessagingClient(config, _telemetry,
+                                                                395338442822,
+                                                                c => c.Discord?.DiscordClientToken,
+                                                                c => c.Discord?.DiscordClientId);
 
             client.AddMessageReceivedHandler(async msg =>
             {                
@@ -77,14 +80,12 @@ namespace nomoretrolls.Commands
             });
             */
 
+            await CreateAdminCommandHandler(client);
+
             await client.StartAsync();
-
-            _telemetry.Message("Starting Admin client...");
-            var adminClient = new Messaging.DiscordMessagingClient(config, _telemetry, c => c.DiscordAdmin?.DiscordClientToken);
-            await CreateAdminCommandHandler(adminClient);
-            await adminClient.StartAsync();
-
-            _telemetry.Message("Startup complete.");
+            
+            _telemetry.Message("Startup complete.");            
+            _telemetry.Message($"Chat bot registration URI: {client.BotRegistrationUri}");
             _telemetry.Message("Proxy started. Hit CTRL-C to quit");
 
             var cts = new CancellationTokenSource();
@@ -97,10 +98,6 @@ namespace nomoretrolls.Commands
 
                 client.Dispose();
                 client = null;
-
-                await adminClient.StopAsync();
-                adminClient.Dispose();
-                adminClient = null;
 
                 cts.Cancel();
 

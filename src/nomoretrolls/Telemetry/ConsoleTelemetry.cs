@@ -15,7 +15,7 @@
 
         public void Event(TelemetryEvent evt)
         {
-            var line = $"[{evt.Time}] {evt.Message}";
+            var line = $"[{evt.Time.ToString("yyyy-MM-dd HH:mm:ss.fff")}] {evt.Message}";
 
             _writeMessage(line);
         }

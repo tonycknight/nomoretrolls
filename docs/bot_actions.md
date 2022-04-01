@@ -1,3 +1,8 @@
+# Bot administration
+
+Admin commands are only available to users with an ``Administrator`` permission: [see here for details](https://discord.com/moderation/1500000176222-201:-Permissions-on-Discord). It's advisable that you use a private channel for these.
+
+All configuration actions apply to all guilds and channels that the bot watches. 
 
 # Blacklisting a user
 
@@ -7,23 +12,31 @@ Blacklisting a user will cause the bot to steadily intrude in their chat. First,
 
 #### Blacklisting a user
 
-``!user blacklist <user name>``
+``!blacklist <user name>``
 
 e.g.
 
-``!user blacklist joe_troll#1234``
+``!blacklist joe_troll#1234``
+
+Optionally, a cool down time can be given in minutes, e.g. to blacklist ``joe_troll#1234`` for 60 minutes:
+
+``!blacklist joe_troll#1234 60``
+
+A user name with spaces must be quoted, e.g.
+
+``!blacklist "joe troll#1234" 60``
 
 #### Clearing a user from the blacklist
 
-``!user allow <user name>``
+``!allow <user name>``
 
 e.g.
 
-``!user allow joe_troll#1234``
+``!allow joe_troll#1234``
 
 #### Listing blacklisted users
 
-``!user list``
+``!users``
 
 ---
 

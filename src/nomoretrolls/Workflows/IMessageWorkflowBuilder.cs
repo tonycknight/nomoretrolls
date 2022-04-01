@@ -5,14 +5,14 @@
         IMessageWorkflowBuilder Receiver(IMessageContextReceiver receiver);
         IMessageWorkflowBuilder Part(IMessageWorkflowPart part);
 
-        IMessageWorkflowBuilder IfShoutingFilterEnabled();
-        IMessageWorkflowBuilder IfBlacklistFilterEnabled();
+        IMessageWorkflowBuilder IfShoutingWorkflowEnabled();
+        IMessageWorkflowBuilder IfBlacklistWorkflowEnabled();
 
         IMessageWorkflowBuilder If(Func<IMessageWorkflowBuilder, IMessageWorkflowBuilder> part, Func<IMessageWorkflowBuilder, IMessageWorkflowBuilder> onSuccess, Func<IMessageWorkflowBuilder, IMessageWorkflowBuilder> onFailure);
         IMessageWorkflowBuilder UserWarningsFilter(string statName, PeriodRange period);
         IMessageWorkflowBuilder BumpUserWarnings(string statName);
-        IMessageWorkflowBuilder MessageIsShoutingFilter();
-        IMessageWorkflowBuilder UserBlacklistFilter();
+        IMessageWorkflowBuilder MessageIsShouting();
+        IMessageWorkflowBuilder UserIsBlacklisted();
         IMessageWorkflowBuilder SendReactionEmote();
         IMessageWorkflowBuilder SendUserReplyMessage();
         IMessageWorkflowBuilder SendDirectUserMessage();

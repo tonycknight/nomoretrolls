@@ -39,10 +39,10 @@ namespace nomoretrolls.Workflows
             return this;
         }
 
-        public IMessageWorkflowBuilder IfShoutingFilterEnabled()
+        public IMessageWorkflowBuilder IfShoutingWorkflowEnabled()
             => this.Part(new Parts.WorkflowConfigEnabled(_serviceProvider.GetService<Config.IWorkflowConfigurationRepository>(), Config.IWorkflowConfigurationRepository.ShoutingWorkflow));
 
-        public IMessageWorkflowBuilder IfBlacklistFilterEnabled()
+        public IMessageWorkflowBuilder IfBlacklistWorkflowEnabled()
             => this.Part(new Parts.WorkflowConfigEnabled(_serviceProvider.GetService<Config.IWorkflowConfigurationRepository>(), Config.IWorkflowConfigurationRepository.BlacklistWorkflow));
 
         public IMessageWorkflowBuilder If(Func<IMessageWorkflowBuilder, IMessageWorkflowBuilder> condition, Func<IMessageWorkflowBuilder, IMessageWorkflowBuilder> onSuccess, Func<IMessageWorkflowBuilder, IMessageWorkflowBuilder> onFailure)
@@ -65,7 +65,7 @@ namespace nomoretrolls.Workflows
             return this.Part(part);
         }
 
-        public IMessageWorkflowBuilder MessageIsShoutingFilter() 
+        public IMessageWorkflowBuilder MessageIsShouting() 
             => this.Part(new Parts.MessageIsShoutingFilter());
 
 
@@ -84,7 +84,7 @@ namespace nomoretrolls.Workflows
         public IMessageWorkflowBuilder BumpUserWarnings(string statName)
             => this.Part(new Parts.BumpUserWarnings(_serviceProvider.GetService<IUserStatisticsProvider>(), statName));
 
-        public IMessageWorkflowBuilder UserBlacklistFilter()
+        public IMessageWorkflowBuilder UserIsBlacklisted()
             => this.Part(new Parts.UserBlacklistFilter(_serviceProvider.GetService<IBlacklistProvider>()));
 
         public IMessageWorkflowBuilder SendDirectUserMessage()

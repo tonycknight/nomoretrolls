@@ -15,7 +15,7 @@ Discord getting unruly? Some folks don't know how to read rooms, nor when to shu
 
 * Ramped-up silencing of shouting users
 
-Details can be found [here](./docs/bot_actions.md).
+Details on features and their configuration can be found [here](./docs/bot_actions.md).
 
 --- 
 

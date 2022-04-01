@@ -43,7 +43,7 @@ namespace nomoretrolls.tests.Telemetry
 
             t.Event(evt);
 
-            var expected = evt.Time.ToString();
+            var expected = evt.Time.ToString("yyyy-MM-dd HH:mm:ss.fff");
 
             r.Should().Contain(expected);
         }

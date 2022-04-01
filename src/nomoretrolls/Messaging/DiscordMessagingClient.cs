@@ -11,17 +11,23 @@ namespace nomoretrolls.Messaging
     {
         private readonly AppConfiguration _config;
         private readonly ITelemetry _telemetry;
+        private readonly ulong _requiredPermissions;
         private readonly Func<AppConfiguration, string?> _getClientToken;
+        private readonly Func<AppConfiguration, string?> _getClientId;
         private DiscordSocketClient _client;
 
         private readonly System.Collections.Concurrent.ConcurrentBag<Func<SocketUserMessage, Task>> _messageReceivedHandlers;
         private readonly System.Collections.Concurrent.ConcurrentBag<Func<IUser, IMessageChannel, Task>> _userTypingHandlers;
 
-        public DiscordMessagingClient(AppConfiguration config, ITelemetry telemetry, Func<AppConfiguration, string?> getClientToken)
+        public DiscordMessagingClient(AppConfiguration config, ITelemetry telemetry, 
+                                      ulong requiredPermissions,
+                                      Func<AppConfiguration, string?> getClientToken, Func<AppConfiguration, string?> getClientId)
         {
             _config = config;
             _telemetry = telemetry;
+            _requiredPermissions = requiredPermissions;
             _getClientToken = getClientToken;
+            _getClientId = getClientId;
             _userTypingHandlers = new System.Collections.Concurrent.ConcurrentBag<Func<IUser, IMessageChannel, Task>>();
             _messageReceivedHandlers = new System.Collections.Concurrent.ConcurrentBag<Func<SocketUserMessage, Task>>();
 
@@ -47,6 +53,10 @@ namespace nomoretrolls.Messaging
         }
 
         public DiscordSocketClient Client => _client;
+
+        public string ClientId => _getClientId(_config);
+
+        public string BotRegistrationUri => $"https://discord.com/api/oauth2/authorize?client_id={ClientId}&permissions={_requiredPermissions}&scope=bot";                
 
         public async Task StartAsync()
         {
@@ -149,7 +159,12 @@ namespace nomoretrolls.Messaging
         {
             if (_config.Telemetry?.LogMessageContent == true)
             {
-                var line = $"[{msg.Channel.Name}] [Message {msg.Id}] [{UserLogPrefix(msg.Author)}] {msg.Content}";
+                var guildName = (msg.Channel as Discord.WebSocket.SocketTextChannel)?.Guild?.Name;
+                var prefix = guildName != null
+                    ? $"[{guildName}] [{msg.Channel.Name}]"
+                    : $"[{msg.Channel.Name}]";
+                
+                var line = $"{prefix} [Message {msg.Id}] [{UserLogPrefix(msg.Author)}] {msg.Content}";
                 _telemetry.Message(line);
             }
         }
