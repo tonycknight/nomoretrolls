@@ -36,7 +36,7 @@ namespace nomoretrolls.Workflows
             {
                 foreach (var part in workflow.Parts)
                 {
-                    _telemetry.Message($"[{logPrefix}] Executing part {part.GetType().Name}...");
+                    _telemetry.Message($"[{logPrefix}] Executing part '{workflow.Name}.{part.GetType().Name}'...");
 
                     MessageWorkflowContext? segmentResult = null;
                     try

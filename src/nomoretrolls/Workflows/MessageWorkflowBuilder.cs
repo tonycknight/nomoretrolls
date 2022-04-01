@@ -48,13 +48,13 @@ namespace nomoretrolls.Workflows
         public IMessageWorkflowBuilder If(Func<IMessageWorkflowBuilder, IMessageWorkflowBuilder> condition, Func<IMessageWorkflowBuilder, IMessageWorkflowBuilder> onSuccess, Func<IMessageWorkflowBuilder, IMessageWorkflowBuilder> onFailure)
         {
             var b1 = new MessageWorkflowBuilder(_serviceProvider).Receiver(_receiver);
-            var wfCondition = condition(b1).Build("");
+            var wfCondition = condition(b1).Build("Condition");
 
             var b2 = new MessageWorkflowBuilder(_serviceProvider).Receiver(_receiver);
-            var wfSuccess = onSuccess(b2).Build("");
+            var wfSuccess = onSuccess(b2).Build("Success");
 
             var b3 = new MessageWorkflowBuilder(_serviceProvider).Receiver(_receiver);
-            var wfFailure = onFailure(b3).Build("");
+            var wfFailure = onFailure(b3).Build("Failure");
                         
             var part = new Parts.IfPart(_serviceProvider.GetService<ITelemetry>(),
                 _serviceProvider.GetService<IMessageWorkflowExecutor>(),
