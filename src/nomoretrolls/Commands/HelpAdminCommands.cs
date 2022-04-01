@@ -26,7 +26,7 @@ namespace nomoretrolls.Commands
                 "The user name is the Discord username & discriminator, e.g. ``joebloggs#1234``",
                 "",
                 $"{"!blacklist <user name> <duration>".ToCode()}",
-                "Sets a user's blacklist for a given duration in minutes. The default is 5 minutes.",
+                "Sets a user's blacklist for a given duration in minutes. The default is 60 minutes.",
                 $"The user name is the Discord username & discriminator, e.g. {"joebloggs#1234".ToCode()}",
                 $"If the user has spaces in it, use double quotes e.g. {"\"joe bloggs#1234\"".ToCode()}",
                 "",

@@ -43,7 +43,7 @@ namespace nomoretrolls.Commands
 
         
         [Command("blacklist")]
-        public async Task BlacklistUserAsync([Summary("The user name")] string userName, int duration = 5)
+        public async Task BlacklistUserAsync([Summary("The user name")] string userName, int duration = 60)
         {
             try
             {
