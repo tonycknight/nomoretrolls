@@ -5,8 +5,8 @@ using nomoretrolls.Telemetry;
 
 namespace nomoretrolls.Commands
 {
-    [ExcludeFromCodeCoverage] // Excluded until Discord.Net provides complete interfaces
-    [Group("help")]
+    [ExcludeFromCodeCoverage] // Excluded until Discord.Net provides complete interfaces    
+    [RequireUserPermission(Discord.GuildPermission.Administrator)]
     internal class HelpAdminCommands : ModuleBase<SocketCommandContext>
     {
         private readonly ITelemetry _telemetry;
@@ -16,7 +16,7 @@ namespace nomoretrolls.Commands
             _telemetry = telemetry;
         }
 
-        [Command("")]
+        [Command("help")]
         public async Task ShowHelpAsync()
         {
             var line = new[]
@@ -35,10 +35,46 @@ namespace nomoretrolls.Commands
                 "",
                 $"{"!workflow help".ToCode()}",
                 "Get help on workflow administration.",
+                "",
+                $"{"!servers".ToCode()}",
+                "Show the servers & channels the bot is watching."
 
             }.Join(Environment.NewLine);
 
             await SendMessageAsync(line);
+        }
+
+
+        [Command("servers")]
+        public async Task ShowServersAsync()
+        {
+            try
+            {
+                var gs = Context.Client.Guilds;
+                string line = "None found.";
+                
+                var guildChannels = gs.Select(g => new
+                {
+                    Guild = g.Name,
+                    Channels = g.Channels.Where(c => c.Users.Any(u => u.Id == Context.Client.CurrentUser.Id))
+                                         .Select(c => c.Name)
+                                         .OrderBy(n => n)
+                                         .ToList(),
+                }).ToList();
+                                    
+                if(guildChannels.Count > 0)
+                {
+                    var header = new[] { "Servers the bot is watching:", "" };
+                    var lines = guildChannels.SelectMany(gc => new[] { $"{gc.Guild}:", gc.Channels.Join(", "), Environment.NewLine });
+                    line = header.Concat(lines).Join(Environment.NewLine);
+                }
+                                
+                await SendMessageAsync(line);
+            }
+            catch (Exception ex)
+            {
+                await SendMessageAsync(ex.Message);
+            }
         }
 
         private Task SendMessageAsync(string message)
