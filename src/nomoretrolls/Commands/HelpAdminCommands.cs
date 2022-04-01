@@ -5,8 +5,8 @@ using nomoretrolls.Telemetry;
 
 namespace nomoretrolls.Commands
 {
-    [ExcludeFromCodeCoverage] // Excluded until Discord.Net provides complete interfaces
-    [Group("help")]
+    [ExcludeFromCodeCoverage] // Excluded until Discord.Net provides complete interfaces    
+    [RequireUserPermission(Discord.GuildPermission.Administrator)]
     internal class HelpAdminCommands : ModuleBase<SocketCommandContext>
     {
         private readonly ITelemetry _telemetry;
@@ -16,7 +16,7 @@ namespace nomoretrolls.Commands
             _telemetry = telemetry;
         }
 
-        [Command("")]
+        [Command("help")]
         public async Task ShowHelpAsync()
         {
             var line = new[]
@@ -26,7 +26,7 @@ namespace nomoretrolls.Commands
                 "The user name is the Discord username & discriminator, e.g. ``joebloggs#1234``",
                 "",
                 $"{"!blacklist <user name> <duration>".ToCode()}",
-                "Sets a user's blacklist for a given duration in minutes. The default is 5 minutes.",
+                "Sets a user's blacklist for a given duration in minutes. The default is 60 minutes.",
                 $"The user name is the Discord username & discriminator, e.g. {"joebloggs#1234".ToCode()}",
                 $"If the user has spaces in it, use double quotes e.g. {"\"joe bloggs#1234\"".ToCode()}",
                 "",
@@ -35,17 +35,53 @@ namespace nomoretrolls.Commands
                 "",
                 $"{"!workflow help".ToCode()}",
                 "Get help on workflow administration.",
+                "",
+                $"{"!servers".ToCode()}",
+                "Show the servers & channels the bot is watching."
 
             }.Join(Environment.NewLine);
 
             await SendMessageAsync(line);
         }
 
+
+        [Command("servers")]
+        public async Task ShowServersAsync()
+        {
+            try
+            {
+                var gs = Context.Client.Guilds;
+                string line = "No servers or channels found.";
+                
+                var guildChannels = gs.Select(g => new
+                {
+                    Guild = g.Name,
+                    Channels = g.Channels.Where(c => c.Users.Any(u => u.Id == Context.Client.CurrentUser.Id))
+                                         .Select(c => ("#" + c.Name).ToCode())
+                                         .OrderBy(n => n)
+                                         .ToList(),
+                }).ToList();
+                                    
+                if(guildChannels.Count > 0)
+                {
+                    var header = new[] { "Servers the bot is watching:", "" };
+                    var lines = guildChannels.Select(gc => $"{gc.Guild.ToBold()}: {gc.Channels.Join(" ")}{Environment.NewLine}");
+                    line = header.Concat(lines).Join(Environment.NewLine);
+                }
+                                
+                await SendMessageAsync(line);
+            }
+            catch (Exception ex)
+            {
+                await SendMessageAsync(ex.Message);
+            }
+        }
+
         private Task SendMessageAsync(string message)
         {
             try
             {
-                return ReplyAsync(message.ToMaxLength().ToCode());
+                return ReplyAsync(message.ToMaxLength());
             }
             catch (Exception ex)
             {

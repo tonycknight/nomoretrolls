@@ -54,6 +54,8 @@ namespace nomoretrolls.Commands
 
             var config = this.ConfigurationFile.Pipe(_configProvider.SetFilePath).Pipe(c => c.GetAppConfiguration());
 
+            new StartServerCommandValidator().Validate(this, config);
+
             _telemetry.Message("Starting services...");
 
             _telemetry.Message("Starting client...");
@@ -85,7 +87,7 @@ namespace nomoretrolls.Commands
             await client.StartAsync();
             
             _telemetry.Message("Startup complete.");            
-            _telemetry.Message($"Chat bot registration URI: {client.BotRegistrationUri}");
+            _telemetry.Message($"Bot registration URI: {client.BotRegistrationUri}");
             _telemetry.Message("Proxy started. Hit CTRL-C to quit");
 
             var cts = new CancellationTokenSource();

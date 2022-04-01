@@ -25,7 +25,7 @@ namespace nomoretrolls.tests.Workflows
                                     .Receiver(receiver)
                                     .Part(part);
                         
-            var result = builder.Build();
+            var result = builder.Build("");
 
             result.Should().NotBeNull();            
             result.Receiver.Should().Be(receiver);
@@ -41,7 +41,7 @@ namespace nomoretrolls.tests.Workflows
             var builder = new MessageWorkflowBuilder(sp)
                                     .Part(part);
 
-            var f = () => builder.Build();
+            var f = () => builder.Build("");
 
             f.Should().Throw<InvalidOperationException>().WithMessage("?*");
         }
@@ -55,7 +55,7 @@ namespace nomoretrolls.tests.Workflows
             var builder = new MessageWorkflowBuilder(sp)
                                     .Receiver(receiver);
 
-            var f = () => builder.Build();
+            var f = () => builder.Build("");
 
             f.Should().Throw<InvalidOperationException>().WithMessage("?*");
         }
@@ -72,7 +72,7 @@ namespace nomoretrolls.tests.Workflows
                                     .MessageIsShouting();
 
 
-            var result = builder.Build().Parts.ToList();
+            var result = builder.Build("").Parts.ToList();
 
             result[0].Should().BeOfType<MessageIsShoutingFilter>();
         }
@@ -87,7 +87,7 @@ namespace nomoretrolls.tests.Workflows
                                     .SendReactionEmote();
 
 
-            var result = builder.Build().Parts.ToList();
+            var result = builder.Build("").Parts.ToList();
 
             result[0].Should().BeOfType<SendReactionEmote>();
         }
@@ -103,7 +103,7 @@ namespace nomoretrolls.tests.Workflows
                                     .SendUserReplyMessage();
 
 
-            var result = builder.Build().Parts.ToList();
+            var result = builder.Build("").Parts.ToList();
 
             result[0].Should().BeOfType<SendUserReplyMessage>();
         }
@@ -127,7 +127,7 @@ namespace nomoretrolls.tests.Workflows
                                     .UserWarningsFilter(statName, PeriodRange.AtLeast(limit, timeframe));
 
 
-            var result = (UserWarningsFilter)builder.Build().Parts.Single();
+            var result = (UserWarningsFilter)builder.Build("").Parts.Single();
 
             result.StatsName.Should().Be(statName);
             result.Period.Count.Should().Be(limit);
@@ -151,7 +151,7 @@ namespace nomoretrolls.tests.Workflows
                                     .BumpUserWarnings(statName);
 
 
-            var result = (BumpUserWarnings)builder.Build().Parts.Single();
+            var result = (BumpUserWarnings)builder.Build("").Parts.Single();
 
             result.StatsName.Should().Be(statName);
         }
@@ -170,7 +170,7 @@ namespace nomoretrolls.tests.Workflows
                                     .UserIsBlacklisted();
 
 
-            var result = builder.Build().Parts.ToList();
+            var result = builder.Build("").Parts.ToList();
 
             result[0].Should().BeOfType<UserBlacklistFilter>();
         }
@@ -192,7 +192,7 @@ namespace nomoretrolls.tests.Workflows
                                     b => b.SendUserReplyMessage(),
                                     b => b.DeleteUserMessage());
 
-            var wf = builder.Build();
+            var wf = builder.Build("");
             var parts = wf.Parts.ToList();
 
             var if1 = (IfPart)parts.Single();
@@ -224,7 +224,7 @@ namespace nomoretrolls.tests.Workflows
                                               b2 => b2.DeleteUserMessage(),
                                               b2 => b2.Noop()));
 
-            var wf = builder.Build();
+            var wf = builder.Build("");
             var parts = wf.Parts.ToList();
 
             var if1 = (IfPart)parts.Single();
@@ -256,7 +256,7 @@ namespace nomoretrolls.tests.Workflows
                                               b2 => b2.DeleteUserMessage(),
                                               b2 => b2.Noop()));
 
-            var wf = builder.Build();
+            var wf = builder.Build("");
             var parts = wf.Parts.ToList();
 
             var if1 = (IfPart)parts.Single();

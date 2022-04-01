@@ -43,7 +43,7 @@ namespace nomoretrolls.Commands
 
         
         [Command("blacklist")]
-        public async Task BlacklistUserAsync([Summary("The user name")] string userName, int duration = 5)
+        public async Task BlacklistUserAsync([Summary("The user name")] string userName, int duration = 60)
         {
             try
             {
@@ -83,7 +83,7 @@ namespace nomoretrolls.Commands
 
                 var lines = (await Task.WhenAll(userEntries))
                                         .OrderBy(a => a.userName)
-                                        .Select(a => $"{a.userName}: Blacklisted, expires {a.entry.Expiry}")
+                                        .Select(a => $"{a.userName}: Blacklisted, expires {a.entry.Expiry} UTC")
                                         .Join(Environment.NewLine);
 
 

@@ -25,9 +25,11 @@ namespace nomoretrolls.Workflows.Parts
         {            
             if (!string.IsNullOrWhiteSpace(content))
             {
-                var (wordCount, capitalsCount, maxWordLength) = content.SplitWords().WordCapitalsSpread();
-
-                return wordCount > 1 && maxWordLength > 5 && capitalsCount > 0;
+                var letterCount = content.LetterCount();
+                
+                return letterCount >= 5 && 
+                    (content.CapitalCount() > letterCount / 2)
+                    && content.CapitalGiniImpurity() < 0.5;
             }
             
             return false;

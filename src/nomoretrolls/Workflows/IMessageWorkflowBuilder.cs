@@ -23,6 +23,6 @@
         IMessageWorkflowBuilder ApplyDirectMessage(string message);
         IMessageWorkflowBuilder Noop();
 
-        IMessageWorkflow Build();
+        IMessageWorkflow Build(string name);
     }
 }

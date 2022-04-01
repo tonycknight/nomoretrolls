@@ -15,5 +15,15 @@ namespace nomoretrolls.Commands
 
             return command;
         }
+
+        public StartServerCommand Validate(StartServerCommand command, Config.AppConfiguration config)
+        {
+            config.Discord
+                    .InvalidOpArg(c => c == null, "The Discord configuration is missing.")
+                    .InvalidOpArg(c => string.IsNullOrWhiteSpace(c.DiscordClientId), "The Discord Client ID is missing.")
+                    .InvalidOpArg(c => string.IsNullOrWhiteSpace(c.DiscordClientToken), "The Discord Client token is missing.");
+
+            return command;
+        }
     }
 }

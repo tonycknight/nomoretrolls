@@ -16,5 +16,7 @@
             else
                 return $"``{value}``";
         }
+
+        public static string ToBold(this string value) => $"**{value}**";
     }
 }

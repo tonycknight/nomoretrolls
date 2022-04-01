@@ -19,12 +19,12 @@ namespace nomoretrolls.Workflows
             _serviceProvider = serviceProvider.ArgNotNull(nameof(serviceProvider));
         }
 
-        public IMessageWorkflow Build()
+        public IMessageWorkflow Build(string name)
         {
             _receiver.InvalidOpArg(r => r == null, "Missing receiver.");
             _parts.InvalidOpArg(ps => ps.Count == 0, "Missing parts.");
 
-            return new MessageWorkflow(_receiver, _parts);
+            return new MessageWorkflow(_receiver, _parts, name);
         }
 
         public IMessageWorkflowBuilder Part(IMessageWorkflowPart part)
@@ -48,13 +48,13 @@ namespace nomoretrolls.Workflows
         public IMessageWorkflowBuilder If(Func<IMessageWorkflowBuilder, IMessageWorkflowBuilder> condition, Func<IMessageWorkflowBuilder, IMessageWorkflowBuilder> onSuccess, Func<IMessageWorkflowBuilder, IMessageWorkflowBuilder> onFailure)
         {
             var b1 = new MessageWorkflowBuilder(_serviceProvider).Receiver(_receiver);
-            var wfCondition = condition(b1).Build();
+            var wfCondition = condition(b1).Build("Condition");
 
             var b2 = new MessageWorkflowBuilder(_serviceProvider).Receiver(_receiver);
-            var wfSuccess = onSuccess(b2).Build();
+            var wfSuccess = onSuccess(b2).Build("Success");
 
             var b3 = new MessageWorkflowBuilder(_serviceProvider).Receiver(_receiver);
-            var wfFailure = onFailure(b3).Build();
+            var wfFailure = onFailure(b3).Build("Failure");
                         
             var part = new Parts.IfPart(_serviceProvider.GetService<ITelemetry>(),
                 _serviceProvider.GetService<IMessageWorkflowExecutor>(),

@@ -51,6 +51,17 @@ namespace nomoretrolls.Parsing
             return (wordCount, capitalsCount, maxWordLength);
 
         }
+        
+        public static double LetterCount(this string value)
+            => value.Count(char.IsLetter);
+
+        public static double CapitalCount(this string value)
+            => value.Count(c => char.IsLetter(c) && char.IsUpper(c));
+
+        public static double CapitalGiniImpurity(this string value) 
+            => value.Where(char.IsLetter)
+                    .Select(char.IsUpper)
+                    .GiniImpurity();
 
         public static string? EmptyWhitespaceToNull(this string value) => string.IsNullOrWhiteSpace(value) ? null : value;
 

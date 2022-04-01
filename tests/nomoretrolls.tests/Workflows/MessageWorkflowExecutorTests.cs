@@ -181,7 +181,7 @@ namespace nomoretrolls.tests.Workflows
                 .If(b => b.Part(parts[0]),
                     b => b.Part(parts[1]),
                     b => b.Part(parts[2]))
-                .Build();
+                .Build("");
 
             await exec.ExecuteAsync(wf, context);
 
@@ -226,7 +226,7 @@ namespace nomoretrolls.tests.Workflows
                 .If(b => b.Part(parts[0]),
                     b => b.Part(parts[1]),
                     b => b.Part(parts[2]))
-                .Build();
+                .Build("");
                         
             await exec.ExecuteAsync(wf, context);
 
