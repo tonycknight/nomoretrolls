@@ -54,6 +54,8 @@ namespace nomoretrolls.Commands
 
             var config = this.ConfigurationFile.Pipe(_configProvider.SetFilePath).Pipe(c => c.GetAppConfiguration());
 
+            new StartServerCommandValidator().Validate(this, config);
+
             _telemetry.Message("Starting services...");
 
             _telemetry.Message("Starting client...");
