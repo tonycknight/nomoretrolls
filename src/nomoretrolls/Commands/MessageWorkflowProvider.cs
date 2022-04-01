@@ -32,7 +32,7 @@ namespace nomoretrolls.Commands
                                 .UserWarningsFilter(blacklistStatsName, PeriodRange.AtLeast(2, duration))
                                 .ApplyBlacklistReply()
                                 .SendUserReplyMessage())
-                    .Build();
+                    .Build("Blacklisted user");
         }
 
         public IMessageWorkflow CreateShoutingWorkflow()
@@ -52,7 +52,7 @@ namespace nomoretrolls.Commands
                                     b3 => b3.UserWarningsFilter(shoutingStatsName, PeriodRange.AtLeast(3, duration))
                                             .ApplyReactionEmote()
                                             .SendReactionEmote()))
-                    .Build();
+                    .Build("Shouting user");
         }
 
         public IMessageWorkflow CreateShoutingPersonalReplyWorkflow()
@@ -68,7 +68,7 @@ namespace nomoretrolls.Commands
                     .BumpUserWarnings(shoutingStatsNotificationName)
                     .ApplyDirectMessage("{0} You have been warned. No more shouting.")
                     .SendDirectUserMessage()
-                    .Build();
+                    .Build("Shouting user DM");
         }
 
     }

@@ -28,7 +28,7 @@ namespace nomoretrolls.Workflows
         {
             var logPrefix = $"Message {context.Message?.Id}";
 
-            _telemetry.Message($"[{logPrefix}] Starting workflow...");
+            _telemetry.Message($"[{logPrefix}] Starting workflow {workflow.Name}...");
             
             var msgContext = await workflow.Receiver.ReceiveAsync(context);
             
@@ -54,7 +54,7 @@ namespace nomoretrolls.Workflows
                     msgContext = segmentResult;
                 }
             }
-            _telemetry.Message($"[{logPrefix}] Finished workflow.");
+            _telemetry.Message($"[{logPrefix}] Finished workflow {workflow.Name}.");
         }
     }
 }
