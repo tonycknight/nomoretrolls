@@ -83,7 +83,7 @@ namespace nomoretrolls.Commands
 
                 var lines = (await Task.WhenAll(userEntries))
                                         .OrderBy(a => a.userName)
-                                        .Select(a => $"{a.userName}: Blacklisted, expires {a.entry.Expiry}")
+                                        .Select(a => $"{a.userName}: Blacklisted, expires {a.entry.Expiry} UTC")
                                         .Join(Environment.NewLine);
 
 
