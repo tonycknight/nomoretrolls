@@ -51,13 +51,13 @@ namespace nomoretrolls.Commands
             try
             {
                 var gs = Context.Client.Guilds;
-                string line = "None found.";
+                string line = "No servers or channels found.";
                 
                 var guildChannels = gs.Select(g => new
                 {
                     Guild = g.Name,
                     Channels = g.Channels.Where(c => c.Users.Any(u => u.Id == Context.Client.CurrentUser.Id))
-                                         .Select(c => c.Name)
+                                         .Select(c => ("#" + c.Name).ToCode())
                                          .OrderBy(n => n)
                                          .ToList(),
                 }).ToList();
@@ -65,7 +65,7 @@ namespace nomoretrolls.Commands
                 if(guildChannels.Count > 0)
                 {
                     var header = new[] { "Servers the bot is watching:", "" };
-                    var lines = guildChannels.SelectMany(gc => new[] { $"{gc.Guild}:", gc.Channels.Join(", "), Environment.NewLine });
+                    var lines = guildChannels.Select(gc => $"{gc.Guild.ToBold()}: {gc.Channels.Join(", ")}{Environment.NewLine}");
                     line = header.Concat(lines).Join(Environment.NewLine);
                 }
                                 
@@ -81,7 +81,7 @@ namespace nomoretrolls.Commands
         {
             try
             {
-                return ReplyAsync(message.ToMaxLength().ToCode());
+                return ReplyAsync(message.ToMaxLength());
             }
             catch (Exception ex)
             {
