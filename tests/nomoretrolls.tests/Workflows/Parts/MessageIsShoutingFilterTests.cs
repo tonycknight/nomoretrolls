@@ -65,5 +65,48 @@ namespace nomoretrolls.tests.Workflows.Parts
 
             result.Should().BeNull();
         }
+
+        [Theory]
+        [InlineData("SHOUT")]
+        [InlineData(" SHOUTing SHOUTing  ")]
+        [InlineData(" will you STOP SHOUTING")]
+        [InlineData(" TESt TeST TEsT")]
+        [InlineData(" this AND this AND this OR that AND NO SHOUTING")]
+        public async Task ExecuteAsync_Shouting_ReturnsNonNull(string content)
+        {
+            var f = new MessageIsShoutingFilter();
+
+            var socketMsg = Substitute.For<Discord.IMessage>();
+            socketMsg.Content.Returns(content);
+
+            var msg = Substitute.For<IDiscordMessageContext>();
+            msg.Message.Returns(socketMsg);
+
+            var context = new MessageWorkflowContext(msg);
+
+            var result = await f.ExecuteAsync(context);
+
+            result.Should().NotBeNull();
+        }
+
+        [Theory]
+        [InlineData("shout")]
+        [InlineData(" this AND this AND this OR that")]
+        public async Task ExecuteAsync_NotShouting_ReturnsNull(string content)
+        {
+            var f = new MessageIsShoutingFilter();
+
+            var socketMsg = Substitute.For<Discord.IMessage>();
+            socketMsg.Content.Returns(content);
+
+            var msg = Substitute.For<IDiscordMessageContext>();
+            msg.Message.Returns(socketMsg);
+
+            var context = new MessageWorkflowContext(msg);
+
+            var result = await f.ExecuteAsync(context);
+
+            result.Should().BeNull();
+        }
     }
 }
