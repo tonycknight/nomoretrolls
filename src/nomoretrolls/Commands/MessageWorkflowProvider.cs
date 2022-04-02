@@ -47,7 +47,9 @@ namespace nomoretrolls.Commands
                     .If(b2 => b2.UserWarningsFilter(shoutingStatsName, PeriodRange.AtLeast(8, duration)),
                         b2 => b2.DeleteUserMessage(),
                         b2 => b2.If(b3 => b3.UserWarningsFilter(shoutingStatsName, PeriodRange.AtLeast(5, duration)),
-                                    b3 => b3.ApplyShoutingReply()
+                                    b3 => b3.ApplyReactionEmote()
+                                            .SendReactionEmote()
+                                            .ApplyShoutingReply()
                                             .SendUserReplyMessage(),
                                     b3 => b3.UserWarningsFilter(shoutingStatsName, PeriodRange.AtLeast(3, duration))
                                             .ApplyReactionEmote()

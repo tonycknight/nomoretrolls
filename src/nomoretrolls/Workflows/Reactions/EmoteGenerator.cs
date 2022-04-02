@@ -3,7 +3,7 @@
     internal class EmoteGenerator : IEmoteGenerator
     {
         private readonly Func<int, int> _picker;
-        private readonly string[] _disapproveEmotes = new[] { "🍋", "👎", "🤐" };
+        private readonly string[] _disapproveEmotes = new[] { "🍋", "👎", "🤐", "🧏‍♂️", "🧏‍♀️", "🍿", "🇸🇦" };
 
         public EmoteGenerator() : this(PickRandom())
         {
