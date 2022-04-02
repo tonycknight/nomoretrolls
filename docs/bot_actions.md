@@ -44,25 +44,23 @@ e.g.
 
 People who shout are annoying. The bot will detect shouters and warn them, first by giving reactions, then steadily replying to them direct and eventually deleting their messages. Like blacklisting, the cycle is not permanent and will reset after a period of time.
 
-### Admin bot commands
-
-None: the bot detects all shouting on all channels it guards.
+Shout detection is automatic if the ``shouting`` feature is enabled (see below).
 
 ---
 
-# Workflow configuration
+# Feature configuration
 
-Each of the above actions are managed by ``workflows``, and the configuration reflects this.
+Each of the above actions are managed by ``features``, and the configuration reflects this.
 
 ### Admin bot commands
 
-``!workflow list`` - to list workflows and their status
+``!features`` - to list features and their status
 
-``!workflow disable <workflow name>`` - to disable a workflow for all users
+``!disable <feature name>`` - to disable a feature for all users
 
-``!workflow enable <workflow name>`` - to enable a workflow
+``!enable <feature name>`` - to enable a feature
 
-Valid ``<workflow name>`` are:
+Valid ``<feature name>`` are:
 
 * ``blacklist``
 * ``shouting``
