@@ -7,7 +7,6 @@ using nomoretrolls.Telemetry;
 namespace nomoretrolls.Commands
 {
     [ExcludeFromCodeCoverage] // Excluded until Discord.Net provides complete interfaces
-    [Group("workflow")]
     [RequireUserPermission(Discord.GuildPermission.Administrator)]
     internal class WorkflowAdminCommands : ModuleBase<SocketCommandContext>
     {
@@ -58,7 +57,7 @@ namespace nomoretrolls.Commands
             }
         }
 
-        [Command("list")]
+        [Command("features")]
         public async Task ListWorkflowsAsync()
         {
             try
@@ -68,7 +67,7 @@ namespace nomoretrolls.Commands
 
                 var lines = configs
                     .OrderBy(c => c.Name)
-                    .Select(c => $"Workflow '{c.Name}': enabled = {c.Enabled}")
+                    .Select(c => $"Feature '{c.Name}': enabled = {c.Enabled}")
                     .Join(Environment.NewLine);
 
                 lines = lines.Length > 0 ? lines : "None found.";
@@ -80,25 +79,25 @@ namespace nomoretrolls.Commands
                 await SendMessageAsync(ex.Message);
             }
         }
-
+        /*
         [Command("help")]
         public async Task HelpAsync()
         {
             var line = new[]
             {
-                $"{"!workflow enable <workflow name>".ToCode()}",
-                "Enables a workflow.",
+                $"{"!enable <feature name>".ToCode()}",
+                "Enables a feature.",
                 "",
-                $"{"!workflow disable <workflow name>".ToCode()}",
-                "Disables a workflow.",
+                $"{"!workflow disable <feature name>".ToCode()}",
+                "Disables a feature.",
                 "",
-                $"{"!workflow list".ToCode()}",
-                "Lists all workflows."
+                $"{"!features".ToCode()}",
+                "Lists all features."
             }.Join(Environment.NewLine);
 
             await SendMessageAsync(line);
         }
-
+        */
         private Task SendMessageAsync(string message)
         {
             try
