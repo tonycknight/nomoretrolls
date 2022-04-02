@@ -8,6 +8,7 @@ namespace nomoretrolls.Commands
         private const string shoutingStatsName = "all_shouting_messages";
         private const string shoutingStatsNotificationName = shoutingStatsName + "_notifications";
         private const string blacklistStatsName = "blacklisted_user";
+        private const string blacklistStatsNotificationName = blacklistStatsName + "_notifications";
 
         private readonly IMessageWorkflowFactory _wfFactory;
 
@@ -33,6 +34,23 @@ namespace nomoretrolls.Commands
                                 .ApplyBlacklistReply()
                                 .SendUserReplyMessage())
                     .Build("Blacklisted user");
+        }
+
+
+        public IMessageWorkflow CreateBlacklistedPersonalReplyWorkflow()
+        {
+            var window = TimeSpan.FromDays(1);
+
+            return _wfFactory.CreateBuilder()
+                    .Receiver(new MessageReceiver())
+                    .IfBlacklistWorkflowEnabled()
+                    .UserIsBlacklisted()
+                    .UserWarningsFilter(blacklistStatsName, PeriodRange.AtLeast(1, window))
+                    .UserWarningsFilter(blacklistStatsNotificationName, PeriodRange.AtMost(0, window))
+                    .BumpUserWarnings(blacklistStatsNotificationName)
+                    .ApplyDirectMessage("{0} You've been blacklisted. Please behave.")
+                    .SendDirectUserMessage()
+                    .Build("Blacklisted user DM");
         }
 
         public IMessageWorkflow CreateShoutingWorkflow()
