@@ -3,12 +3,12 @@ using nomoretrolls.Io;
 
 namespace nomoretrolls.Config
 {
-    internal class ConfigurationProvider : IConfigurationProvider
+    internal class FileConfigurationProvider : IConfigurationProvider
     {
         private readonly IIoProvider _ioProvider;
         private string? _filePath;
 
-        public ConfigurationProvider(Io.IIoProvider ioProvider)
+        public FileConfigurationProvider(Io.IIoProvider ioProvider)
         {
             _ioProvider = ioProvider;
         }

@@ -8,13 +8,13 @@ using Xunit;
 
 namespace nomoretrolls.tests.Config
 {
-    public class ConfigProviderTests
+    public class FileConfigProviderTests
     {
         [Fact]
         public void ConfigurationProvider_NullFilePath_ExceptionThrown()
         {
             var io = Substitute.For<IoProvider>();
-            var cp = new ConfigurationProvider(io);
+            var cp = new FileConfigurationProvider(io);
 
             var f = () => cp.GetAppConfiguration();
 
@@ -34,7 +34,7 @@ namespace nomoretrolls.tests.Config
             io.OpenFileReader(Arg.Any<string>()).Returns(srdr);
 
 
-            var provider = new ConfigurationProvider(io);
+            var provider = new FileConfigurationProvider(io);
             provider.SetFilePath("dummyfilepath");
 
             var config = provider.GetAppConfiguration();
