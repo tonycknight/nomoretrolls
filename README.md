@@ -37,7 +37,7 @@ Details on features and their configuration can be found [here](./docs/bot_actio
 
 * To run from the command line:
 
-  ``.\nomoretrolls.exe start <path to config file>``
+  ``.\nomoretrolls.exe start -c <path to config file>``
 
   See [discord configuration](./docs/discord_config.md) for details on configuration.
 

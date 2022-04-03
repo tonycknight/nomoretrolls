@@ -1,43 +1,31 @@
-﻿using Newtonsoft.Json;
-using nomoretrolls.Io;
-
-namespace nomoretrolls.Config
+﻿namespace nomoretrolls.Config
 {
     internal class ConfigurationProvider : IConfigurationProvider
     {
-        private readonly IIoProvider _ioProvider;
-        private string? _filePath;
+        private readonly FileConfigurationProvider _fileProvider;
+        private readonly EnvVarConfigurationProvider _envVarProvider;
+        private string _filePath;
 
-        public ConfigurationProvider(Io.IIoProvider ioProvider)
+        public ConfigurationProvider(FileConfigurationProvider fileProvider, EnvVarConfigurationProvider envVarProvider)
         {
-            _ioProvider = ioProvider;
+            _fileProvider = fileProvider;
+            _envVarProvider = envVarProvider;
         }
 
         public AppConfiguration GetAppConfiguration()
         {
-            if(_filePath == null)
+            if(_filePath != null)
             {
-                throw new InvalidOperationException("File path not set.");
+                return _fileProvider.SetFilePath(_filePath)
+                                    .GetAppConfiguration();
             }
-            
-            return GetAppConfiguration(_filePath);
+            return _envVarProvider.GetAppConfiguration();
         }
 
         public IConfigurationProvider SetFilePath(string filePath)
         {
-            _filePath = filePath.ArgNotNull(nameof(filePath));
+            _filePath = filePath;
             return this;
         }
-
-        private AppConfiguration GetAppConfiguration(string filePath)
-        {
-            using var sRdr = _ioProvider.OpenFileReader(filePath);
-            using var jRdr = new JsonTextReader(sRdr);
-
-            var s = JsonSerializer.Create();
-
-            return s.Deserialize<AppConfiguration>(jRdr);
-        }
-
     }
 }
