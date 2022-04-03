@@ -40,6 +40,10 @@ namespace nomoretrolls.Config
 
                 return s.Deserialize<AppConfiguration>(jRdr);
             }
+            catch (JsonSerializationException)
+            {
+                throw new InvalidOperationException("The config file is not valid JSON.");
+            }
             catch (JsonReaderException)
             {
                 throw new InvalidOperationException("The config file is not valid JSON.");

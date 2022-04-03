@@ -20,6 +20,8 @@ namespace nomoretrolls.Commands
 
         public StartServerCommand Validate(StartServerCommand command, Config.AppConfiguration config)
         {
+            config.InvalidOpArg(c => c == null, "Missing configuration.");
+
             config.Discord
                     .InvalidOpArg(c => string.IsNullOrWhiteSpace(c?.DiscordClientId), "The Discord Client ID is missing.")
                     .InvalidOpArg(c => string.IsNullOrWhiteSpace(c?.DiscordClientToken), "The Discord Client token is missing.");
