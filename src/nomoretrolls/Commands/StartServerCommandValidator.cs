@@ -21,9 +21,15 @@ namespace nomoretrolls.Commands
         public StartServerCommand Validate(StartServerCommand command, Config.AppConfiguration config)
         {
             config.Discord
-                    .InvalidOpArg(c => c == null, "The Discord configuration is missing.")
-                    .InvalidOpArg(c => string.IsNullOrWhiteSpace(c.DiscordClientId), "The Discord Client ID is missing.")
-                    .InvalidOpArg(c => string.IsNullOrWhiteSpace(c.DiscordClientToken), "The Discord Client token is missing.");
+                    .InvalidOpArg(c => string.IsNullOrWhiteSpace(c?.DiscordClientId), "The Discord Client ID is missing.")
+                    .InvalidOpArg(c => string.IsNullOrWhiteSpace(c?.DiscordClientToken), "The Discord Client token is missing.");
+
+            config.MongoDb
+                    .InvalidOpArg(c => string.IsNullOrWhiteSpace(c?.Connection), "The Mongo connection is missing.")
+                    .InvalidOpArg(c => string.IsNullOrWhiteSpace(c?.DatabaseName), "The Mongo DB name is missing.")
+                    .InvalidOpArg(c => string.IsNullOrWhiteSpace(c?.WorkflowConfigCollectionName), "The Workflow config collection name is missing.")
+                    .InvalidOpArg(c => string.IsNullOrWhiteSpace(c?.UserStatsCollectionName), "The User stats collection name is missing.")
+                    .InvalidOpArg(c => string.IsNullOrWhiteSpace(c?.UserBlacklistCollectionName), "The User blacklist collection name is missing.");
 
             return command;
         }
