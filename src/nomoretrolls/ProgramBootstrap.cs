@@ -6,7 +6,9 @@ namespace nomoretrolls
     {
         public static IServiceProvider CreateServiceCollection() => 
             new ServiceCollection()
-                .AddSingleton<Config.IConfigurationProvider, Config.FileConfigurationProvider>()
+                .AddSingleton<Config.FileConfigurationProvider>()
+                .AddSingleton<Config.EnvVarConfigurationProvider>()
+                .AddSingleton<Config.IConfigurationProvider, Config.ConfigurationProvider>()
                 .AddSingleton<IList<Telemetry.ITelemetry>>(sp => new Telemetry.ITelemetry[] { new Telemetry.ConsoleTelemetry() })
                 .AddSingleton<Telemetry.ITelemetry, Telemetry.AggregatedTelemetry>()
                 .AddSingleton<Io.IIoProvider, Io.IoProvider>()

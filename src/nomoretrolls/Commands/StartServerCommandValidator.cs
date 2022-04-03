@@ -8,10 +8,12 @@ namespace nomoretrolls.Commands
     {
         public StartServerCommand Validate(StartServerCommand command)
         {
-            command.ConfigurationFile = command.ConfigurationFile
+#pragma warning disable CS8601 // Possible null reference assignment.
+            command.ConfigurationFile = command.ConfigurationFile?
                 .InvalidOpArg(string.IsNullOrWhiteSpace, $"The {nameof(command.ConfigurationFile)} parameter is missing.")
                 .ResolveWorkingPath()
                 .AssertFileExists();
+#pragma warning restore CS8601 // Possible null reference assignment.
 
             return command;
         }

@@ -5,7 +5,6 @@ using nomoretrolls.Config;
 using nomoretrolls.Statistics;
 using nomoretrolls.Telemetry;
 using nomoretrolls.Workflows;
-using nomoretrolls.Workflows.Parts;
 
 namespace nomoretrolls.Commands
 {
@@ -40,15 +39,14 @@ namespace nomoretrolls.Commands
                                               wfProvider.CreateShoutingPersonalReplyWorkflow() };
         }
 
-        [Option(ShortName ="c", LongName = "config", Description = "The configuration file's path.")]
+        [Option(CommandOptionType.SingleValue, Description = "The configuration file's path.", LongName = "config", ShortName = "c")]
         public string ConfigurationFile { get; set; }
 
         public async Task<int> OnExecuteAsync()
-        {            
+        {
             new StartServerCommandValidator().Validate(this);
-
-            var config = this.ConfigurationFile.Pipe(_configProvider.SetFilePath).Pipe(c => c.GetAppConfiguration());
-
+            var config = this.ConfigurationFile.Pipe(_configProvider.SetFilePath)
+                                               .Pipe(c => c.GetAppConfiguration());
             new StartServerCommandValidator().Validate(this, config);
 
             _telemetry.Message("Starting services...");
