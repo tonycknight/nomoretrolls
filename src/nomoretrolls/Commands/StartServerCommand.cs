@@ -40,16 +40,11 @@ namespace nomoretrolls.Commands
                                               wfProvider.CreateShoutingPersonalReplyWorkflow() };
         }
 
-        [Argument(0, Name ="configFile", Description = "The path to the configuration file.")]
-        public string? ConfigurationFile { get; set; }
+        [Option(ShortName ="c", LongName = "config", Description = "The configuration file's path.")]
+        public string ConfigurationFile { get; set; }
 
         public async Task<int> OnExecuteAsync()
         {            
-            if(this.ConfigurationFile == null)
-            {
-                return false.ToReturnCode();
-            }
-
             new StartServerCommandValidator().Validate(this);
 
             var config = this.ConfigurationFile.Pipe(_configProvider.SetFilePath).Pipe(c => c.GetAppConfiguration());

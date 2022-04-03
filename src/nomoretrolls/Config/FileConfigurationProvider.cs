@@ -31,12 +31,19 @@ namespace nomoretrolls.Config
 
         private AppConfiguration GetAppConfiguration(string filePath)
         {
-            using var sRdr = _ioProvider.OpenFileReader(filePath);
-            using var jRdr = new JsonTextReader(sRdr);
+            try
+            {
+                using var sRdr = _ioProvider.OpenFileReader(filePath);
+                using var jRdr = new JsonTextReader(sRdr);
 
-            var s = JsonSerializer.Create();
+                var s = JsonSerializer.Create();
 
-            return s.Deserialize<AppConfiguration>(jRdr);
+                return s.Deserialize<AppConfiguration>(jRdr);
+            }
+            catch (JsonReaderException)
+            {
+                throw new InvalidOperationException("The config file is not valid JSON.");
+            }
         }
 
     }

@@ -8,7 +8,7 @@ namespace nomoretrolls.Commands
     {
         public StartServerCommand Validate(StartServerCommand command)
         {
-            command.ConfigurationFile = command.ConfigurationFile?
+            command.ConfigurationFile = command.ConfigurationFile
                 .InvalidOpArg(string.IsNullOrWhiteSpace, $"The {nameof(command.ConfigurationFile)} parameter is missing.")
                 .ResolveWorkingPath()
                 .AssertFileExists();
