@@ -21,7 +21,7 @@ namespace nomoretrolls.Config
 
                 result.Discord.DiscordClientId = xs.TryGet($"{EnvVarNamePrefix}_Discord_DiscordClientId");
                 result.Discord.DiscordClientToken = xs.TryGet($"{EnvVarNamePrefix}_Discord_DiscordClientToken");
-                result.MongoDb.Connection = xs.TryGet($"{EnvVarNamePrefix}_MongoDb _Connection");
+                result.MongoDb.Connection = xs.TryGet($"{EnvVarNamePrefix}_MongoDb_Connection");
             }
             return result;
         }
