@@ -5,6 +5,10 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Description>A Discord bot to counter trolls</Description>
+    <Authors>Tony Knight</Authors>
+    <Copyright>(c) Tony Knight 2022</Copyright>
+    <PackageProjectUrl>https://github.com/tonycknight/nomoretrolls</PackageProjectUrl>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <NoWarn>1701;1702;CS8619;CS8604;CS8620;CS8634;CS8600;CS8625;CS4014;CS8603;CS8618;CS8602</NoWarn>

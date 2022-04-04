@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Crayon;
+using System.Reflection;
 
 namespace nomoretrolls
 {
@@ -8,7 +10,7 @@ namespace nomoretrolls
             new ServiceCollection()
                 .AddSingleton<Config.FileConfigurationProvider>()
                 .AddSingleton<Config.EnvVarConfigurationProvider>()
-                .AddSingleton<Config.IConfigurationProvider, Config.ConfigurationProvider>()
+                .AddSingleton<Config.IConfigurationProvider, Config.ConfigurationProvider>()                
                 .AddSingleton<IList<Telemetry.ITelemetry>>(sp => new Telemetry.ITelemetry[] { new Telemetry.ConsoleTelemetry() })
                 .AddSingleton<Telemetry.ITelemetry, Telemetry.AggregatedTelemetry>()
                 .AddSingleton<Io.IIoProvider, Io.IoProvider>()
@@ -24,5 +26,23 @@ namespace nomoretrolls
                 .AddSingleton < Config.IWorkflowConfigurationRepository>(sp => 
                     new Config.WorkflowConfigurationRepository(sp.GetService<Config.MemoryWorkflowConfigurationRepository>(), sp.GetService<Config.MongoDbWorkflowConfigurationRepository>()))
                 .BuildServiceProvider();
+
+
+
+        public static string GetDescription()
+        {
+            var attrs = typeof(ProgramBootstrap).Assembly.GetCustomAttributes();
+
+            return new[]
+                {
+                    Output.Bright.Magenta("nomoretrolls"),
+                    attrs.GetAttributeValue<AssemblyDescriptionAttribute>(a => a.Description),
+                    "",
+                    $"{Output.Bright.Yellow(attrs.GetAttributeValue<AssemblyInformationalVersionAttribute>(a => a.InformationalVersion).Format("Version {0}"))}{Output.Bright.Green(" beta ")}",
+                    Output.Bright.Yellow(attrs.GetAttributeValue<AssemblyCopyrightAttribute>(a => a.Copyright)),
+                    Output.Bright.Yellow("You can find the repository at https://github.com/tonycknight/nomoretrolls"),
+                }.Where(x => x != null)
+                .Join(Environment.NewLine);
+        }
     }
 }
