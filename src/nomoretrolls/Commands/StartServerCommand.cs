@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using McMaster.Extensions.CommandLineUtils;
 using nomoretrolls.Blacklists;
 using nomoretrolls.Config;
@@ -45,6 +46,9 @@ namespace nomoretrolls.Commands
         public async Task<int> OnExecuteAsync()
         {
             var config = GetConfig();
+
+            var attrs = typeof(ProgramBootstrap).Assembly.GetCustomAttributes();
+            _telemetry.Message($"{attrs.GetAttributeValue<AssemblyProductAttribute>(a => a.Product)} {attrs.GetAttributeValue<AssemblyInformationalVersionAttribute>(a => a.InformationalVersion).Format("Version {0}")}");
 
             _telemetry.Message("Starting services...");
             _telemetry.Message("Starting client...");

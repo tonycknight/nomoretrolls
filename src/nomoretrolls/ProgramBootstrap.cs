@@ -35,7 +35,7 @@ namespace nomoretrolls
 
             return new[]
                 {
-                    Output.Bright.Magenta("nomoretrolls"),
+                    Output.Bright.Magenta(attrs.GetAttributeValue<AssemblyProductAttribute>(a => a.Product)),
                     attrs.GetAttributeValue<AssemblyDescriptionAttribute>(a => a.Description),
                     "",
                     $"{Output.Bright.Yellow(attrs.GetAttributeValue<AssemblyInformationalVersionAttribute>(a => a.InformationalVersion).Format("Version {0}"))}{Output.Bright.Green(" beta ")}",
