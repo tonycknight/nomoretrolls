@@ -8,9 +8,6 @@ namespace nomoretrolls.Config
         public string? DiscordClientToken { get; set; }
 
         [JsonProperty("clientId")]
-        public string? DiscordClientId { get; set; }
-        
-        [JsonProperty("clientSecret")]
-        public string? DiscordClientSecret { get; set; }
+        public string? DiscordClientId { get; set; }        
     }
 }
