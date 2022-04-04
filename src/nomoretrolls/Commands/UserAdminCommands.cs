@@ -13,6 +13,8 @@ namespace nomoretrolls.Commands
         private readonly ITelemetry _telemetry;
         private readonly IBlacklistProvider _blacklistProvider;
 
+        private const string DateTimeFormat = "dd MMM yyyy HH:mm:ss UTC";
+
         public UserAdminCommands(ITelemetry telemetry, IBlacklistProvider blacklistProvider)
         {
             _telemetry = telemetry;
@@ -55,9 +57,9 @@ namespace nomoretrolls.Commands
                 }
                 else
                 {
-                    var entry = user.CreateBlacklistEntry(DateTime.UtcNow, duration);
+                    var entry = user.CreateBlacklistEntry(DateTime.UtcNow, duration);                    
                     await _blacklistProvider.SetUserEntryAsync(entry);
-                    await SendMessageAsync("Done.".ToCode());
+                    await SendMessageAsync($"Done. {userName.ToCode()} has been blacklisted until {entry.Expiry.ToString(DateTimeFormat).ToBold()}");
                 }
             }
             catch(Exception ex)
@@ -83,7 +85,8 @@ namespace nomoretrolls.Commands
 
                 var lines = (await Task.WhenAll(userEntries))
                                         .OrderBy(a => a.userName)
-                                        .SelectMany(a => new[] { a.userName.ToCode().ToBold(), "Blacklisted", $"Expires {a.entry.Expiry} UTC" } )
+                                        .SelectMany(a => new[] { a.userName.ToCode().ToBold(), 
+                                                                 $"Blacklisted - expires {a.entry.Expiry.ToString(DateTimeFormat).ToBold()}" } )
                                         .Join(Environment.NewLine);
 
 
