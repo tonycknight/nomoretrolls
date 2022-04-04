@@ -35,7 +35,13 @@ Details on features and their configuration can be found [here](./docs/bot_actio
 
   ``dotnet fake run "build.fsx"``
 
-* To run from the command line:
+* To run from the command line using environment variables :
+
+  ``.\nomoretrolls.exe start``
+
+  See [discord configuration](./docs/discord_config.md) for details on configuration.
+
+* To run from the command line with a configuration file:
 
   ``.\nomoretrolls.exe start -c <path to config file>``
 
