@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "nomoretrolls": {
-      "commandName": "Project",
-      "commandLineArgs": "start  "
-    }
-  }
-}
