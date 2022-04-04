@@ -5,6 +5,7 @@ namespace nomoretrolls
 {
     [ExcludeFromCodeCoverage]
     [Subcommand(typeof(Commands.StartServerCommand))]
+    [Subcommand(typeof(Commands.VersionCommand))]
     public class Program
     {
         public static int Main(string[] args)

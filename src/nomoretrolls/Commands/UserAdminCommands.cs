@@ -13,6 +13,8 @@ namespace nomoretrolls.Commands
         private readonly ITelemetry _telemetry;
         private readonly IBlacklistProvider _blacklistProvider;
 
+        private const string DateTimeFormat = "dd MMM yyyy HH:mm:ss UTC";
+
         public UserAdminCommands(ITelemetry telemetry, IBlacklistProvider blacklistProvider)
         {
             _telemetry = telemetry;
@@ -27,17 +29,17 @@ namespace nomoretrolls.Commands
                 var user = await Context.GetUserAsync(userName);
                 if (user == null)
                 {
-                    await SendMessageAsync("The user was not found on any allowed servers.");
+                    await SendMessageAsync("The user was not found on any allowed servers.".ToCode());
                 }
                 else
                 {
                     await _blacklistProvider.DeleteUserEntryAsync(user.Id);
-                    await SendMessageAsync("Done.");
+                    await SendMessageAsync("Done.".ToCode());
                 }
             }
             catch (Exception ex)
             {
-                await SendMessageAsync(ex.Message);
+                await SendMessageAsync(ex.Message.ToCode());
             }
         }
 
@@ -51,18 +53,18 @@ namespace nomoretrolls.Commands
                 var user = await Context.GetUserAsync(userName);
                 if (user == null)
                 {
-                    await SendMessageAsync("The user was not found on any allowed servers.");
+                    await SendMessageAsync("The user was not found on any allowed servers.".ToCode());
                 }
                 else
                 {
-                    var entry = user.CreateBlacklistEntry(DateTime.UtcNow, duration);
+                    var entry = user.CreateBlacklistEntry(DateTime.UtcNow, duration);                    
                     await _blacklistProvider.SetUserEntryAsync(entry);
-                    await SendMessageAsync("Done.");
+                    await SendMessageAsync($"Done. {userName.ToCode()} has been blacklisted until {entry.Expiry.ToString(DateTimeFormat).ToBold()}");
                 }
             }
             catch(Exception ex)
             {
-                await SendMessageAsync(ex.Message);
+                await SendMessageAsync(ex.Message.ToCode());
             }
         }
 
@@ -83,11 +85,12 @@ namespace nomoretrolls.Commands
 
                 var lines = (await Task.WhenAll(userEntries))
                                         .OrderBy(a => a.userName)
-                                        .Select(a => $"{a.userName}: Blacklisted, expires {a.entry.Expiry} UTC")
+                                        .SelectMany(a => new[] { a.userName.ToCode().ToBold(), 
+                                                                 $"Blacklisted - expires {a.entry.Expiry.ToString(DateTimeFormat).ToBold()}" } )
                                         .Join(Environment.NewLine);
 
 
-                lines = lines.Length > 0 ? lines : "None found.";
+                lines = lines.Length > 0 ? lines : "None found.".ToCode();
 
                 await SendMessageAsync(lines);
             }
@@ -101,7 +104,7 @@ namespace nomoretrolls.Commands
         {
             try
             {
-                return ReplyAsync(message.ToMaxLength().ToCode());
+                return ReplyAsync(message.ToMaxLength());
             }
             catch(Exception ex)
             {

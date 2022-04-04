@@ -66,7 +66,7 @@ namespace nomoretrolls.Workflows
         }
 
         public IMessageWorkflowBuilder MessageIsShouting() 
-            => this.Part(new Parts.MessageIsShoutingFilter());
+            => this.Part(new Parts.MessageIsShoutingFilter(_serviceProvider.GetService<ITelemetry>()));
 
 
         public IMessageWorkflowBuilder Noop()
