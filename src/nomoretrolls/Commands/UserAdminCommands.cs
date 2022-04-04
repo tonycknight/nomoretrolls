@@ -27,17 +27,17 @@ namespace nomoretrolls.Commands
                 var user = await Context.GetUserAsync(userName);
                 if (user == null)
                 {
-                    await SendMessageAsync("The user was not found on any allowed servers.");
+                    await SendMessageAsync("The user was not found on any allowed servers.".ToCode());
                 }
                 else
                 {
                     await _blacklistProvider.DeleteUserEntryAsync(user.Id);
-                    await SendMessageAsync("Done.");
+                    await SendMessageAsync("Done.".ToCode());
                 }
             }
             catch (Exception ex)
             {
-                await SendMessageAsync(ex.Message);
+                await SendMessageAsync(ex.Message.ToCode());
             }
         }
 
@@ -51,18 +51,18 @@ namespace nomoretrolls.Commands
                 var user = await Context.GetUserAsync(userName);
                 if (user == null)
                 {
-                    await SendMessageAsync("The user was not found on any allowed servers.");
+                    await SendMessageAsync("The user was not found on any allowed servers.".ToCode());
                 }
                 else
                 {
                     var entry = user.CreateBlacklistEntry(DateTime.UtcNow, duration);
                     await _blacklistProvider.SetUserEntryAsync(entry);
-                    await SendMessageAsync("Done.");
+                    await SendMessageAsync("Done.".ToCode());
                 }
             }
             catch(Exception ex)
             {
-                await SendMessageAsync(ex.Message);
+                await SendMessageAsync(ex.Message.ToCode());
             }
         }
 
@@ -83,11 +83,11 @@ namespace nomoretrolls.Commands
 
                 var lines = (await Task.WhenAll(userEntries))
                                         .OrderBy(a => a.userName)
-                                        .Select(a => $"{a.userName}: Blacklisted, expires {a.entry.Expiry} UTC")
+                                        .SelectMany(a => new[] { a.userName.ToCode().ToBold(), "Blacklisted", $"Expires {a.entry.Expiry} UTC" } )
                                         .Join(Environment.NewLine);
 
 
-                lines = lines.Length > 0 ? lines : "None found.";
+                lines = lines.Length > 0 ? lines : "None found.".ToCode();
 
                 await SendMessageAsync(lines);
             }
@@ -101,7 +101,7 @@ namespace nomoretrolls.Commands
         {
             try
             {
-                return ReplyAsync(message.ToMaxLength().ToCode());
+                return ReplyAsync(message.ToMaxLength());
             }
             catch(Exception ex)
             {
