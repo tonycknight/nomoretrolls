@@ -44,13 +44,9 @@ namespace nomoretrolls.Commands
 
         public async Task<int> OnExecuteAsync()
         {
-            new StartServerCommandValidator().Validate(this);
-            var config = this.ConfigurationFile.Pipe(_configProvider.SetFilePath)
-                                               .Pipe(c => c.GetAppConfiguration());
-            new StartServerCommandValidator().Validate(this, config);
+            var config = GetConfig();
 
             _telemetry.Message("Starting services...");
-
             _telemetry.Message("Starting client...");
             var client = new Messaging.DiscordMessagingClient(config, _telemetry,
                                                                 395338442822,
@@ -58,28 +54,17 @@ namespace nomoretrolls.Commands
                                                                 c => c.Discord?.DiscordClientId);
 
             client.AddMessageReceivedHandler(async msg =>
-            {                
+            {
                 var context = new Messaging.DiscordMessageContext(msg);
 
                 await _workflowExecutor.ExecuteAsync(_clientMessageWorkflows, context);
             });
 
-            /*
-            client.AddUserIsTypingHandler(async (user, channel) =>
-            {
-                var mention = user.Mention;
-
-                var msg = $"{mention} Noone cares what you think.";
-
-                await channel.SendMessageAsync(msg);
-            });
-            */
-
             await CreateAdminCommandHandler(client);
 
             await client.StartAsync();
-            
-            _telemetry.Message("Startup complete.");            
+
+            _telemetry.Message("Startup complete.");
             _telemetry.Message($"Bot registration URI: {client.BotRegistrationUri}");
             _telemetry.Message("Proxy started. Hit CTRL-C to quit");
 
@@ -96,12 +81,23 @@ namespace nomoretrolls.Commands
 
                 cts.Cancel();
 
-                _telemetry.Message("Services shutdown");                
+                _telemetry.Message("Services shutdown");
             };
 
             WaitHandle.WaitAll(new[] { cts.Token.WaitHandle });
 
             return true.ToReturnCode();
+        }
+
+        private AppConfiguration GetConfig()
+        {
+            new StartServerCommandValidator().Validate(this);
+            
+            var config = this.ConfigurationFile.Pipe(_configProvider.SetFilePath)
+                                               .Pipe(c => c.GetAppConfiguration());
+            new StartServerCommandValidator().Validate(this, config);
+
+            return config;
         }
 
         private async Task<AdminCommandsHandler> CreateAdminCommandHandler(Messaging.DiscordMessagingClient client)
