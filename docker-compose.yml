@@ -1,0 +1,9 @@
+
+version: '3.4'
+
+services:
+  nomoretrolls:
+    image: nomoretrolls
+    build:
+      context: .
+      dockerfile: Dockerfile
