@@ -1,9 +1,10 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using Discord.Commands;
 using nomoretrolls.Formatting;
 using nomoretrolls.Telemetry;
 
-namespace nomoretrolls.Commands
+namespace nomoretrolls.Commands.DiscordCommands
 {
     [ExcludeFromCodeCoverage] // Excluded until Discord.Net provides complete interfaces    
     [RequireUserPermission(Discord.GuildPermission.Administrator)]
@@ -16,7 +17,7 @@ namespace nomoretrolls.Commands
             _telemetry = telemetry;
         }
 
-        [Command("help")]
+        [Command("help", RunMode = RunMode.Async)]
         public async Task ShowHelpAsync()
         {
             var line = new[]
@@ -51,14 +52,14 @@ namespace nomoretrolls.Commands
         }
 
 
-        [Command("servers")]
+        [Command("servers", RunMode = RunMode.Async)]
         public async Task ShowServersAsync()
         {
             try
             {
                 var gs = Context.Client.Guilds;
-                string line = "No servers or channels found.";
-                
+                var line = "No servers or channels found.";
+
                 var guildChannels = gs.Select(g => new
                 {
                     Guild = g.Name,
@@ -67,19 +68,34 @@ namespace nomoretrolls.Commands
                                          .OrderBy(n => n)
                                          .ToList(),
                 }).ToList();
-                                    
-                if(guildChannels.Count > 0)
+
+                if (guildChannels.Count > 0)
                 {
                     var header = new[] { "Servers the bot is watching:", "" };
                     var lines = guildChannels.Select(gc => $"{gc.Guild.ToBold()}: {gc.Channels.Join(" ")}{Environment.NewLine}");
                     line = header.Concat(lines).Join(Environment.NewLine);
                 }
-                                
+
                 await SendMessageAsync(line);
             }
             catch (Exception ex)
             {
                 await SendMessageAsync(ex.Message);
+            }
+        }
+
+        [Command("about", RunMode = RunMode.Async)]
+        public Task ShowAboutAsync()
+        {
+            try
+            {
+                var line = ProgramBootstrap.GetDescription();
+
+                return SendMessageAsync(line);                
+            }
+            catch(Exception ex)
+            {
+                return SendMessageAsync(ex.Message);
             }
         }
 

@@ -4,7 +4,7 @@ using nomoretrolls.Blacklists;
 using nomoretrolls.Formatting;
 using nomoretrolls.Telemetry;
 
-namespace nomoretrolls.Commands
+namespace nomoretrolls.Commands.DiscordCommands
 {
     [ExcludeFromCodeCoverage] // Excluded until Discord.Net provides complete interfaces
     [RequireUserPermission(Discord.GuildPermission.Administrator)]
@@ -20,12 +20,12 @@ namespace nomoretrolls.Commands
             _telemetry = telemetry;
             _blacklistProvider = blacklistProvider;
         }
-        
-        [Command("allow")]
+
+        [Command("allow", RunMode = RunMode.Async)]
         public async Task AllowUserAsync([Remainder][Summary("The user name")] string userName)
         {
             try
-            {                
+            {
                 var user = await Context.GetUserAsync(userName);
                 if (user == null)
                 {
@@ -43,8 +43,8 @@ namespace nomoretrolls.Commands
             }
         }
 
-        
-        [Command("blacklist")]
+
+        [Command("blacklist", RunMode = RunMode.Async)]
         public async Task BlacklistUserAsync([Summary("The user name")] string userName, int duration = 60)
         {
             try
@@ -57,36 +57,36 @@ namespace nomoretrolls.Commands
                 }
                 else
                 {
-                    var entry = user.CreateBlacklistEntry(DateTime.UtcNow, duration);                    
+                    var entry = user.CreateBlacklistEntry(DateTime.UtcNow, duration);
                     await _blacklistProvider.SetUserEntryAsync(entry);
                     await SendMessageAsync($"Done. {userName.ToCode()} has been blacklisted until {entry.Expiry.ToString(DateTimeFormat).ToBold()}");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 await SendMessageAsync(ex.Message.ToCode());
             }
         }
 
-        [Command("users")]
+        [Command("users", RunMode = RunMode.Async)]
         public async Task ListtUsersAsync()
         {
             try
             {
                 var entries = await _blacklistProvider.GetUserEntriesAsync();
 
-                var userEntries = entries.Select(async e => 
+                var userEntries = entries.Select(async e =>
                 {
                     var user = await Context.GetUserAsync(e.UserId);
                     var userName = user != null ? $"{user.Username}#{user.Discriminator}" : e.UserId.ToString();
 
-                    return new { userName = userName, entry = e };
+                    return new { userName, entry = e };
                 }).ToArray();
 
                 var lines = (await Task.WhenAll(userEntries))
                                         .OrderBy(a => a.userName)
-                                        .SelectMany(a => new[] { a.userName.ToCode().ToBold(), 
-                                                                 $"Blacklisted - expires {a.entry.Expiry.ToString(DateTimeFormat).ToBold()}" } )
+                                        .SelectMany(a => new[] { a.userName.ToCode().ToBold(),
+                                                                 $"Blacklisted - expires {a.entry.Expiry.ToString(DateTimeFormat).ToBold()}" })
                                         .Join(Environment.NewLine);
 
 
@@ -106,7 +106,7 @@ namespace nomoretrolls.Commands
             {
                 return ReplyAsync(message.ToMaxLength());
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _telemetry.Message(ex.Message);
                 return Task.CompletedTask;

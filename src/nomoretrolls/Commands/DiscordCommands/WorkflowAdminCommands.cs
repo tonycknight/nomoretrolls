@@ -4,7 +4,7 @@ using nomoretrolls.Config;
 using nomoretrolls.Formatting;
 using nomoretrolls.Telemetry;
 
-namespace nomoretrolls.Commands
+namespace nomoretrolls.Commands.DiscordCommands
 {
     [ExcludeFromCodeCoverage] // Excluded until Discord.Net provides complete interfaces
     [RequireUserPermission(Discord.GuildPermission.Administrator)]
@@ -19,13 +19,13 @@ namespace nomoretrolls.Commands
             _workflowConfig = workflowConfig;
         }
 
-        [Command("enable")]
+        [Command("enable", RunMode = RunMode.Async)]
         public async Task EnableWorkflowAsync([Remainder][Summary("The workflow's name")] string workflowName)
         {
             try
             {
                 var config = await _workflowConfig.GetWorkflowConfigAsync(workflowName);
-                                
+
                 config.Enabled = true;
 
                 await _workflowConfig.SetWorkflowConfigAsync(config);
@@ -38,11 +38,11 @@ namespace nomoretrolls.Commands
             }
         }
 
-        [Command("disable")]
+        [Command("disable", RunMode = RunMode.Async)]
         public async Task DisableWorkflowAsync([Remainder][Summary("The workflow's name")] string workflowName)
         {
             try
-            {                
+            {
                 var config = await _workflowConfig.GetWorkflowConfigAsync(workflowName);
 
                 config.Enabled = false;
@@ -57,12 +57,12 @@ namespace nomoretrolls.Commands
             }
         }
 
-        [Command("features")]
+        [Command("features", RunMode = RunMode.Async)]
         public async Task ListWorkflowsAsync()
         {
             try
             {
-                
+
                 var configs = await _workflowConfig.GetWorkflowConfigsAsync();
 
                 var lines = configs
