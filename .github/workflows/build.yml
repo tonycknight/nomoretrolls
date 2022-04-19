@@ -52,11 +52,11 @@ jobs:
           name: codecoverage
           path: ./publish/codecoverage/*.*
 
-      - name: Archive Ubuntu build
-        uses: actions/upload-artifact@v2
-        with:
-          name: nomoretrolls-ubuntu-x64
-          path: ./publish/ubuntu-x64/nomoretrolls/*.*
+      #- name: Archive Ubuntu build
+      #  uses: actions/upload-artifact@v2
+      #  with:
+      #    name: nomoretrolls-ubuntu-x64
+      #    path: ./publish/ubuntu-x64/nomoretrolls/*.*
 
       - name: Unit test results
         uses: dorny/test-reporter@v1

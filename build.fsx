@@ -161,7 +161,6 @@ Target.create "All" ignore
   ==> "Unit Tests"
   ==> "Run Stryker"
   ==> "Consolidate code coverage"
-  ==> "PublishRuntime-ubuntu-x64"
   ==> "All"
 
 Target.runOrDefault "All"
