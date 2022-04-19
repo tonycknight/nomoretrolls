@@ -8,8 +8,8 @@ on:
   workflow_dispatch:
 
 env:
-  build-version-number: 1.0.${{ github.run_number }}
-  docker-image-name: ghcr.io/tonycknight/nomoretrolls:v1.0.${{ github.run_number }}
+  build-version-number: 0.0.${{ github.run_number }}
+  docker-image-name: ghcr.io/tonycknight/nomoretrolls:v0.0.${{ github.run_number }}
   
 
 jobs:
@@ -108,3 +108,20 @@ jobs:
       - name: Push docker image
         if: github.ref == 'refs/heads/main'
         run: docker push ${{ env.docker-image-name }}
+
+  create-gh-release:
+    runs-on: ubuntu-latest
+    needs: [ codeql, build-docker-image ]
+    if: ${{ github.event_name == 'push' }} && ${{ github.ref == 'refs/heads/main' }}
+
+    steps:    
+      - uses: actions/checkout@v2
+
+      - name: Create Release
+        uses: ncipollo/release-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+        
+
+      
