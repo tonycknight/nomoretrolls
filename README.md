@@ -51,7 +51,24 @@ Details on features and their configuration can be found [here](./docs/bot_actio
 
 # Installation
 
-Discord Configuration: see [discord configuration](./docs/discord_config.md).
+A [docker image](https://github.com/users/tonycknight/packages/container/package/nomoretrolls) is built by this repository:
 
-Bot Configuration: see [bot configuration](./docs/bot_config.md).
+```
+docker pull ghcr.io/tonycknight/nomoretrolls:<tag>
+```
+
+To run, provide environment variable configuration:
+
+```
+docker run -it --rm -e nomoretrolls_Discord_DiscordClientId=<discord client id> 
+                    -e nomoretrolls_Discord_DiscordClientToken=<discord client token> 
+                    -e nomoretrolls_MongoDb_Connection=<mongo DB connection string> 
+                    -e nomoretrolls_MongoDb_DatabaseName=<mongo DB name> ghcr.io/tonycknight/nomoretrolls:<tag>
+```
+
+## Configuration
+
+For Discord Configuration, see [discord configuration](./docs/discord_config.md).
+
+For Bot Configuration, see [bot configuration](./docs/bot_config.md).
 
