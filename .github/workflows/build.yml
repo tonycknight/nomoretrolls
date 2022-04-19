@@ -9,7 +9,7 @@ on:
 
 env:
   build-version-number: 1.0.${{ github.run_number }}
-  docker-image-name: ghcr.io/tonycknight/nomoretrolls:v${{ env.build-version-number }}
+  docker-image-name: ghcr.io/tonycknight/nomoretrolls:v${{ build-version-number }}
   
 
 jobs:
