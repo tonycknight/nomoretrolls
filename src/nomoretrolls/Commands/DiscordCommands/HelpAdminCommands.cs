@@ -89,9 +89,9 @@ namespace nomoretrolls.Commands.DiscordCommands
         {
             try
             {
-                var line = ProgramBootstrap.GetDescription();
+                var line = ProgramBootstrap.GetVersionDescription().Join(Environment.NewLine).ToCode().ToBold();
 
-                return SendMessageAsync(line);                
+                return SendMessageAsync(line);
             }
             catch(Exception ex)
             {
