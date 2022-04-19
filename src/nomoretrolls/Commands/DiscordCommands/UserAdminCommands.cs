@@ -90,7 +90,7 @@ namespace nomoretrolls.Commands.DiscordCommands
                                         .Join(Environment.NewLine);
 
 
-                lines = lines.Length > 0 ? lines : "None found.".ToCode();
+                lines = lines.Length > 0 ? lines : "No blacklisted users found.".ToCode();
 
                 await SendMessageAsync(lines);
             }
