@@ -1,0 +1,11 @@
+
+version: '3.4'
+
+services:
+  nomoretrolls:
+    image: nomoretrolls
+    build:
+      context: .
+      dockerfile: src/nomoretrolls/Dockerfile
+    volumes:
+      - ~/.vsdbg:/remote_debugger:rw

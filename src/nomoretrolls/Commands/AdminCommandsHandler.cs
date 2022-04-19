@@ -3,6 +3,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using nomoretrolls.Blacklists;
+using nomoretrolls.Commands.DiscordCommands;
 using nomoretrolls.Config;
 using nomoretrolls.Statistics;
 using nomoretrolls.Telemetry;

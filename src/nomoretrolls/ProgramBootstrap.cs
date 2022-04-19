@@ -35,12 +35,12 @@ namespace nomoretrolls
 
             return new[]
                 {
-                    Output.Bright.Magenta(attrs.GetAttributeValue<AssemblyProductAttribute>(a => a.Product)),
+                    attrs.GetAttributeValue<AssemblyProductAttribute>(a => a.Product),
                     attrs.GetAttributeValue<AssemblyDescriptionAttribute>(a => a.Description),
                     "",
-                    $"{Output.Bright.Yellow(attrs.GetAttributeValue<AssemblyInformationalVersionAttribute>(a => a.InformationalVersion).Format("Version {0}"))}{Output.Bright.Green(" beta ")}",
-                    Output.Bright.Yellow(attrs.GetAttributeValue<AssemblyCopyrightAttribute>(a => a.Copyright)),
-                    Output.Bright.Yellow("You can find the repository at https://github.com/tonycknight/nomoretrolls"),
+                    $"{attrs.GetAttributeValue<AssemblyInformationalVersionAttribute>(a => a.InformationalVersion).Format("Version {0} beta")}",
+                    attrs.GetAttributeValue<AssemblyCopyrightAttribute>(a => a.Copyright),
+                    "You can find the repository at https://github.com/tonycknight/nomoretrolls",
                 }.Where(x => x != null)
                 .Join(Environment.NewLine);
         }
