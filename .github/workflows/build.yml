@@ -122,4 +122,6 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: v${{ env.build-version-number }}
+          generateReleaseNotes: true
+          
           
