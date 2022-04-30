@@ -8,7 +8,7 @@ namespace nomoretrolls.Messaging
         Task StartAsync();
         Task StopAsync();
 
-        void AddMessageReceivedHandler(Func<SocketUserMessage, Task> handler);
+        void AddMessageReceivedHandler(Func<IUserMessage, Task> handler);
 
         void AddUserIsTypingHandler(Func<IUser, IMessageChannel, Task> handler);
     }

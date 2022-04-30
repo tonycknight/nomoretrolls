@@ -16,7 +16,7 @@ namespace nomoretrolls.Messaging
         private readonly Func<AppConfiguration, string?> _getClientId;
         private DiscordSocketClient _client;
 
-        private readonly System.Collections.Concurrent.ConcurrentBag<Func<SocketUserMessage, Task>> _messageReceivedHandlers;
+        private readonly System.Collections.Concurrent.ConcurrentBag<Func<IUserMessage, Task>> _messageReceivedHandlers;
         private readonly System.Collections.Concurrent.ConcurrentBag<Func<IUser, IMessageChannel, Task>> _userTypingHandlers;
 
         public DiscordMessagingClient(AppConfiguration config, ITelemetry telemetry, 
@@ -29,7 +29,7 @@ namespace nomoretrolls.Messaging
             _getClientToken = getClientToken;
             _getClientId = getClientId;
             _userTypingHandlers = new System.Collections.Concurrent.ConcurrentBag<Func<IUser, IMessageChannel, Task>>();
-            _messageReceivedHandlers = new System.Collections.Concurrent.ConcurrentBag<Func<SocketUserMessage, Task>>();
+            _messageReceivedHandlers = new System.Collections.Concurrent.ConcurrentBag<Func<IUserMessage, Task>>();
 
             var clientConfig = new DiscordSocketConfig()
             {
@@ -64,7 +64,7 @@ namespace nomoretrolls.Messaging
             await _client.StartAsync();            
         }
 
-        public void AddMessageReceivedHandler(Func<SocketUserMessage, Task> handler)
+        public void AddMessageReceivedHandler(Func<IUserMessage, Task> handler)
         {
             _messageReceivedHandlers.Add(handler);
         }
@@ -92,7 +92,7 @@ namespace nomoretrolls.Messaging
 
         private Task client_MessageReceived(SocketMessage arg)
         {            
-            var msg = arg as SocketUserMessage;
+            var msg = arg as IUserMessage;
             if(msg != null && !msg.Author.IsBot)
             {
                 Task.Run(() => HandleMessageAsync(msg));
@@ -140,7 +140,7 @@ namespace nomoretrolls.Messaging
             return Task.CompletedTask;
         }
 
-        private Task HandleMessageAsync(SocketUserMessage msg)
+        private Task HandleMessageAsync(IUserMessage msg)
         {
             LogMessageContent(msg);
 
@@ -155,7 +155,7 @@ namespace nomoretrolls.Messaging
         private string UserLogPrefix(IUser user) => $"{user.Id} {user.Username}#{user.Discriminator}";
 
 
-        private void LogMessageContent(SocketMessage msg)
+        private void LogMessageContent(IUserMessage msg)
         {
             if (_config.Telemetry?.LogMessageContent == true)
             {

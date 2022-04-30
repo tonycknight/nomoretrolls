@@ -29,7 +29,7 @@ namespace nomoretrolls.Commands.DiscordCommands
                 var user = await Context.GetUserAsync(userName);
                 if (user == null)
                 {
-                    await SendMessageAsync("The user was not found on any allowed servers.".ToCode());
+                    await SendMessageAsync("The user was not found on any attached servers.".ToCode());
                 }
                 else
                 {
@@ -53,7 +53,7 @@ namespace nomoretrolls.Commands.DiscordCommands
                 var user = await Context.GetUserAsync(userName);
                 if (user == null)
                 {
-                    await SendMessageAsync("The user was not found on any allowed servers.".ToCode());
+                    await SendMessageAsync("The user was not found on any attached servers.".ToCode());
                 }
                 else
                 {
