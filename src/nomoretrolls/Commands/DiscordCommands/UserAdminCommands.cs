@@ -3,6 +3,7 @@ using Discord.Commands;
 using nomoretrolls.Blacklists;
 using nomoretrolls.Formatting;
 using nomoretrolls.Telemetry;
+using Tk.Extensions;
 
 namespace nomoretrolls.Commands.DiscordCommands
 {

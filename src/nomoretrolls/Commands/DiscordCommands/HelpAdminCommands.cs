@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
 using Discord.Commands;
 using nomoretrolls.Formatting;
 using nomoretrolls.Telemetry;
+using Tk.Extensions;
 
 namespace nomoretrolls.Commands.DiscordCommands
 {
