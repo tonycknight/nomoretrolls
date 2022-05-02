@@ -1,4 +1,6 @@
-﻿namespace nomoretrolls.Workflows
+﻿using Tk.Extensions;
+
+namespace nomoretrolls.Workflows
 {
     internal static class MessageWorkflowContextExtensions
     {
@@ -16,7 +18,7 @@
             return context;
         }
 
-        public static string? EmoteCode(this MessageWorkflowContext context) => context.AppData.TryGet(EmoteCodeKey);
+        public static string? EmoteCode(this MessageWorkflowContext context) => context.AppData.GetOrDefault(EmoteCodeKey);
 
         public static MessageWorkflowContext ReplyText(this MessageWorkflowContext context, string value)
         {
@@ -26,7 +28,7 @@
 
         public static string? UserMention(this MessageWorkflowContext context) => context.DiscordContext.Message.Author.Mention;
 
-        public static string? ReplyText(this MessageWorkflowContext contextt) => contextt.AppData.TryGet(ReplyTextKey);
+        public static string? ReplyText(this MessageWorkflowContext contextt) => contextt.AppData.GetOrDefault(ReplyTextKey);
 
         public static string Content(this MessageWorkflowContext context) => context.DiscordContext.Message.Content ?? "";
 

@@ -1,5 +1,5 @@
 ﻿using nomoretrolls.Blacklists;
-using nomoretrolls.Workflows.Reactions;
+using Tk.Extensions;
 
 namespace nomoretrolls.Workflows.Parts
 {

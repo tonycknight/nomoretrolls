@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Tk.Extensions;
 
 namespace nomoretrolls.Config
 {
@@ -19,10 +20,10 @@ namespace nomoretrolls.Config
                     .Where(t => t.Item1.StartsWith(EnvVarNamePrefix))
                     .ToDictionary(t => t.Item1, t => t.Item2);
 
-                result.Discord.DiscordClientId = xs.TryGet($"{EnvVarNamePrefix}_Discord_DiscordClientId");
-                result.Discord.DiscordClientToken = xs.TryGet($"{EnvVarNamePrefix}_Discord_DiscordClientToken");
-                result.MongoDb.Connection = xs.TryGet($"{EnvVarNamePrefix}_MongoDb_Connection");
-                result.MongoDb.DatabaseName = xs.TryGet($"{EnvVarNamePrefix}_MongoDb_DatabaseName");
+                result.Discord.DiscordClientId = xs.GetOrDefault($"{EnvVarNamePrefix}_Discord_DiscordClientId");
+                result.Discord.DiscordClientToken = xs.GetOrDefault($"{EnvVarNamePrefix}_Discord_DiscordClientToken");
+                result.MongoDb.Connection = xs.GetOrDefault($"{EnvVarNamePrefix}_MongoDb_Connection");
+                result.MongoDb.DatabaseName = xs.GetOrDefault($"{EnvVarNamePrefix}_MongoDb_DatabaseName");
             }
             return result;
         }

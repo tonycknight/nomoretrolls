@@ -6,6 +6,8 @@ using nomoretrolls.Config;
 using nomoretrolls.Statistics;
 using nomoretrolls.Telemetry;
 using nomoretrolls.Workflows;
+using Tk.Extensions;
+using Tk.Extensions.Reflection;
 
 namespace nomoretrolls.Commands
 {

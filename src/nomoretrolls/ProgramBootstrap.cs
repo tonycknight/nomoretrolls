@@ -1,6 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Crayon;
-using System.Reflection;
+﻿using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
+using Tk.Extensions;
+using Tk.Extensions.Reflection;
 
 namespace nomoretrolls
 {
