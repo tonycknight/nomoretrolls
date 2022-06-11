@@ -1,9 +1,9 @@
-﻿namespace nomoretrolls.Workflows.Reactions
+namespace nomoretrolls.Workflows.Reactions
 {
     internal class EmoteGenerator : IEmoteGenerator
     {
         private readonly Func<int, int> _picker;
-        private readonly string[] _disapproveEmotes = new[] { "🍋", "👎", "🤐", "🧏‍♂️", "🧏‍♀️", "🍿", "🇸🇦" };
+        private readonly string[] _disapproveEmotes = new[] { "🍋", "👎", "🤐", "🧏‍♂️", "🧏‍♀️", "🍿", "🇸🇦", ":waffle:" };
 
         public EmoteGenerator() : this(PickRandom())
         {
