@@ -1,5 +1,5 @@
 ﻿using System.Collections.Concurrent;
-using Tk.Extensions;
+using Tk.Extensions.Guards;
 
 namespace nomoretrolls.Blacklists
 {
