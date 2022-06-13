@@ -84,13 +84,8 @@ namespace nomoretrolls.Commands.DiscordCommands
                 }
                 else
                 {
-                    var entry = new KnockingScheduleEntry()
-                    {
-                        UserId = user.Id,
-                        Start = DateTime.UtcNow,
-                        Expiry = DateTime.UtcNow + TimeSpan.FromDays(1),
-                        Frequency = TimeSpan.FromSeconds(1), // TODO:
-                    };
+                    // TODO: defaults
+                    var entry = user.CreateScheduleEntry(DateTime.UtcNow, TimeSpan.FromMinutes(duration), TimeSpan.FromSeconds(1));
 
                     _knockingProvider.SetUserEntryAsync(entry);
                     await SendMessageAsync("Done.");
