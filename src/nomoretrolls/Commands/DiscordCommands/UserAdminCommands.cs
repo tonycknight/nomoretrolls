@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using Cronos;
 using Discord.Commands;
 using nomoretrolls.Blacklists;
@@ -25,8 +26,10 @@ namespace nomoretrolls.Commands.DiscordCommands
             _knockingProvider = knockingProvider;
         }
 
-        [Command("allow", RunMode = RunMode.Async)]
-        public async Task AllowUserAsync([Remainder][Summary("The user name")] string userName)
+        [Command("deleteblacklist", RunMode = RunMode.Async)]
+        [Description("Delete a user's blacklisting.")]
+        [CommandForm("<user name>")]
+        public async Task DeleteUserBlacklistAsync([Remainder][Summary("The user name")] string userName)
         {
             try
             {
@@ -49,7 +52,9 @@ namespace nomoretrolls.Commands.DiscordCommands
 
 
         [Command("blacklist", RunMode = RunMode.Async)]
-        public async Task BlacklistUserAsync([Summary("The user name")] string userName, int duration = 60)
+        [Description("Blacklist a user.")]
+        [CommandForm("<user name> <duration in minutes>")]
+        public async Task SetUserBlacklistAsync([Summary("The user name")] string userName, int duration = 60)
         {
             try
             {
@@ -73,6 +78,8 @@ namespace nomoretrolls.Commands.DiscordCommands
         }
 
         [Command("knock", RunMode = RunMode.Async)]
+        [Description("Set a schedule to knock a user.")]
+        [CommandForm("<user name> <duration in minutes> <cron frequency>")]
         public async Task SetKnockScheduleAsync([Summary("The user name")] string userName, int duration = 60, [Remainder]string frequency = "*/3 * * * *")
         {
             try
@@ -100,6 +107,8 @@ namespace nomoretrolls.Commands.DiscordCommands
         }
 
         [Command("deleteknock", RunMode = RunMode.Async)]
+        [Description("Delete a user's knock schedule.")]
+        [CommandForm("<user name>")]
         public async Task RemoveKnockScheduleAsync([Summary("The user name")] string userName)
         {
             try
@@ -124,6 +133,7 @@ namespace nomoretrolls.Commands.DiscordCommands
         }
 
         [Command("users", RunMode = RunMode.Async)]
+        [Description("Show all configured users.")]
         public async Task ListtUsersAsync()
         {
             try

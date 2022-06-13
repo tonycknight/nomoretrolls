@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using nomoretrolls.Blacklists;
 using nomoretrolls.Commands.DiscordCommands;
 using nomoretrolls.Config;
-using nomoretrolls.Statistics;
 using nomoretrolls.Telemetry;
 
 namespace nomoretrolls.Commands
@@ -45,7 +44,7 @@ namespace nomoretrolls.Commands
 
             int argPos = 0;
 
-            if (!(message.HasCharPrefix('!', ref argPos) ||
+            if (!(message.HasCharPrefix(HelpExtensions.CommandPrefix, ref argPos) ||
                     message.HasMentionPrefix(_client.CurrentUser, ref argPos)) ||
                     message.Author.IsBot)
             {

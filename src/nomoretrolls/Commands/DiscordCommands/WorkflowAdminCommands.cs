@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using Discord.Commands;
 using nomoretrolls.Config;
 using nomoretrolls.Formatting;
@@ -21,6 +22,8 @@ namespace nomoretrolls.Commands.DiscordCommands
         }
 
         [Command("enable", RunMode = RunMode.Async)]
+        [Description("Enable a bot feature.")]
+        [CommandForm("<feature name>")]
         public async Task EnableWorkflowAsync([Remainder][Summary("The workflow's name")] string workflowName)
         {
             try
@@ -40,6 +43,8 @@ namespace nomoretrolls.Commands.DiscordCommands
         }
 
         [Command("disable", RunMode = RunMode.Async)]
+        [Description("Disable a bot feature.")]
+        [CommandForm("<feature name>")]
         public async Task DisableWorkflowAsync([Remainder][Summary("The workflow's name")] string workflowName)
         {
             try
@@ -59,6 +64,7 @@ namespace nomoretrolls.Commands.DiscordCommands
         }
 
         [Command("features", RunMode = RunMode.Async)]
+        [Description("List all bot features and their status.")]
         public async Task ListWorkflowsAsync()
         {
             try
@@ -80,25 +86,7 @@ namespace nomoretrolls.Commands.DiscordCommands
                 await SendMessageAsync(ex.Message);
             }
         }
-        /*
-        [Command("help")]
-        public async Task HelpAsync()
-        {
-            var line = new[]
-            {
-                $"{"!enable <feature name>".ToCode()}",
-                "Enables a feature.",
-                "",
-                $"{"!workflow disable <feature name>".ToCode()}",
-                "Disables a feature.",
-                "",
-                $"{"!features".ToCode()}",
-                "Lists all features."
-            }.Join(Environment.NewLine);
-
-            await SendMessageAsync(line);
-        }
-        */
+        
         private Task SendMessageAsync(string message)
         {
             try
@@ -111,7 +99,5 @@ namespace nomoretrolls.Commands.DiscordCommands
                 return Task.CompletedTask;
             }
         }
-
     }
-
 }
