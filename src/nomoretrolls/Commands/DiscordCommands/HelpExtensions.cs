@@ -39,7 +39,7 @@ namespace nomoretrolls.Commands.DiscordCommands
                 
                 if (cmd.Item4 != null)
                 {
-                    yield return $"{cmd.Item2}{aliases(cmd.Item3)} Example: ``{HelpExtensions.CommandPrefix}{cmd.Item1} {cmd.Item4}``";
+                    yield return $"{cmd.Item2}{aliases(cmd.Item3)} Form: ``{HelpExtensions.CommandPrefix}{cmd.Item1} {cmd.Item4}``";
                 }
                 else
                 {

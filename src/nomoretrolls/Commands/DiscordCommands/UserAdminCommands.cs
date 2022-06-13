@@ -164,7 +164,7 @@ namespace nomoretrolls.Commands.DiscordCommands
                 var lines = userEntries.Where(a => a.blacklist != null || a.knock != null) 
                                         .OrderBy(a => a.userName)                                        
                                         .SelectMany(a => new[] { a.userName.ToCode().ToBold(),
-                                                                 a.blacklist != null ? $"Blacklisted - expires {a.blacklist.Expiry.ToString(DateTimeFormat).ToCode()}"  : null,
+                                                                 a.blacklist != null ? $"Blacklisted. Expires {a.blacklist.Expiry.ToString(DateTimeFormat).ToCode()}"  : null,
                                                                  a.knock != null ? $"Knocking - with frequency {a.knock.Frequency.ToCode()} - {CronExpressionDescriptor.ExpressionDescriptor.GetDescription(a.knock.Frequency).ToCode()}. Expires {a.knock.Expiry.ToString(DateTimeFormat).ToCode()} " : null,
                                                                })
                                         .Where(l => l != null)
