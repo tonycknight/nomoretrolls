@@ -1,17 +1,20 @@
 ﻿using nomoretrolls.Messaging;
 using nomoretrolls.Scheduling;
 using nomoretrolls.Telemetry;
+using Tk.Extensions.Time;
 
 namespace nomoretrolls.Knocking
 {
     internal class KnockingScheduleJob : IJob
     {
+        private readonly ITimeProvider _timeProvider;
         private readonly ITelemetry _telemetry;
         private readonly IDiscordMessagingClient _discordClient;
         private readonly IKnockingScheduleRepository _scheduleRepo;
 
-        public KnockingScheduleJob(ITelemetry telemetry, IDiscordMessagingClientProvider discordClientProvider, IKnockingScheduleRepository scheduleRepo)
+        public KnockingScheduleJob(Tk.Extensions.Time.ITimeProvider timeProvider, ITelemetry telemetry, IDiscordMessagingClientProvider discordClientProvider, IKnockingScheduleRepository scheduleRepo)
         {
+            _timeProvider = timeProvider;
             _telemetry = telemetry;
             _discordClient = discordClientProvider.GetClient();
             _scheduleRepo = scheduleRepo;
@@ -23,7 +26,10 @@ namespace nomoretrolls.Knocking
         {            
             var scheds = await _scheduleRepo.GetUserEntriesAsync();
 
-            var tasks = scheds.Select(KnockAsync).ToArray();
+            var tasks = scheds.Where(IsKnockDue)
+                              .Select(KnockAsync)
+                              .ToArray();
+
             if (tasks.Length > 0)
             {
                 _telemetry.Message($"Knocking {tasks.Length} user(s).");
@@ -38,10 +44,24 @@ namespace nomoretrolls.Knocking
             }
         }
 
+        private bool IsKnockDue(KnockingScheduleEntry entry)
+        {
+            var cron = Cronos.CronExpression.Parse(entry.Frequency);
+            
+            var now = _timeProvider.UtcNow();
+            var start = now - this.Frequency;
+                        
+            var occursNext = cron.GetNextOccurrence(start, true);
+
+            return (occursNext >= start && occursNext <= now);
+        }
+
         private async Task KnockAsync(KnockingScheduleEntry entry)
         {
+            
             try
             {
+                
                 var user = (await _discordClient.GetUsersAsync(new[] { entry.UserId })).FirstOrDefault();
                 if (user != null)
                 {

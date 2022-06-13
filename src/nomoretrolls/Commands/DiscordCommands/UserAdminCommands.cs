@@ -131,7 +131,7 @@ namespace nomoretrolls.Commands.DiscordCommands
                                         .OrderBy(a => a.userName)                                        
                                         .SelectMany(a => new[] { a.userName.ToCode().ToBold(),
                                                                  a.blacklist != null ? $"Blacklisted - expires {a.blacklist.Expiry.ToString(DateTimeFormat).ToCode()}"  : null,
-                                                                 a.knock != null ? $"Knocking - expires {a.knock.Expiry.ToString(DateTimeFormat).ToCode()} with frequency {a.knock.Frequency.ToCode()} - {CronExpressionDescriptor.ExpressionDescriptor.GetDescription(a.knock.Frequency).ToCode()}" : null,
+                                                                 a.knock != null ? $"Knocking - with frequency {a.knock.Frequency.ToCode()} - {CronExpressionDescriptor.ExpressionDescriptor.GetDescription(a.knock.Frequency).ToCode()}. Expires {a.knock.Expiry.ToString(DateTimeFormat).ToCode()} " : null,
                                                                })
                                         .Where(l => l != null)
                                         .Join(Environment.NewLine);
