@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Cronos;
 using Discord.Commands;
 using nomoretrolls.Blacklists;
 using nomoretrolls.Formatting;
@@ -72,20 +73,21 @@ namespace nomoretrolls.Commands.DiscordCommands
         }
 
         [Command("knock", RunMode = RunMode.Async)]
-        public async Task ScheduleKnockKnockAsync([Summary("The user name")] string userName, int duration = 60)
+        public async Task ScheduleKnockKnockAsync([Summary("The user name")] string userName, int duration = 60, [Remainder]string frequency = "*/3 * * * *")
         {
             try
             {
                 userName = userName.Trim('"');
+                frequency = frequency.Trim('"');
+
                 var user = await Context.GetUserAsync(userName);
                 if (user == null)
                 {
                     await SendMessageAsync("The user was not found on any attached servers.".ToCode());
                 }
                 else
-                {
-                    // TODO: defaults
-                    var entry = user.CreateScheduleEntry(DateTime.UtcNow, TimeSpan.FromMinutes(duration), TimeSpan.FromSeconds(1));
+                {                    
+                    var entry = user.CreateScheduleEntry(DateTime.UtcNow, TimeSpan.FromMinutes(duration), frequency);
 
                     _knockingProvider.SetUserEntryAsync(entry);
                     await SendMessageAsync("Done.");
@@ -128,8 +130,8 @@ namespace nomoretrolls.Commands.DiscordCommands
                 var lines = userEntries.Where(a => a.blacklist != null || a.knock != null) 
                                         .OrderBy(a => a.userName)                                        
                                         .SelectMany(a => new[] { a.userName.ToCode().ToBold(),
-                                                                 a.blacklist != null ? $"Blacklisted - expires {a.blacklist.Expiry.ToString(DateTimeFormat).ToBold()}"  : null,
-                                                                 a.knock != null ? $"Knocking - expires {a.knock.Expiry.ToString(DateTimeFormat).ToBold()}"  : null,
+                                                                 a.blacklist != null ? $"Blacklisted - expires {a.blacklist.Expiry.ToString(DateTimeFormat).ToCode()}"  : null,
+                                                                 a.knock != null ? $"Knocking - expires {a.knock.Expiry.ToString(DateTimeFormat).ToCode()} with frequency {a.knock.Frequency.ToCode()} - {CronExpressionDescriptor.ExpressionDescriptor.GetDescription(a.knock.Frequency).ToCode()}" : null,
                                                                })
                                         .Where(l => l != null)
                                         .Join(Environment.NewLine);

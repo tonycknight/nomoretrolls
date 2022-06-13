@@ -18,6 +18,6 @@ namespace nomoretrolls.Knocking
         public DateTime Expiry { get; init; }
 
         [BsonElement("frequency")]
-        public TimeSpan Frequency { get; set; }
+        public string Frequency { get; set; }
     }
 }

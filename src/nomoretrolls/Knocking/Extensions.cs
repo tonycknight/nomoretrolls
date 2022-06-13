@@ -1,4 +1,6 @@
-﻿namespace nomoretrolls.Knocking
+﻿using Cronos;
+
+namespace nomoretrolls.Knocking
 {
     internal static class Extensions
     {
@@ -18,13 +20,29 @@
             Frequency = value.Frequency,
         };
 
-        public static KnockingScheduleEntry CreateScheduleEntry(this Discord.IUser user, DateTime now, TimeSpan duration, TimeSpan frequency)
-            => new KnockingScheduleEntry()
+        public static KnockingScheduleEntry CreateScheduleEntry(this Discord.IUser user, DateTime start, TimeSpan duration, string frequency)
+        {
+            try
+            {
+                var cronFreq = CronExpression.Parse(frequency, CronFormat.Standard);
+            }
+            catch (CronFormatException)
+            {
+                throw new ArgumentException("Invalid Cron expression.");
+            }
+
+            if (duration <= TimeSpan.Zero)
+            {
+                duration = DateTime.UtcNow.AddYears(1).Subtract(DateTime.UtcNow);
+            }
+
+            return new KnockingScheduleEntry()
             {
                 UserId = user.Id,
-                Start = now,
-                Expiry = now.Add(duration),
+                Start = start,
+                Expiry = start.Add(duration),
                 Frequency = frequency
             };
+        }
     }
 }
