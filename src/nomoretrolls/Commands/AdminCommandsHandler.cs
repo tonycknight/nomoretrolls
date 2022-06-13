@@ -15,24 +15,16 @@ namespace nomoretrolls.Commands
     {
         private readonly DiscordSocketClient _client;
         private readonly CommandService _commandService;
-        private readonly IBlacklistProvider _blacklistProvider;
         private readonly ITelemetry _telemetry;
-        private readonly IUserStatisticsProvider _statsProvider;
-        private readonly IWorkflowConfigurationRepository _workflowRepo;
         private readonly IServiceProvider _serviceProvider;
 
         public AdminCommandsHandler(DiscordSocketClient client, CommandService commandService, 
-                                    Blacklists.IBlacklistProvider blacklistProvider, ITelemetry telemetry,
-                                    Statistics.IUserStatisticsProvider statsProvider,
-                                    Config.IWorkflowConfigurationRepository workflowRepo,
+                                    ITelemetry telemetry,
                                     IServiceProvider serviceProvider)
         {
             _client = client;
             _commandService = commandService;
-            _blacklistProvider = blacklistProvider;
             _telemetry = telemetry;
-            _statsProvider = statsProvider;
-            _workflowRepo = workflowRepo;
             _serviceProvider = serviceProvider;
         }
 
@@ -67,11 +59,10 @@ namespace nomoretrolls.Commands
         }
 
         private IServiceProvider CreateServiceProvider() => new ServiceCollection()
-                .AddSingleton<Blacklists.IBlacklistProvider>(_blacklistProvider)
-                .AddSingleton<Knocking.IKnockingScheduleProvider>(_serviceProvider.GetService(typeof(Knocking.IKnockingScheduleProvider)) as Knocking.IKnockingScheduleProvider)
-                .AddSingleton<Statistics.IUserStatisticsProvider>(_statsProvider)
-                .AddSingleton<Telemetry.ITelemetry>(_telemetry)
-                .AddSingleton<Config.IWorkflowConfigurationRepository>(_workflowRepo)
+                .AddSingleton(_telemetry)
+                .AddSingleton(_serviceProvider.GetService(typeof(IBlacklistProvider)) as IBlacklistProvider)
+                .AddSingleton(_serviceProvider.GetService(typeof(Knocking.IKnockingScheduleProvider)) as Knocking.IKnockingScheduleProvider)
+                .AddSingleton(_serviceProvider.GetService(typeof(IWorkflowConfigurationRepository)) as IWorkflowConfigurationRepository)
                 .BuildServiceProvider();
     }
 }

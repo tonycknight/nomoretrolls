@@ -1,10 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using McMaster.Extensions.CommandLineUtils;
-using nomoretrolls.Blacklists;
 using nomoretrolls.Config;
 using nomoretrolls.Scheduling;
-using nomoretrolls.Statistics;
 using nomoretrolls.Telemetry;
 using nomoretrolls.Workflows;
 using Tk.Extensions;
@@ -22,24 +20,17 @@ namespace nomoretrolls.Commands
         private readonly ITelemetry _telemetry;
         private readonly IMessageWorkflowExecutor _workflowExecutor;
         private readonly IMessageWorkflow[] _clientMessageWorkflows;
-        private readonly IBlacklistProvider _blacklistProvider;
-        private readonly IUserStatisticsProvider _statsProvider;
-        private readonly IWorkflowConfigurationRepository _workflowConfig;
         private readonly IServiceProvider _serviceProvider;
         private readonly IJobScheduler _jobScheduler;
 
         public StartServerCommand(Config.IConfigurationProvider configProvider, Telemetry.ITelemetry telemetry, 
                                   Workflows.IMessageWorkflowFactory wfFactory, Workflows.IMessageWorkflowExecutor workflowExecutor,
-                                  Blacklists.IBlacklistProvider blacklistProvider, Statistics.IUserStatisticsProvider statsProvider,
                                   Config.IWorkflowConfigurationRepository workflowConfig,
                                   IServiceProvider serviceProvider, IJobScheduler jobScheduler)
         {
             _configProvider = configProvider.ArgNotNull(nameof(configProvider));
             _telemetry = telemetry.ArgNotNull(nameof(telemetry));            
             _workflowExecutor = workflowExecutor.ArgNotNull(nameof(workflowExecutor));
-            _blacklistProvider = blacklistProvider;
-            _statsProvider = statsProvider;
-            _workflowConfig = workflowConfig;
             _serviceProvider = serviceProvider;
             _jobScheduler = jobScheduler;
             var wfProvider = new MessageWorkflowProvider(wfFactory);
@@ -121,7 +112,7 @@ namespace nomoretrolls.Commands
 
         private async Task<AdminCommandsHandler> CreateAdminCommandHandler(Messaging.DiscordMessagingClient client)
         {            
-            var adminHandler = new Commands.AdminCommandsHandler(client.Client, new Discord.Commands.CommandService(), _blacklistProvider, _telemetry, _statsProvider, _workflowConfig, _serviceProvider);
+            var adminHandler = new Commands.AdminCommandsHandler(client.Client, new Discord.Commands.CommandService(), _telemetry, _serviceProvider);
             
             await adminHandler.InstallCommandsAsync();
 
