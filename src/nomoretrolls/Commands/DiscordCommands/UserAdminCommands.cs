@@ -73,7 +73,7 @@ namespace nomoretrolls.Commands.DiscordCommands
         }
 
         [Command("knock", RunMode = RunMode.Async)]
-        public async Task ScheduleKnockKnockAsync([Summary("The user name")] string userName, int duration = 60, [Remainder]string frequency = "*/3 * * * *")
+        public async Task SetKnockScheduleAsync([Summary("The user name")] string userName, int duration = 60, [Remainder]string frequency = "*/3 * * * *")
         {
             try
             {
@@ -90,6 +90,30 @@ namespace nomoretrolls.Commands.DiscordCommands
                     var entry = user.CreateScheduleEntry(DateTime.UtcNow, TimeSpan.FromMinutes(duration), frequency);
 
                     _knockingProvider.SetUserEntryAsync(entry);
+                    await SendMessageAsync("Done.");
+                }
+            }
+            catch (Exception ex)
+            {
+                await SendMessageAsync(ex.Message.ToCode());
+            }
+        }
+
+        [Command("deleteknock", RunMode = RunMode.Async)]
+        public async Task RemoveKnockScheduleAsync([Summary("The user name")] string userName)
+        {
+            try
+            {
+                userName = userName.Trim('"');
+
+                var user = await Context.GetUserAsync(userName);
+                if (user == null)
+                {
+                    await SendMessageAsync("The user was not found on any attached servers.".ToCode());
+                }
+                else
+                {                    
+                    _knockingProvider.DeleteUserEntryAsync(user.Id);
                     await SendMessageAsync("Done.");
                 }
             }
