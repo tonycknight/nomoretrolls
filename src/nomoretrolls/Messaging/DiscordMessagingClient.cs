@@ -79,6 +79,15 @@ namespace nomoretrolls.Messaging
             await _client.StopAsync();
         }
 
+        public async Task<IList<IUser>> GetUsersAsync(IEnumerable<ulong> userIds)
+        {
+            var tasks = userIds.ToArray()
+                .Select(GetUserAsync)
+                .ToArray();
+
+            return await Task.WhenAll(tasks);
+        }
+
         public void Dispose()
         {
             Dispose(true);
@@ -167,6 +176,11 @@ namespace nomoretrolls.Messaging
                 var line = $"{prefix} [Message {msg.Id}] [{UserLogPrefix(msg.Author)}] {msg.Content}";
                 _telemetry.Message(line);
             }
+        }
+
+        private async Task<IUser> GetUserAsync(ulong userId)
+        {
+            return await _client.GetUserAsync(userId);
         }
     }
 }

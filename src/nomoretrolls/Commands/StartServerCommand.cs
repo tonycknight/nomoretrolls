@@ -50,29 +50,11 @@ namespace nomoretrolls.Commands
             var attrs = typeof(ProgramBootstrap).Assembly.GetCustomAttributes();
             _telemetry.Message($"{attrs.GetAttributeValue<AssemblyProductAttribute>(a => a.Product)} {attrs.GetAttributeValue<AssemblyInformationalVersionAttribute>(a => a.InformationalVersion).Format("Version {0}")}");
 
-            _telemetry.Message("Starting client...");
-            var client = new Messaging.DiscordMessagingClient(config, _telemetry,
-                                                                395338442822,
-                                                                c => c.Discord?.DiscordClientToken,
-                                                                c => c.Discord?.DiscordClientId);
-
-            client.AddMessageReceivedHandler(async msg =>
-            {
-                var context = new Messaging.DiscordMessageContext(msg);
-
-                await _workflowExecutor.ExecuteAsync(_clientMessageWorkflows, context);
-            });
-
+            var client = CreateDiscordClient(config);
             await CreateAdminCommandHandler(client);
-
             await client.StartAsync();
 
-            _telemetry.Message("Starting job scheduler...");
-            var jobs = GetJobSchedules().ToList();
-            _telemetry.Message($"Found {jobs.Count} scheduled job(s).");
-            _jobScheduler.Register(jobs);
-            _jobScheduler.Start();
-            _telemetry.Message("Finished job scheduler.");
+            CreateJobScheduler();
 
             _telemetry.Message("Startup complete.");
             _telemetry.Message($"Bot registration URI: {client.BotRegistrationUri}");
@@ -89,7 +71,7 @@ namespace nomoretrolls.Commands
                 _telemetry.Message("Shutting down services...");
                 await client.StopAsync();
                 client.Dispose();
-                client = null;                                
+                client = null;
                 cts.Cancel();
                 _telemetry.Message("Services shutdown");
             };
@@ -97,6 +79,37 @@ namespace nomoretrolls.Commands
             WaitHandle.WaitAll(new[] { cts.Token.WaitHandle });
 
             return true.ToReturnCode();
+        }
+
+        private void CreateJobScheduler()
+        {
+            _telemetry.Message("Starting job scheduler...");
+            var jobs = GetJobSchedules().ToList();
+            _telemetry.Message($"Found {jobs.Count} scheduled job(s).");
+            _jobScheduler.Register(jobs);
+            _jobScheduler.Start();
+            _telemetry.Message("Finished creating job scheduler.");
+        }
+
+        private Messaging.DiscordMessagingClient CreateDiscordClient(AppConfiguration config)
+        {
+            _telemetry.Message("Starting client...");
+            var client = new Messaging.DiscordMessagingClient(config, _telemetry,
+                                                                395338442822,
+                                                                c => c.Discord?.DiscordClientToken,
+                                                                c => c.Discord?.DiscordClientId);
+
+            var clientProvider = _serviceProvider.GetService(typeof(Messaging.IDiscordMessagingClientProvider)) as Messaging.IDiscordMessagingClientProvider;
+            clientProvider.SetClient(client);
+
+            client.AddMessageReceivedHandler(async msg =>
+            {
+                var context = new Messaging.DiscordMessageContext(msg);
+
+                await _workflowExecutor.ExecuteAsync(_clientMessageWorkflows, context);
+            });
+
+            return client;
         }
 
         private AppConfiguration GetConfig()
