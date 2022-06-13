@@ -1,6 +1,6 @@
 ﻿namespace nomoretrolls.Knocking
 {
-    internal interface IKnockingScheduleProvider
+    internal interface IKnockingScheduleRepository
     {        
         Task<IList<KnockingScheduleEntry>> GetUserEntriesAsync();
 

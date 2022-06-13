@@ -14,10 +14,10 @@ namespace nomoretrolls.Commands.DiscordCommands
     {
         private readonly ITelemetry _telemetry;
         private readonly IBlacklistProvider _blacklistProvider;
-        private readonly IKnockingScheduleProvider _knockingProvider;
+        private readonly IKnockingScheduleRepository _knockingProvider;
         private const string DateTimeFormat = "dd MMM yyyy HH:mm:ss UTC";
 
-        public UserAdminCommands(ITelemetry telemetry, IBlacklistProvider blacklistProvider, IKnockingScheduleProvider knockingProvider)
+        public UserAdminCommands(ITelemetry telemetry, IBlacklistProvider blacklistProvider, IKnockingScheduleRepository knockingProvider)
         {
             _telemetry = telemetry;
             _blacklistProvider = blacklistProvider;

@@ -61,7 +61,7 @@ namespace nomoretrolls.Commands
         private IServiceProvider CreateServiceProvider() => new ServiceCollection()
                 .AddSingleton(_telemetry)
                 .AddSingleton(_serviceProvider.GetService(typeof(IBlacklistProvider)) as IBlacklistProvider)
-                .AddSingleton(_serviceProvider.GetService(typeof(Knocking.IKnockingScheduleProvider)) as Knocking.IKnockingScheduleProvider)
+                .AddSingleton(_serviceProvider.GetService(typeof(Knocking.IKnockingScheduleRepository)) as Knocking.IKnockingScheduleRepository)
                 .AddSingleton(_serviceProvider.GetService(typeof(IWorkflowConfigurationRepository)) as IWorkflowConfigurationRepository)
                 .BuildServiceProvider();
     }

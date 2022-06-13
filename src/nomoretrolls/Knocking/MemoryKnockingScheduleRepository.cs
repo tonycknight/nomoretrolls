@@ -3,11 +3,11 @@ using Tk.Extensions.Tasks;
 
 namespace nomoretrolls.Knocking
 {
-    internal class MemoryKnockingScheduleProvider : IKnockingScheduleProvider
+    internal class MemoryKnockingScheduleRepository : IKnockingScheduleRepository
     {
         private readonly ConcurrentDictionary<ulong, KnockingScheduleEntry> _entries;
 
-        public MemoryKnockingScheduleProvider()
+        public MemoryKnockingScheduleRepository()
         {
             _entries = new ConcurrentDictionary<ulong, KnockingScheduleEntry>();
         }
