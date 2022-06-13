@@ -2,6 +2,7 @@
 using Discord.Commands;
 using nomoretrolls.Blacklists;
 using nomoretrolls.Formatting;
+using nomoretrolls.Knocking;
 using nomoretrolls.Telemetry;
 using Tk.Extensions;
 
@@ -13,13 +14,14 @@ namespace nomoretrolls.Commands.DiscordCommands
     {
         private readonly ITelemetry _telemetry;
         private readonly IBlacklistProvider _blacklistProvider;
-
+        private readonly IKnockingScheduleProvider _knockingProvider;
         private const string DateTimeFormat = "dd MMM yyyy HH:mm:ss UTC";
 
-        public UserAdminCommands(ITelemetry telemetry, IBlacklistProvider blacklistProvider)
+        public UserAdminCommands(ITelemetry telemetry, IBlacklistProvider blacklistProvider, IKnockingScheduleProvider knockingProvider)
         {
             _telemetry = telemetry;
             _blacklistProvider = blacklistProvider;
+            _knockingProvider = knockingProvider;
         }
 
         [Command("allow", RunMode = RunMode.Async)]
@@ -69,29 +71,76 @@ namespace nomoretrolls.Commands.DiscordCommands
             }
         }
 
+        [Command("knock", RunMode = RunMode.Async)]
+        public async Task ScheduleKnockKnockAsync([Summary("The user name")] string userName, int duration = 60)
+        {
+            try
+            {
+                userName = userName.Trim('"');
+                var user = await Context.GetUserAsync(userName);
+                if (user == null)
+                {
+                    await SendMessageAsync("The user was not found on any attached servers.".ToCode());
+                }
+                else
+                {
+                    var entry = new KnockingScheduleEntry()
+                    {
+                        UserId = user.Id,
+                        Start = DateTime.UtcNow,
+                        Expiry = DateTime.UtcNow + TimeSpan.FromDays(1),
+                        Frequency = TimeSpan.FromSeconds(1), // TODO:
+                    };
+
+                    _knockingProvider.SetUserEntryAsync(entry);
+                    await SendMessageAsync("Done.");
+                }
+            }
+            catch (Exception ex)
+            {
+                await SendMessageAsync(ex.Message.ToCode());
+            }
+        }
+
         [Command("users", RunMode = RunMode.Async)]
         public async Task ListtUsersAsync()
         {
             try
             {
-                var entries = await _blacklistProvider.GetUserEntriesAsync();
+                var blacklistEntries = (await _blacklistProvider.GetUserEntriesAsync()).ToDictionary(e => e.UserId);
+                var knockEntries = (await _knockingProvider.GetUserEntriesAsync()).ToDictionary(e => e.UserId);
 
-                var userEntries = entries.Select(async e =>
+                var users1 = blacklistEntries.Keys
+                    .Concat(knockEntries.Keys)
+                    .Distinct()
+                    .Select(userId => Context.GetUserAsync(userId))
+                    .ToArray();
+
+                var users = (await Task.WhenAll(users1))
+                            .Select(user =>
+                                    {
+                                        var userName = user != null ? $"{user.Username}#{user.Discriminator}" : user.ToString();
+                                        return new { user = user, userName = userName };
+                                    }).ToArray();
+
+                var userEntries = users.Select(u =>
                 {
-                    var user = await Context.GetUserAsync(e.UserId);
-                    var userName = user != null ? $"{user.Username}#{user.Discriminator}" : e.UserId.ToString();
+                    var ble = blacklistEntries.GetValueOrDefault(u.user.Id);
+                    var ke = knockEntries.GetValueOrDefault(u.user.Id);
+                    return new { userName = u.userName, blacklist = ble, knock = ke };
+                });
 
-                    return new { userName, entry = e };
-                }).ToArray();
-
-                var lines = (await Task.WhenAll(userEntries))
-                                        .OrderBy(a => a.userName)
+                var lines = userEntries.Where(a => a.blacklist != null || a.knock != null) 
+                                        .OrderBy(a => a.userName)                                        
                                         .SelectMany(a => new[] { a.userName.ToCode().ToBold(),
-                                                                 $"Blacklisted - expires {a.entry.Expiry.ToString(DateTimeFormat).ToBold()}" })
+                                                                 a.blacklist != null ? $"Blacklisted - expires {a.blacklist.Expiry.ToString(DateTimeFormat).ToBold()}"  : null,
+                                                                 a.knock != null ? $"Knocking - expires {a.knock.Expiry.ToString(DateTimeFormat).ToBold()}"  : null,
+                                                               })
+                                        .Where(l => l != null)
                                         .Join(Environment.NewLine);
 
 
-                lines = lines.Length > 0 ? lines : "No blacklisted users found.".ToCode();
+                lines = lines.Length > 0 ? lines : "No configured users found.".ToCode();
 
                 await SendMessageAsync(lines);
             }

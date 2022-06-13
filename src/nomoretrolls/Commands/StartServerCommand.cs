@@ -121,7 +121,7 @@ namespace nomoretrolls.Commands
 
         private async Task<AdminCommandsHandler> CreateAdminCommandHandler(Messaging.DiscordMessagingClient client)
         {            
-            var adminHandler = new Commands.AdminCommandsHandler(client.Client, new Discord.Commands.CommandService(), _blacklistProvider, _telemetry, _statsProvider, _workflowConfig);
+            var adminHandler = new Commands.AdminCommandsHandler(client.Client, new Discord.Commands.CommandService(), _blacklistProvider, _telemetry, _statsProvider, _workflowConfig, _serviceProvider);
             
             await adminHandler.InstallCommandsAsync();
 
