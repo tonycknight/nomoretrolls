@@ -3,6 +3,7 @@ using System.Reflection;
 using McMaster.Extensions.CommandLineUtils;
 using nomoretrolls.Blacklists;
 using nomoretrolls.Config;
+using nomoretrolls.Scheduling;
 using nomoretrolls.Statistics;
 using nomoretrolls.Telemetry;
 using nomoretrolls.Workflows;
@@ -24,11 +25,14 @@ namespace nomoretrolls.Commands
         private readonly IBlacklistProvider _blacklistProvider;
         private readonly IUserStatisticsProvider _statsProvider;
         private readonly IWorkflowConfigurationRepository _workflowConfig;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly IJobScheduler _jobScheduler;
 
         public StartServerCommand(Config.IConfigurationProvider configProvider, Telemetry.ITelemetry telemetry, 
                                   Workflows.IMessageWorkflowFactory wfFactory, Workflows.IMessageWorkflowExecutor workflowExecutor,
                                   Blacklists.IBlacklistProvider blacklistProvider, Statistics.IUserStatisticsProvider statsProvider,
-                                  Config.IWorkflowConfigurationRepository workflowConfig)
+                                  Config.IWorkflowConfigurationRepository workflowConfig,
+                                  IServiceProvider serviceProvider, IJobScheduler jobScheduler)
         {
             _configProvider = configProvider.ArgNotNull(nameof(configProvider));
             _telemetry = telemetry.ArgNotNull(nameof(telemetry));            
@@ -36,7 +40,8 @@ namespace nomoretrolls.Commands
             _blacklistProvider = blacklistProvider;
             _statsProvider = statsProvider;
             _workflowConfig = workflowConfig;
-            
+            _serviceProvider = serviceProvider;
+            _jobScheduler = jobScheduler;
             var wfProvider = new MessageWorkflowProvider(wfFactory);
 
             _clientMessageWorkflows = new[] { wfProvider.CreateBlacklistedUserWorkflow(),
@@ -54,7 +59,6 @@ namespace nomoretrolls.Commands
             var attrs = typeof(ProgramBootstrap).Assembly.GetCustomAttributes();
             _telemetry.Message($"{attrs.GetAttributeValue<AssemblyProductAttribute>(a => a.Product)} {attrs.GetAttributeValue<AssemblyInformationalVersionAttribute>(a => a.InformationalVersion).Format("Version {0}")}");
 
-            _telemetry.Message("Starting services...");
             _telemetry.Message("Starting client...");
             var client = new Messaging.DiscordMessagingClient(config, _telemetry,
                                                                 395338442822,
@@ -72,6 +76,13 @@ namespace nomoretrolls.Commands
 
             await client.StartAsync();
 
+            _telemetry.Message("Starting job scheduler...");
+            var jobs = GetJobSchedules().ToList();
+            _telemetry.Message($"Found {jobs.Count} scheduled job(s).");
+            _jobScheduler.Register(jobs);
+            _jobScheduler.Start();
+            _telemetry.Message("Finished job scheduler.");
+
             _telemetry.Message("Startup complete.");
             _telemetry.Message($"Bot registration URI: {client.BotRegistrationUri}");
             _telemetry.Message("Proxy started. Hit CTRL-C to quit");
@@ -80,15 +91,15 @@ namespace nomoretrolls.Commands
 
             Console.CancelKeyPress += async (object? sender, ConsoleCancelEventArgs e) =>
             {
+                _telemetry.Message("Shutting down job scheduler...");
+                _jobScheduler.Stop();
+                _telemetry.Message("Job scheduler shutdown.");
+
                 _telemetry.Message("Shutting down services...");
-
                 await client.StopAsync();
-
                 client.Dispose();
-                client = null;
-
+                client = null;                                
                 cts.Cancel();
-
                 _telemetry.Message("Services shutdown");
             };
 
@@ -115,6 +126,18 @@ namespace nomoretrolls.Commands
             await adminHandler.InstallCommandsAsync();
 
             return adminHandler;
+        }
+
+        private IEnumerable<JobScheduleInfo> GetJobSchedules()
+        {
+            var jobTypes = this.GetType().Assembly.GetTypes()
+                               .Where(t => t.IsClass && !t.IsAbstract && t.IsAssignableTo(typeof(IJob)));
+
+            return jobTypes.Select(_serviceProvider.GetService)
+                           .Where(o => o != null)
+                           .OfType<IJob>()
+                           .Select(j => new JobScheduleInfo(j, j.Frequency))
+                           .ToList();
         }
     }
 }
