@@ -3,7 +3,7 @@ using nomoretrolls.Blacklists;
 using nomoretrolls.Statistics;
 using nomoretrolls.Telemetry;
 using nomoretrolls.Workflows.Reactions;
-using Tk.Extensions;
+using Tk.Extensions.Guards;
 
 namespace nomoretrolls.Workflows
 {

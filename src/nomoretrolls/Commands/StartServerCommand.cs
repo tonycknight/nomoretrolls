@@ -7,6 +7,8 @@ using nomoretrolls.Statistics;
 using nomoretrolls.Telemetry;
 using nomoretrolls.Workflows;
 using Tk.Extensions;
+using Tk.Extensions.Funcs;
+using Tk.Extensions.Guards;
 using Tk.Extensions.Reflection;
 
 namespace nomoretrolls.Commands

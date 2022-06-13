@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 using nomoretrolls.Io;
-using Tk.Extensions;
+using Tk.Extensions.Guards;
 
 namespace nomoretrolls.Config
 {
