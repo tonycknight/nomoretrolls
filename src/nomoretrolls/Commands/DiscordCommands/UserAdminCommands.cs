@@ -79,7 +79,7 @@ namespace nomoretrolls.Commands.DiscordCommands
 
         [Command("knock", RunMode = RunMode.Async)]
         [Description("Set a schedule to knock a user.")]
-        [CommandForm("<user name> <duration in minutes> <cron frequency>")]
+        [CommandForm("<user name> <duration in minutes> <cron frequency for UTC>", guidelines: "Use double quotes for the CRON expression as Discord may hide them")]
         public async Task SetKnockScheduleAsync([Summary("The user name")] string userName, int duration = 60, [Remainder]string frequency = "*/3 * * * *")
         {
             try

@@ -11,7 +11,7 @@ namespace nomoretrolls.Commands.DiscordCommands
         public static IEnumerable<Type> GetDiscordCommandTypes(this Type type) => type.Assembly.GetTypes()
                             .Where(t => t.IsAssignableTo(typeof(ModuleBase<SocketCommandContext>)));
 
-        public static IEnumerable<(string, string, string[], string)> GetCommandHelp(this IEnumerable<Type> discordCommands)
+        public static IEnumerable<(string, string, string[], string, string)> GetCommandHelp(this IEnumerable<Type> discordCommands)
         {
             var methods = discordCommands.SelectMany(t => t.GetMethods())
                                          .Select(mi => new
@@ -24,11 +24,11 @@ namespace nomoretrolls.Commands.DiscordCommands
                                          })
                                          .Where(a => !string.IsNullOrWhiteSpace(a.cmdAttr?.Text));
 
-            return methods.Select(a => (a.cmdAttr.Text, a.descAttr?.Description, a.aliasAttr?.Aliases, a.exampleAttr?.Format))
+            return methods.Select(a => (a.cmdAttr.Text, a.descAttr?.Description, a.aliasAttr?.Aliases, a.exampleAttr?.Format, a.exampleAttr?.Guidelines))
                 .OrderBy(t => t.Text);
         }
 
-        public static IEnumerable<string> FormatCommandHelp(this IEnumerable<(string, string, string[], string)> cmds)
+        public static IEnumerable<string> FormatCommandHelp(this IEnumerable<(string, string, string[], string, string)> cmds)
         {            
             Func<string[], string> joinAliases = xs => xs.Select(s => $"``{s}``").Join(", ");
             Func<string[], string> aliases = xs => xs != null ? $" Aliases: {joinAliases(xs)}" : "";
@@ -40,6 +40,10 @@ namespace nomoretrolls.Commands.DiscordCommands
                 if (cmd.Item4 != null)
                 {
                     yield return $"{cmd.Item2}{aliases(cmd.Item3)} Form: ``{HelpExtensions.CommandPrefix}{cmd.Item1} {cmd.Item4}``";
+                    if(cmd.Item5 != null)
+                    {
+                        yield return cmd.Item5;
+                    }
                 }
                 else
                 {
