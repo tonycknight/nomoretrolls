@@ -1,4 +1,5 @@
 ﻿using Cronos;
+using Tk.Extensions.Guards;
 
 namespace nomoretrolls.Knocking
 {
@@ -22,6 +23,8 @@ namespace nomoretrolls.Knocking
 
         public static KnockingScheduleEntry CreateScheduleEntry(this Discord.IUser user, DateTime start, TimeSpan duration, string frequency)
         {
+            user.ArgNotNull(nameof(user));
+            frequency.InvalidOpArg(string.IsNullOrWhiteSpace, $"{nameof(frequency)} is invalid.");
             try
             {
                 var cronFreq = CronExpression.Parse(frequency, CronFormat.Standard);
@@ -33,7 +36,7 @@ namespace nomoretrolls.Knocking
 
             if (duration <= TimeSpan.Zero)
             {
-                duration = DateTime.UtcNow.AddYears(1).Subtract(DateTime.UtcNow);
+                duration = start.AddYears(1).Subtract(start);
             }
 
             return new KnockingScheduleEntry()

@@ -69,8 +69,7 @@ namespace nomoretrolls.Knocking
                     var channel = await user.CreateDMChannelAsync();
                     if (channel != null)
                     {
-                        var msgText = $"{user.Mention} Knock knock";
-                        var msg = await channel.SendMessageAsync(msgText);
+                        var msg = await channel.SendMessageAsync($"{user.Mention} Knock knock");
 
                         await msg.DeleteAsync();
 
