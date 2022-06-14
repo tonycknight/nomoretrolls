@@ -44,7 +44,7 @@ namespace nomoretrolls.Commands.DiscordCommands
                 else
                 {
                     await _blacklistProvider.DeleteUserEntryAsync(user.Id);
-                    await SendMessageAsync("Done.".ToCode());
+                    await SendMessageAsync($"Done. {userName.ToCode()} has been cleared.");
                 }
             }
             catch (Exception ex)
@@ -108,7 +108,7 @@ namespace nomoretrolls.Commands.DiscordCommands
                     var entry = user.CreateScheduleEntry(DateTime.UtcNow, TimeSpan.FromMinutes(duration), frequency);
 
                     _knockingProvider.SetUserEntryAsync(entry);
-                    await SendMessageAsync("Done.");
+                    await SendMessageAsync($"Done.{userName.ToCode()} has been set to knock {CronExpressionDescriptor.ExpressionDescriptor.GetDescription(entry.Frequency).ToCode()}.");
                 }
             }
             catch (Exception ex)
@@ -135,7 +135,7 @@ namespace nomoretrolls.Commands.DiscordCommands
                 else
                 {                    
                     _knockingProvider.DeleteUserEntryAsync(user.Id);
-                    await SendMessageAsync("Done.");
+                    await SendMessageAsync($"Done. {userName.ToCode()} has been cleared.");
                 }
             }
             catch (Exception ex)
