@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using nomoretrolls.Blacklists;
 using nomoretrolls.Commands.DiscordCommands;
 using nomoretrolls.Config;
-using nomoretrolls.Statistics;
 using nomoretrolls.Telemetry;
 
 namespace nomoretrolls.Commands
@@ -15,22 +14,17 @@ namespace nomoretrolls.Commands
     {
         private readonly DiscordSocketClient _client;
         private readonly CommandService _commandService;
-        private readonly IBlacklistProvider _blacklistProvider;
         private readonly ITelemetry _telemetry;
-        private readonly IUserStatisticsProvider _statsProvider;
-        private readonly IWorkflowConfigurationRepository _workflowRepo;
+        private readonly IServiceProvider _serviceProvider;
 
         public AdminCommandsHandler(DiscordSocketClient client, CommandService commandService, 
-                                    Blacklists.IBlacklistProvider blacklistProvider, ITelemetry telemetry,
-                                    Statistics.IUserStatisticsProvider statsProvider,
-                                    Config.IWorkflowConfigurationRepository workflowRepo)
+                                    ITelemetry telemetry,
+                                    IServiceProvider serviceProvider)
         {
             _client = client;
             _commandService = commandService;
-            _blacklistProvider = blacklistProvider;
             _telemetry = telemetry;
-            _statsProvider = statsProvider;
-            _workflowRepo = workflowRepo;
+            _serviceProvider = serviceProvider;
         }
 
         public async Task InstallCommandsAsync()
@@ -50,7 +44,7 @@ namespace nomoretrolls.Commands
 
             int argPos = 0;
 
-            if (!(message.HasCharPrefix('!', ref argPos) ||
+            if (!(message.HasCharPrefix(HelpExtensions.CommandPrefix, ref argPos) ||
                     message.HasMentionPrefix(_client.CurrentUser, ref argPos)) ||
                     message.Author.IsBot)
             {
@@ -64,10 +58,10 @@ namespace nomoretrolls.Commands
         }
 
         private IServiceProvider CreateServiceProvider() => new ServiceCollection()
-                .AddSingleton<Blacklists.IBlacklistProvider>(_blacklistProvider)
-                .AddSingleton<Statistics.IUserStatisticsProvider>(_statsProvider)
-                .AddSingleton<Telemetry.ITelemetry>(_telemetry)
-                .AddSingleton<Config.IWorkflowConfigurationRepository>(_workflowRepo)
+                .AddSingleton(_telemetry)
+                .AddSingleton(_serviceProvider.GetService(typeof(IBlacklistProvider)) as IBlacklistProvider)                
+                .AddSingleton(_serviceProvider.GetService(typeof(Knocking.IKnockingScheduleRepository)) as Knocking.IKnockingScheduleRepository)
+                .AddSingleton(_serviceProvider.GetService(typeof(IWorkflowConfigurationRepository)) as IWorkflowConfigurationRepository)
                 .BuildServiceProvider();
     }
 }

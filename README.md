@@ -1,8 +1,5 @@
 # nomoretrolls - A Discord bot to counter the awkward
 
-## ** :warning: This is a work in progress! **
-
-
 [![Build & Release](https://github.com/tonycknight/nomoretrolls/actions/workflows/build.yml/badge.svg)](https://github.com/tonycknight/nomoretrolls/actions/workflows/build.yml)
 
 Discord getting unruly? Some folks don't know how to read rooms, nor when to shut up? Tired of long fireside chats, and being ignored? **Then it's time to troll the trolls!**

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using Discord.Commands;
 using nomoretrolls.Formatting;
 using nomoretrolls.Telemetry;
@@ -17,42 +18,30 @@ namespace nomoretrolls.Commands.DiscordCommands
             _telemetry = telemetry;
         }
 
+
         [Command("help", RunMode = RunMode.Async)]
-        public async Task ShowHelpAsync()
+        [Description("Show help.")]
+        public Task ShowHelpAsync()
         {
-            var line = new[]
+            try
             {
-                $"{"!allow <user name>".ToCode()}",
-                "Clears a user from the blacklist.",
-                "The user name is the Discord username & discriminator, e.g. ``joebloggs#1234``",
-                "",
-                $"{"!blacklist <user name> <duration>".ToCode()}",
-                "Sets a user's blacklist for a given duration in minutes. The default is 60 minutes.",
-                $"The user name is the Discord username & discriminator, e.g. {"joebloggs#1234".ToCode()}",
-                $"If the user has spaces in it, use double quotes e.g. {"\"joe bloggs#1234\"".ToCode()}",
-                "",
-                $"{"!users".ToCode()}",
-                "Lists all configured users' details.",
-                "",
-                $"{"!enable <feature name>".ToCode()}",
-                "Enables a feature.",
-                "",
-                $"{"!disable <feature name>".ToCode()}",
-                "Disables a feature.",
-                "",
-                $"{"!features".ToCode()}",
-                "Lists all features.",
-                "",
-                $"{"!servers".ToCode()}",
-                "Show the servers & channels the bot is watching."
+                var msg = this.GetType().GetDiscordCommandTypes()
+                                .GetCommandHelpInfos()
+                                .FormatCommandHelp()
+                                .Join(Environment.NewLine);
 
-            }.Join(Environment.NewLine);
-
-            await SendMessageAsync(line);
+                return ReplyAsync(msg);
+            }
+            catch (Exception ex)
+            {
+                _telemetry.Error(ex.Message);
+                return ReplyAsync(ex.Message);
+            }
         }
-
+              
 
         [Command("servers", RunMode = RunMode.Async)]
+        [Description("List all servers that the bot watches.")]
         public async Task ShowServersAsync()
         {
             try
@@ -85,6 +74,7 @@ namespace nomoretrolls.Commands.DiscordCommands
         }
 
         [Command("about", RunMode = RunMode.Async)]
+        [Description("About this bot.")]
         public Task ShowAboutAsync()
         {
             try

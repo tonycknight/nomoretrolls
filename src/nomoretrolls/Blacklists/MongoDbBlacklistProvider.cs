@@ -73,7 +73,7 @@ namespace nomoretrolls.Blacklists
 
         private IMongoCollection<UserBlacklistEntryDto> CreateBlacklistCollection(MongoDbConfiguration config, IMongoDatabase db)
         {
-            var col = db.GetCollection<UserBlacklistEntryDto>(config.UserStatsCollectionName);
+            var col = db.GetCollection<UserBlacklistEntryDto>(config.UserBlacklistCollectionName);
             if (col == null)
             {
                 var opts = new CreateCollectionOptions();

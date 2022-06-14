@@ -18,5 +18,8 @@ namespace nomoretrolls.Config
 
         [JsonProperty("workflowConfigCollectionName")]
         public string WorkflowConfigCollectionName { get; set; } = "workflowconfigs";
+
+        [JsonProperty("userKnockingScheduleCollectionName")]
+        public string UserKnockingScheduleCollectionName { get; set; } = "userknockschedule";
     }
 }

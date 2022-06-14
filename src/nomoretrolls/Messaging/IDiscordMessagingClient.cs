@@ -11,5 +11,7 @@ namespace nomoretrolls.Messaging
         void AddMessageReceivedHandler(Func<IUserMessage, Task> handler);
 
         void AddUserIsTypingHandler(Func<IUser, IMessageChannel, Task> handler);
+
+        Task<IList<IUser>> GetUsersAsync(IEnumerable<ulong> userIds);
     }
 }

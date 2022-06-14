@@ -15,6 +15,8 @@ namespace nomoretrolls
                 .AddSingleton<IList<Telemetry.ITelemetry>>(sp => new Telemetry.ITelemetry[] { new Telemetry.ConsoleTelemetry() })
                 .AddSingleton<Telemetry.ITelemetry, Telemetry.AggregatedTelemetry>()
                 .AddSingleton<Io.IIoProvider, Io.IoProvider>()
+                .AddSingleton<Tk.Extensions.Time.ITimeProvider, Tk.Extensions.Time.TimeProvider>()
+                .AddSingleton<Messaging.IDiscordMessagingClientProvider, Messaging.DiscordMessagingClientProvider>()
                 .AddSingleton<Workflows.Reactions.IBlacklistReplyTextGenerator, Workflows.Reactions.BlacklistReplyTextGenerator>()
                 .AddSingleton<Workflows.Reactions.IEmoteGenerator, Workflows.Reactions.EmoteGenerator>()
                 .AddSingleton<Workflows.Reactions.IShoutingReplyTextGenerator, Workflows.Reactions.ShoutingReplyTextGenerator>()
@@ -26,7 +28,9 @@ namespace nomoretrolls
                 .AddSingleton < Config.MongoDbWorkflowConfigurationRepository>()
                 .AddSingleton < Config.IWorkflowConfigurationRepository>(sp => 
                     new Config.WorkflowConfigurationRepository(sp.GetService<Config.MemoryWorkflowConfigurationRepository>(), sp.GetService<Config.MongoDbWorkflowConfigurationRepository>()))
+                .AddSingleton<Knocking.IKnockingScheduleRepository, Knocking.MongoDbKnockingScheduleRepository>()
                 .AddSingleton<Scheduling.IJobScheduler, Scheduling.JobScheduler>()
+                .AddSingleton<Knocking.KnockingScheduleJob>()
                 .BuildServiceProvider();
 
 
