@@ -26,13 +26,16 @@ namespace nomoretrolls.Commands.DiscordCommands
             _knockingProvider = knockingProvider;
         }
 
-        [Command("deleteblacklist", RunMode = RunMode.Async)]
+        [Command("deleteblacklist", RunMode = RunMode.Async)]        
         [Description("Delete a user's blacklisting.")]
-        [CommandForm("<user name>")]
+        [CommandForm("<user name>",
+                     example: @"""JoeUser#1234""",
+                     guidelines: "Use double quotes for the user name as Discord may get confused.")]
         public async Task DeleteUserBlacklistAsync([Remainder][Summary("The user name")] string userName)
         {
             try
             {
+                userName = userName.Trim('"');
                 var user = await Context.GetUserAsync(userName);
                 if (user == null)
                 {
@@ -52,8 +55,12 @@ namespace nomoretrolls.Commands.DiscordCommands
 
 
         [Command("blacklist", RunMode = RunMode.Async)]
+        [Alias("bl")]
         [Description("Blacklist a user.")]
-        [CommandForm("<user name> <duration in minutes>")]
+        [CommandForm("<user name> <duration in minutes>",
+            example: @"""JoeUser#1234"" 60",
+            exampleExplanation: "to blacklist Joe for 60 minutes",
+            guidelines: "Use double quotes for the user name as Discord may get confused.")]
         public async Task SetUserBlacklistAsync([Summary("The user name")] string userName, int duration = 60)
         {
             try
@@ -78,8 +85,12 @@ namespace nomoretrolls.Commands.DiscordCommands
         }
 
         [Command("knock", RunMode = RunMode.Async)]
+        [Alias("k")]
         [Description("Set a schedule to knock a user.")]
-        [CommandForm("<user name> <duration in minutes> <cron frequency for UTC>", guidelines: "Use double quotes for the CRON expression as Discord may hide them")]
+        [CommandForm("<user name> <duration in minutes> <cron frequency for UTC>", 
+                     guidelines: "Use double quotes for the user name & CRON expression as Discord may get confused.",
+                     example: @"""JoeUser#1234"" 60 ""*/1 * * * 1""",
+                     exampleExplanation: "to knock Joe every minute on Mondays for an hour")]
         public async Task SetKnockScheduleAsync([Summary("The user name")] string userName, int duration = 60, [Remainder]string frequency = "*/3 * * * *")
         {
             try
@@ -108,13 +119,14 @@ namespace nomoretrolls.Commands.DiscordCommands
 
         [Command("deleteknock", RunMode = RunMode.Async)]
         [Description("Delete a user's knock schedule.")]
-        [CommandForm("<user name>")]
+        [CommandForm("<user name>",
+            example: @"""JoeUser#1234""",
+            guidelines: "Use double quotes for the user name as Discord may get confused.")]
         public async Task RemoveKnockScheduleAsync([Summary("The user name")] string userName)
         {
             try
             {
                 userName = userName.Trim('"');
-
                 var user = await Context.GetUserAsync(userName);
                 if (user == null)
                 {

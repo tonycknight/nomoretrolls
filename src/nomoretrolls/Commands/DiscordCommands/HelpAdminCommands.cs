@@ -26,7 +26,7 @@ namespace nomoretrolls.Commands.DiscordCommands
             try
             {
                 var msg = this.GetType().GetDiscordCommandTypes()
-                                .GetCommandHelp()
+                                .GetCommandHelpInfos()
                                 .FormatCommandHelp()
                                 .Join(Environment.NewLine);
 
