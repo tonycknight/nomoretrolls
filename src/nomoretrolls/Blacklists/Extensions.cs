@@ -16,15 +16,15 @@
             Expiry = value.Expiry,
         };
 
-        public static UserBlacklistEntry CreateBlacklistEntry(this Discord.IUser user, DateTime now, int duration)
+        public static UserBlacklistEntry CreateBlacklistEntry(this Discord.IUser user, DateTime now, TimeSpan duration)
         {
-            duration = duration > 0 ? duration : (int)TimeSpan.FromDays(365).TotalMinutes;
+            duration = duration > TimeSpan.Zero ? duration : TimeSpan.FromDays(365);
 
             return new UserBlacklistEntry()
             {
                 UserId = user.Id,
                 Start = now,
-                Expiry = now.AddMinutes(duration),
+                Expiry = now.Add(duration),
             };
         }
 

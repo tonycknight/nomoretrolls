@@ -88,7 +88,7 @@ namespace nomoretrolls.tests.Knocking
 
             var r = nomoretrolls.Knocking.Extensions.CreateScheduleEntry(user, start, TimeSpan.Zero, "* * * * *");
 
-            return r.Expiry == start.AddYears(1);
+            return r.Expiry == start.AddDays(365);
         }
 
 

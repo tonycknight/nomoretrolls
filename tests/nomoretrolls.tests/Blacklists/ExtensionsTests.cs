@@ -15,7 +15,7 @@ namespace nomoretrolls.tests.Blacklists
             user.Id.Returns(id);
 
             var now = DateTime.UtcNow;
-            var result = user.CreateBlacklistEntry(now, 0);
+            var result = user.CreateBlacklistEntry(now, TimeSpan.Zero);
 
             return result.UserId == id;
         }
@@ -25,7 +25,7 @@ namespace nomoretrolls.tests.Blacklists
         {
             var user = Substitute.For<Discord.IUser>();
             
-            var result = user.CreateBlacklistEntry(start, 0);
+            var result = user.CreateBlacklistEntry(start, TimeSpan.Zero);
 
             return result.Start == start;
         }
@@ -35,7 +35,7 @@ namespace nomoretrolls.tests.Blacklists
         {
             var user = Substitute.For<Discord.IUser>();
             
-            var result = user.CreateBlacklistEntry(start, duration.Get);
+            var result = user.CreateBlacklistEntry(start, TimeSpan.FromMinutes(duration.Get));
 
             return result.Expiry == start.AddMinutes(duration.Get);
         }
@@ -47,7 +47,7 @@ namespace nomoretrolls.tests.Blacklists
             {
                 var user = Substitute.For<Discord.IUser>();
 
-                var result = user.CreateBlacklistEntry(start, duration);
+                var result = user.CreateBlacklistEntry(start, TimeSpan.FromMinutes(duration));
 
                 return result.Expiry == start.AddDays(365);
             };

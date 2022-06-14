@@ -36,7 +36,7 @@ namespace nomoretrolls.Knocking
 
             if (duration <= TimeSpan.Zero)
             {
-                duration = start.AddYears(1).Subtract(start);
+                duration = start.AddDays(365).Subtract(start);
             }
 
             return new KnockingScheduleEntry()

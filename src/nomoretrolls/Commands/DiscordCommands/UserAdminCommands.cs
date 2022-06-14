@@ -73,9 +73,9 @@ namespace nomoretrolls.Commands.DiscordCommands
                 }
                 else
                 {
-                    var entry = user.CreateBlacklistEntry(DateTime.UtcNow, duration);
+                    var entry = user.CreateBlacklistEntry(DateTime.UtcNow, TimeSpan.FromMinutes(duration));
                     await _blacklistProvider.SetUserEntryAsync(entry);
-                    await SendMessageAsync($"Done. {userName.ToCode()} has been blacklisted until {entry.Expiry.ToString(DateTimeFormat).ToBold()}");
+                    await SendMessageAsync($"Done. {userName.ToCode()} has been blacklisted until {entry.Expiry.ToString(DateTimeFormat).ToCode()}");
                 }
             }
             catch (Exception ex)
