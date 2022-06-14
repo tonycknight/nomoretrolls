@@ -3,7 +3,7 @@ namespace nomoretrolls.Workflows.Reactions
     internal class EmoteGenerator : IEmoteGenerator
     {
         private readonly Func<int, int> _picker;
-        private readonly string[] _disapproveEmotes = new[] { "🍋", "👎", "🤐", "🧏‍♂️", "🧏‍♀️", "🍿", "🇸🇦", ":waffle:" };
+        private readonly string[] _disapproveEmotes = new[] { "🍋", "👎", "🤐", "🧏‍♂️", "🧏‍♀️", "🍿", "🇸🇦", "🧇" };
 
         public EmoteGenerator() : this(PickRandom())
         {
