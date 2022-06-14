@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using FsCheck;
 using FsCheck.Xunit;
-using nomoretrolls.Workflows.Reactions;
+using nomoretrolls.Emotes;
 
-namespace nomoretrolls.tests.Workflows.Reactions
+namespace nomoretrolls.tests.Emotes
 {
     public class EmoteGeneratorTests
     {

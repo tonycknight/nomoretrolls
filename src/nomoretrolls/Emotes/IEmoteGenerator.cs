@@ -1,4 +1,4 @@
-﻿namespace nomoretrolls.Workflows.Reactions
+﻿namespace nomoretrolls.Emotes
 {
     internal interface IEmoteGenerator
     {

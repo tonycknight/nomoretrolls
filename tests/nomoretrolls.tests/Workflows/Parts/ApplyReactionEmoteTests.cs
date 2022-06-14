@@ -1,9 +1,9 @@
 ﻿using FsCheck;
 using FsCheck.Xunit;
+using nomoretrolls.Emotes;
 using nomoretrolls.Messaging;
 using nomoretrolls.Workflows;
 using nomoretrolls.Workflows.Parts;
-using nomoretrolls.Workflows.Reactions;
 using NSubstitute;
 
 namespace nomoretrolls.tests.Workflows.Parts

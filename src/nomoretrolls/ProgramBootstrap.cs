@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
+using nomoretrolls.Emotes;
 using Tk.Extensions;
 using Tk.Extensions.Reflection;
 
@@ -18,7 +19,7 @@ namespace nomoretrolls
                 .AddSingleton<Tk.Extensions.Time.ITimeProvider, Tk.Extensions.Time.TimeProvider>()
                 .AddSingleton<Messaging.IDiscordMessagingClientProvider, Messaging.DiscordMessagingClientProvider>()
                 .AddSingleton<Workflows.Reactions.IBlacklistReplyTextGenerator, Workflows.Reactions.BlacklistReplyTextGenerator>()
-                .AddSingleton<Workflows.Reactions.IEmoteGenerator, Workflows.Reactions.EmoteGenerator>()
+                .AddSingleton<IEmoteGenerator, EmoteGenerator>()
                 .AddSingleton<Workflows.Reactions.IShoutingReplyTextGenerator, Workflows.Reactions.ShoutingReplyTextGenerator>()
                 .AddSingleton<Workflows.IMessageWorkflowFactory, Workflows.MessageWorkflowFactory>()
                 .AddTransient<Workflows.IMessageWorkflowExecutor, Workflows.MessageWorkflowExecutor>()

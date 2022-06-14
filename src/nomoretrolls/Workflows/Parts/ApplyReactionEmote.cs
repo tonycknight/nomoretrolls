@@ -1,4 +1,4 @@
-﻿using nomoretrolls.Workflows.Reactions;
+﻿using nomoretrolls.Emotes;
 
 namespace nomoretrolls.Workflows.Parts
 {

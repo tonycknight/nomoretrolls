@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using nomoretrolls.Blacklists;
+using nomoretrolls.Emotes;
 using nomoretrolls.Statistics;
 using nomoretrolls.Telemetry;
 using nomoretrolls.Workflows.Reactions;
