@@ -17,7 +17,9 @@
         };
 
         public static UserBlacklistEntry CreateBlacklistEntry(this Discord.IUser user, DateTime now, int duration)
-        {            
+        {
+            duration = duration > 0 ? duration : (int)TimeSpan.FromDays(365).TotalMinutes;
+
             return new UserBlacklistEntry()
             {
                 UserId = user.Id,
