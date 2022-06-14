@@ -1,20 +1,31 @@
+using Tk.Extensions.Guards;
+
 namespace nomoretrolls.Emotes
 {
     internal class EmoteGenerator : IEmoteGenerator
     {
         private readonly Func<int, int> _picker;
-        private readonly string[] _disapproveEmotes = new[] { "🍋", "👎", "🤐", "🧏‍♂️", "🧏‍♀️", "🍿", "🇸🇦", "🧇" };
-
-        public EmoteGenerator() : this(PickRandom())
+        private readonly IEmoteRepository _emoteRepo;
+        
+        public EmoteGenerator(IEmoteRepository emoteRepo) : this(PickRandom(), emoteRepo)
         {
         }
 
-        public EmoteGenerator(Func<int, int> picker)
+        public EmoteGenerator(Func<int, int> picker, IEmoteRepository emoteRepo)
         {
-            _picker = picker;
+            _picker = picker.ArgNotNull(nameof(picker));
+            _emoteRepo = emoteRepo.ArgNotNull(nameof(emoteRepo));
         }
 
-        public string PickDisapproveEmotes() => _disapproveEmotes[_picker(_disapproveEmotes.Length)];
+        public string PickDisapproveEmotes() => PickEmote("blacklist");
+
+        private string PickEmote(string name)
+        {
+            var emotes = _emoteRepo.GetEmotesAsync(name).GetAwaiter().GetResult();
+            if (emotes == null) return null;
+
+            return emotes[_picker(emotes.Count)].Emotes.FirstOrDefault();
+        }
 
         private static Func<int, int> PickRandom()
         {

@@ -19,6 +19,7 @@ namespace nomoretrolls
                 .AddSingleton<Tk.Extensions.Time.ITimeProvider, Tk.Extensions.Time.TimeProvider>()
                 .AddSingleton<Messaging.IDiscordMessagingClientProvider, Messaging.DiscordMessagingClientProvider>()
                 .AddSingleton<Workflows.Reactions.IBlacklistReplyTextGenerator, Workflows.Reactions.BlacklistReplyTextGenerator>()
+                .AddSingleton<IEmoteRepository, EmoteRepository>()
                 .AddSingleton<IEmoteGenerator, EmoteGenerator>()
                 .AddSingleton<Workflows.Reactions.IShoutingReplyTextGenerator, Workflows.Reactions.ShoutingReplyTextGenerator>()
                 .AddSingleton<Workflows.IMessageWorkflowFactory, Workflows.MessageWorkflowFactory>()
