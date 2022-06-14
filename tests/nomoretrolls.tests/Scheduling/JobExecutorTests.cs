@@ -26,7 +26,8 @@ namespace nomoretrolls.Tests.Scheduling
             result.Should().BeOfType<JobExecuteResultOk>();
             result.Duration.Should().BeGreaterThan(TimeSpan.Zero);
             await job.Received(1).ExecuteAsync();
-            t.Received(2).Message(Arg.Any<string>());
+            t.Received(2).Message(Arg.Is<string>(s => !string.IsNullOrWhiteSpace(s)));
+            t.Received(0).Error(Arg.Any<string>());
         }
 
         [Fact]
@@ -48,7 +49,9 @@ namespace nomoretrolls.Tests.Scheduling
             result.Exception.Should().NotBeNull();
             result.Duration.Should().BeGreaterThan(TimeSpan.Zero);
             await job.Received(1).ExecuteAsync();
-            t.Received(1).Message(Arg.Any<string>());
+            t.Received(1).Message(Arg.Is<string>(s => !string.IsNullOrWhiteSpace(s)));
+            t.Received(1).Error(Arg.Is<string>(s => !string.IsNullOrWhiteSpace(s)));
+            
         }
 
         private ITelemetry CreateMockTelemetry() => Substitute.For<ITelemetry>();
