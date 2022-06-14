@@ -2,7 +2,7 @@
 {
     internal interface IDiscordMessagingClientProvider
     {
-        DiscordMessagingClient GetClient();
-        void SetClient(DiscordMessagingClient client);
+        IDiscordMessagingClient GetClient();
+        void SetClient(IDiscordMessagingClient client);
     }
 }

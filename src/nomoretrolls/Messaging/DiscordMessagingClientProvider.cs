@@ -2,10 +2,10 @@
 {
     internal class DiscordMessagingClientProvider : IDiscordMessagingClientProvider
     {
-        private DiscordMessagingClient _client;
+        private IDiscordMessagingClient _client;
         private readonly object _lock = new object();
 
-        public DiscordMessagingClient GetClient()
+        public IDiscordMessagingClient GetClient()
         {
             if (_client == null)
             {
@@ -14,7 +14,7 @@
             return _client;
         }
 
-        public void SetClient(DiscordMessagingClient client)
+        public void SetClient(IDiscordMessagingClient client)
         {
             lock (_lock)
             {

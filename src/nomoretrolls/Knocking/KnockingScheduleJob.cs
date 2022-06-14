@@ -12,7 +12,7 @@ namespace nomoretrolls.Knocking
         private readonly IDiscordMessagingClient _discordClient;
         private readonly IKnockingScheduleRepository _scheduleRepo;
 
-        public KnockingScheduleJob(Tk.Extensions.Time.ITimeProvider timeProvider, ITelemetry telemetry, IDiscordMessagingClientProvider discordClientProvider, IKnockingScheduleRepository scheduleRepo)
+        public KnockingScheduleJob(ITimeProvider timeProvider, ITelemetry telemetry, IDiscordMessagingClientProvider discordClientProvider, IKnockingScheduleRepository scheduleRepo)
         {
             _timeProvider = timeProvider;
             _telemetry = telemetry;
@@ -32,7 +32,7 @@ namespace nomoretrolls.Knocking
 
             if (tasks.Length > 0)
             {
-                _telemetry.Message($"Knocking {tasks.Length} user(s).");
+                _telemetry.Message($"Found {tasks.Length} user(s) to knock.");
                 try
                 {
                     await Task.WhenAll(tasks);
@@ -57,11 +57,9 @@ namespace nomoretrolls.Knocking
         }
 
         private async Task KnockAsync(KnockingScheduleEntry entry)
-        {
-            
+        {            
             try
-            {
-                
+            {                
                 var user = (await _discordClient.GetUsersAsync(new[] { entry.UserId })).FirstOrDefault();
                 if (user != null)
                 {
