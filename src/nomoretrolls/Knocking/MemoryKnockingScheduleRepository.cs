@@ -1,8 +1,10 @@
 ﻿using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 using Tk.Extensions.Tasks;
 
 namespace nomoretrolls.Knocking
 {
+    [ExcludeFromCodeCoverage] // Tech debt added to the backlog
     internal class MemoryKnockingScheduleRepository : IKnockingScheduleRepository
     {
         private readonly ConcurrentDictionary<ulong, KnockingScheduleEntry> _entries;
