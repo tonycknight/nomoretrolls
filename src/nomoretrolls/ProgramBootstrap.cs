@@ -28,7 +28,7 @@ namespace nomoretrolls
                 .AddSingleton < Config.MongoDbWorkflowConfigurationRepository>()
                 .AddSingleton < Config.IWorkflowConfigurationRepository>(sp => 
                     new Config.WorkflowConfigurationRepository(sp.GetService<Config.MemoryWorkflowConfigurationRepository>(), sp.GetService<Config.MongoDbWorkflowConfigurationRepository>()))
-                .AddSingleton<Knocking.IKnockingScheduleRepository, Knocking.MongoKnockingScheduleRepository>()
+                .AddSingleton<Knocking.IKnockingScheduleRepository, Knocking.MongoDbKnockingScheduleRepository>()
                 .AddSingleton<Scheduling.IJobScheduler, Scheduling.JobScheduler>()
                 .AddSingleton<Knocking.KnockingScheduleJob>()
                 .BuildServiceProvider();

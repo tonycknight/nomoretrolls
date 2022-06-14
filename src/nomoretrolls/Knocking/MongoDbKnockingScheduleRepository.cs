@@ -6,11 +6,11 @@ using nomoretrolls.Io;
 namespace nomoretrolls.Knocking
 {
     [ExcludeFromCodeCoverage]
-    internal class MongoKnockingScheduleRepository : IKnockingScheduleRepository
+    internal class MongoDbKnockingScheduleRepository : IKnockingScheduleRepository
     {
         private readonly Lazy<IMongoCollection<KnockingScheduleEntryDto>> _knockScheduleCol;
 
-        public MongoKnockingScheduleRepository(Config.IConfigurationProvider configProvider)
+        public MongoDbKnockingScheduleRepository(Config.IConfigurationProvider configProvider)
         {
             _knockScheduleCol = new Lazy<IMongoCollection<KnockingScheduleEntryDto>>(() => InitialiseDb(configProvider));
         }
