@@ -91,18 +91,14 @@ namespace nomoretrolls.Commands
                     .Build("Shouting user DM");
         }
 
-        public IMessageWorkflow CreateAutoEmoteWorkflow()
-        {
-            var window = TimeSpan.FromDays(1);
-
-            return _wfFactory.CreateBuilder()
+        public IMessageWorkflow CreateAutoEmoteWorkflow() 
+            => _wfFactory.CreateBuilder()
                     .Receiver(new MessageReceiver())
                     .IfEmoteAnnotationWorkflowEnabled()
                     .UserIsEmoteAnnotated()
                     .ApplyReactionEmote(null)
                     .SendReactionEmote()
                     .Build("Emote Annotation");
-        }
 
     }
 }
