@@ -32,6 +32,7 @@ namespace nomoretrolls.Emotes
                 { "shouting", CreateShoutingEmotes() },
                 { "farmyardanimals", CreateFarmyardAnimalsEmotes() },
                 { "gay", CreateGayEmotes() },
+                { "religion", CreateFaithEmotes() }
             };
 
         private IList<EmoteInfo> CreateBlacklistEmotes()
@@ -62,6 +63,12 @@ namespace nomoretrolls.Emotes
             return ToEmotes(emotes.Select(s => new[] { s }));
         }
 
+        private IList<EmoteInfo> CreateFaithEmotes()
+        {
+            var emotes = new[] { "✝️", "☪️", "✡️", "🕉️", "☸️", "☦️", "🕎", "🔯" };
+
+            return ToEmotes(emotes.Select(s => new[] { s }));
+        }
         private IList<EmoteInfo> ToEmotes(IEnumerable<string[]> emotes)
             => emotes.Select(e => new EmoteInfo(e)).ToArray();
     }
