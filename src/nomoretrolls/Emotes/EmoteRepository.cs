@@ -29,7 +29,9 @@ namespace nomoretrolls.Emotes
             new Dictionary<string, IList<EmoteInfo>>(StringComparer.InvariantCultureIgnoreCase)
             {
                 { "blacklist", CreateBlacklistDefaults()  },
-                { "gay", CreateGayDefaults()  },
+                { "shouting", CreateShoutingDefaults() },
+                { "farmyardanimals", CreateFarmyardAnimalsDefaults() },
+                { "gay", CreateGayDefaults() },
             };
 
         private IList<EmoteInfo> CreateBlacklistDefaults()
@@ -39,9 +41,23 @@ namespace nomoretrolls.Emotes
             return ToEmotes(emotes.Select(s => new[] { s }));            
         }
 
+        private IList<EmoteInfo> CreateShoutingDefaults()
+        {
+            var emotes = new[] { "🍋", "👎", "🤐", "🧏‍♂️", "🧏‍♀️", "🍿", "🧇" };
+
+            return ToEmotes(emotes.Select(s => new[] { s }));
+        }
+
         private IList<EmoteInfo> CreateGayDefaults()
         {
             var emotes = new[] { "🏳️‍🌈", "🏳️‍⚧️", "⚧", "👨‍❤️‍👨", "👨‍❤️‍💋‍👨" };
+
+            return ToEmotes(emotes.Select(s => new[] { s }));
+        }
+
+        private IList<EmoteInfo> CreateFarmyardAnimalsDefaults()
+        {
+            var emotes = new[] { "🐐", "🐑", "🐮", "🐄", "🐷" };
 
             return ToEmotes(emotes.Select(s => new[] { s }));
         }
