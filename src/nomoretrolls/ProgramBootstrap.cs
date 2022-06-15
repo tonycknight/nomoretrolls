@@ -26,7 +26,7 @@ namespace nomoretrolls
                 .AddTransient<Workflows.IMessageWorkflowExecutor, Workflows.MessageWorkflowExecutor>()
                 .AddSingleton<Statistics.IUserStatisticsProvider, Statistics.MongoDbUserStatisticsProvider>()
                 .AddSingleton<Blacklists.IBlacklistProvider, Blacklists.MongoDbBlacklistProvider>()
-                .AddSingleton<IEmoteConfigProvider, MemoryEmoteConfigProvider>()
+                .AddSingleton<IEmoteConfigProvider, MongoDbEmoteConfigProvider>()
                 .AddSingleton<Config.MemoryWorkflowConfigurationRepository>()
                 .AddSingleton<Config.MongoDbWorkflowConfigurationRepository>()
                 .AddSingleton<Config.IWorkflowConfigurationRepository>(sp => 
