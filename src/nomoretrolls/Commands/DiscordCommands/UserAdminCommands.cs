@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using Cronos;
 using Discord.Commands;
 using nomoretrolls.Blacklists;
+using nomoretrolls.Emotes;
 using nomoretrolls.Formatting;
 using nomoretrolls.Knocking;
 using nomoretrolls.Telemetry;
@@ -17,13 +18,16 @@ namespace nomoretrolls.Commands.DiscordCommands
         private readonly ITelemetry _telemetry;
         private readonly IBlacklistProvider _blacklistProvider;
         private readonly IKnockingScheduleRepository _knockingProvider;
+        private readonly IEmoteConfigProvider _emoteConfig;
         private const string DateTimeFormat = "dd MMM yyyy HH:mm:ss UTC";
 
-        public UserAdminCommands(ITelemetry telemetry, IBlacklistProvider blacklistProvider, IKnockingScheduleRepository knockingProvider)
+        public UserAdminCommands(ITelemetry telemetry, IBlacklistProvider blacklistProvider, IKnockingScheduleRepository knockingProvider,
+            IEmoteConfigProvider emoteConfig)
         {
             _telemetry = telemetry;
             _blacklistProvider = blacklistProvider;
             _knockingProvider = knockingProvider;
+            _emoteConfig = emoteConfig;
         }
 
         [Command("deleteblacklist", RunMode = RunMode.Async)]        
@@ -83,6 +87,65 @@ namespace nomoretrolls.Commands.DiscordCommands
                 await SendMessageAsync(ex.Message.ToCode());
             }
         }
+
+        [Command("deleteemote", RunMode = RunMode.Async)]
+        [Description("Delete a user's emotes.")]
+        [CommandForm("<user name>",
+                     example: @"""JoeUser#1234""",
+                     guidelines: "Use double quotes for the user name as Discord may get confused.")]
+        public async Task DeleteUserEmoteAnnotationAsync([Remainder][Summary("The user name")] string userName)
+        {
+            try
+            {
+                userName = userName.Trim('"');
+                var user = await Context.GetUserAsync(userName);
+                if (user == null)
+                {
+                    await SendMessageAsync("The user was not found on any attached servers.".ToCode());
+                }
+                else
+                {
+                    await _emoteConfig.DeleteUserEmoteAnnotationEntryAsync(user.Id);                    
+                    await SendMessageAsync($"Done. {userName.ToCode()} has been cleared.");
+                }
+            }
+            catch (Exception ex)
+            {
+                await SendMessageAsync(ex.Message.ToCode());
+            }
+        }
+
+        [Command("emote", RunMode = RunMode.Async)]
+        [Alias("e")]
+        [Description("Annotate a user's messages with emotes.")]
+        [CommandForm("<user name> <duration in minutes> <emote list name>",
+            example: @"""JoeUser#1234"" 60 shouting",
+            exampleExplanation: @"to annotate Joe's messages for 60 minutes with ""shouting"" emotes",
+            guidelines: "Use double quotes for the user name as Discord may get confused.")]
+        public async Task SetUserEmoteAnnotationAsync([Summary("The user name")] string userName, int duration = 60, string emoteList = "farmyardanimals")
+        {
+            try
+            {
+                userName = userName.Trim('"');
+                emoteList = emoteList.Trim('"');
+                var user = await Context.GetUserAsync(userName);
+                if (user == null)
+                {
+                    await SendMessageAsync("The user was not found on any attached servers.".ToCode());
+                }
+                else
+                {
+                    var entry = user.CreateUserEmoteAnnotationEntry(DateTime.UtcNow, TimeSpan.FromMinutes(duration), emoteList);
+                    await _emoteConfig.SetUserEmoteAnnotationEntryAsync(entry);
+                    await SendMessageAsync($"Done. {userName.ToCode()} will have emotes until {entry.Expiry.ToString(DateTimeFormat).ToCode()}");
+                }
+            }
+            catch (Exception ex)
+            {
+                await SendMessageAsync(ex.Message.ToCode());
+            }
+        }
+
 
         [Command("knock", RunMode = RunMode.Async)]
         [Alias("k")]
@@ -152,9 +215,11 @@ namespace nomoretrolls.Commands.DiscordCommands
             {
                 var blacklistEntries = (await _blacklistProvider.GetUserEntriesAsync()).ToDictionary(e => e.UserId);
                 var knockEntries = (await _knockingProvider.GetUserEntriesAsync()).ToDictionary(e => e.UserId);
+                var emoteEntries = (await _emoteConfig.GetUserEmoteAnnotationEntriesAsync()).ToDictionary(e => e.UserId);
 
                 var users1 = blacklistEntries.Keys
                     .Concat(knockEntries.Keys)
+                    .Concat(emoteEntries.Keys)
                     .Distinct()
                     .Select(userId => Context.GetUserAsync(userId))
                     .ToArray();
@@ -170,13 +235,16 @@ namespace nomoretrolls.Commands.DiscordCommands
                 {
                     var ble = blacklistEntries.GetValueOrDefault(u.user.Id);
                     var ke = knockEntries.GetValueOrDefault(u.user.Id);
-                    return new { userName = u.userName, blacklist = ble, knock = ke };
+                    var em = emoteEntries.GetValueOrDefault(u.user.Id);
+
+                    return new { userName = u.userName, blacklist = ble, knock = ke, emote = em };
                 });
 
                 var lines = userEntries.Where(a => a.blacklist != null || a.knock != null) 
                                         .OrderBy(a => a.userName)                                        
                                         .SelectMany(a => new[] { a.userName.ToCode().ToBold(),
                                                                  a.blacklist != null ? $"Blacklisted. Expires {a.blacklist.Expiry.ToString(DateTimeFormat).ToCode()}"  : null,
+                                                                 a.emote != null ? $"Emotes with {a.emote.EmoteListName.ToCode()}. Expires {a.emote.Expiry.ToString(DateTimeFormat).ToCode()}" : null,
                                                                  a.knock != null ? $"Knocking - with frequency {a.knock.Frequency.ToCode()} - {CronExpressionDescriptor.ExpressionDescriptor.GetDescription(a.knock.Frequency).ToCode()}. Expires {a.knock.Expiry.ToString(DateTimeFormat).ToCode()} " : null,
                                                                })
                                         .Where(l => l != null)

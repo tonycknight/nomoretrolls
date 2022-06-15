@@ -15,6 +15,19 @@ namespace nomoretrolls.Emotes
             _entries = new ConcurrentDictionary<ulong,UserEmoteAnnotationEntry>();            
         }
 
+        public Task DeleteUserEmoteAnnotationEntryAsync(ulong userId)
+        {
+            _entries.TryRemove(userId, out var _);
+            return Task.CompletedTask;
+        }
+
+        public Task<IList<UserEmoteAnnotationEntry>> GetUserEmoteAnnotationEntriesAsync()
+        {
+            var result = _entries.Values.ToList();
+
+            return Task.FromResult((IList<UserEmoteAnnotationEntry>)result);
+        }
+
         public Task<UserEmoteAnnotationEntry?> GetUserEmoteAnnotationEntryAsync(ulong userId)
         {
             UserEmoteAnnotationEntry result = null;
