@@ -4,7 +4,7 @@
     {
         public const string ShoutingWorkflow = "shouting";
         public const string BlacklistWorkflow = "blacklist";
-        public const string EmoteAnnotationWorkflow = "emoteannotation";
+        public const string EmoteAnnotationWorkflow = "emotes";
 
         public Task<IList<WorkflowConfiguration>> GetWorkflowConfigsAsync();
 
