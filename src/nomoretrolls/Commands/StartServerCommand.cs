@@ -37,7 +37,8 @@ namespace nomoretrolls.Commands
 
             _clientMessageWorkflows = new[] { wfProvider.CreateBlacklistedUserWorkflow(),
                                               wfProvider.CreateShoutingWorkflow(),
-                                              wfProvider.CreateShoutingPersonalReplyWorkflow() };
+                                              wfProvider.CreateShoutingPersonalReplyWorkflow(),
+                                              wfProvider.CreateAutoEmoteWorkflow()};
         }
 
         [Option(CommandOptionType.SingleValue, Description = "The configuration file's path.", LongName = "config", ShortName = "c")]

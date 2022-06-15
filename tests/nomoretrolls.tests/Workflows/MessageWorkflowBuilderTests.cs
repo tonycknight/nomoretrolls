@@ -2,6 +2,7 @@
 using System.Linq;
 using FluentAssertions;
 using nomoretrolls.Blacklists;
+using nomoretrolls.Emotes;
 using nomoretrolls.Statistics;
 using nomoretrolls.Telemetry;
 using nomoretrolls.Workflows;

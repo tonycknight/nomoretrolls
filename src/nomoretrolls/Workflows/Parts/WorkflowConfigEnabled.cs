@@ -7,7 +7,7 @@ namespace nomoretrolls.Workflows.Parts
         private readonly IWorkflowConfigurationRepository _configRepo;
         private readonly string _name;
 
-        public WorkflowConfigEnabled(Config.IWorkflowConfigurationRepository configRepo, string name)
+        public WorkflowConfigEnabled(IWorkflowConfigurationRepository configRepo, string name)
         {
             _configRepo = configRepo;
             _name = name;

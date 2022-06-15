@@ -16,6 +16,9 @@ namespace nomoretrolls.Config
         [JsonProperty("userBlacklistCollectionName")]
         public string UserBlacklistCollectionName { get; set; } = "userblacklist";
 
+        [JsonProperty("userEmoteAnnotationsCollectionName")]
+        public string UserEmoteAnnotationsCollectionName { get; set; } = "user_emote_annotations";
+
         [JsonProperty("workflowConfigCollectionName")]
         public string WorkflowConfigCollectionName { get; set; } = "workflowconfigs";
 

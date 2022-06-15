@@ -29,6 +29,7 @@ namespace nomoretrolls.Config
             var names = new[] {
                 IWorkflowConfigurationRepository.ShoutingWorkflow,
                 IWorkflowConfigurationRepository.BlacklistWorkflow,
+                IWorkflowConfigurationRepository.EmoteAnnotationWorkflow,
             };
 
             foreach(var n in names)

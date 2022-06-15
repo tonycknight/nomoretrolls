@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using nomoretrolls.Blacklists;
+using nomoretrolls.Emotes;
 using nomoretrolls.Statistics;
 using nomoretrolls.Telemetry;
 using nomoretrolls.Workflows.Reactions;
@@ -7,7 +8,6 @@ using Tk.Extensions.Guards;
 
 namespace nomoretrolls.Workflows
 {
-
     internal sealed class MessageWorkflowBuilder : IMessageWorkflowBuilder
     {
 
@@ -46,6 +46,8 @@ namespace nomoretrolls.Workflows
         public IMessageWorkflowBuilder IfBlacklistWorkflowEnabled()
             => this.Part(new Parts.WorkflowConfigEnabled(_serviceProvider.GetService<Config.IWorkflowConfigurationRepository>(), Config.IWorkflowConfigurationRepository.BlacklistWorkflow));
 
+        public IMessageWorkflowBuilder IfEmoteAnnotationWorkflowEnabled()
+            => this.Part(new Parts.WorkflowConfigEnabled(_serviceProvider.GetService<Config.IWorkflowConfigurationRepository>(), Config.IWorkflowConfigurationRepository.EmoteAnnotationWorkflow));
         public IMessageWorkflowBuilder If(Func<IMessageWorkflowBuilder, IMessageWorkflowBuilder> condition, Func<IMessageWorkflowBuilder, IMessageWorkflowBuilder> onSuccess, Func<IMessageWorkflowBuilder, IMessageWorkflowBuilder> onFailure)
         {
             var b1 = new MessageWorkflowBuilder(_serviceProvider).Receiver(_receiver);
@@ -88,6 +90,9 @@ namespace nomoretrolls.Workflows
         public IMessageWorkflowBuilder UserIsBlacklisted()
             => this.Part(new Parts.UserBlacklistFilter(_serviceProvider.GetService<IBlacklistProvider>()));
 
+        public IMessageWorkflowBuilder UserIsEmoteAnnotated()
+            => this.Part(new Parts.UserEmoteAnnotationFilter(_serviceProvider.GetService<IEmoteConfigProvider>()));
+
         public IMessageWorkflowBuilder SendDirectUserMessage()
             => this.Part(new Parts.SendDirectMessage());
 
@@ -100,8 +105,8 @@ namespace nomoretrolls.Workflows
         public IMessageWorkflowBuilder ApplyShoutingReply() 
             => this.Part(new Parts.ApplyShoutingReplyText(_serviceProvider.GetService<IShoutingReplyTextGenerator>()));
 
-        public IMessageWorkflowBuilder ApplyReactionEmote() 
-            => this.Part(new Parts.ApplyReactionEmote(_serviceProvider.GetService<IEmoteGenerator>()));
+        public IMessageWorkflowBuilder ApplyReactionEmote(string emotesName) 
+            => this.Part(new Parts.ApplyReactionEmote(_serviceProvider.GetService<IEmoteGenerator>(), emotesName));
 
         public IMessageWorkflowBuilder ApplyDirectMessage(string message)
             => this.Part(new Parts.ApplyReplyText(new ArbitraryTextGenerator(message)));

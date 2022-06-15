@@ -1,9 +1,5 @@
-﻿using System;
-using System.IO;
-using FluentAssertions;
+﻿using FluentAssertions;
 using nomoretrolls.Commands;
-using nomoretrolls.Config;
-using nomoretrolls.Io;
 using nomoretrolls.Workflows;
 using NSubstitute;
 using Xunit;
@@ -62,5 +58,16 @@ namespace nomoretrolls.tests.Workflows
             r.Should().NotBeNull();
         }
 
+        [Fact]
+        public void CreateAutoEmoteWorkflow_ResultsReturned()
+        {
+            var wff = Substitute.For<IMessageWorkflowFactory>();
+
+            var mwp = new MessageWorkflowProvider(wff);
+
+            var r = mwp.CreateAutoEmoteWorkflow();
+
+            r.Should().NotBeNull();
+        }
     }
 }

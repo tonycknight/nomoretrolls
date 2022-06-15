@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using nomoretrolls.Blacklists;
 using nomoretrolls.Commands.DiscordCommands;
 using nomoretrolls.Config;
+using nomoretrolls.Emotes;
 using nomoretrolls.Telemetry;
 
 namespace nomoretrolls.Commands
@@ -62,6 +63,8 @@ namespace nomoretrolls.Commands
                 .AddSingleton(_serviceProvider.GetService(typeof(IBlacklistProvider)) as IBlacklistProvider)                
                 .AddSingleton(_serviceProvider.GetService(typeof(Knocking.IKnockingScheduleRepository)) as Knocking.IKnockingScheduleRepository)
                 .AddSingleton(_serviceProvider.GetService(typeof(IWorkflowConfigurationRepository)) as IWorkflowConfigurationRepository)
+                .AddSingleton(_serviceProvider.GetService(typeof(IEmoteConfigProvider)) as IEmoteConfigProvider)
+                .AddSingleton(_serviceProvider.GetService(typeof(IEmoteRepository)) as IEmoteRepository)
                 .BuildServiceProvider();
     }
 }

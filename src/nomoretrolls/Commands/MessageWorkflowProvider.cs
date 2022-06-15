@@ -28,7 +28,7 @@ namespace nomoretrolls.Commands
                     .BumpUserWarnings(blacklistStatsName)
                     .If(b2 => b2.UserWarningsFilter(blacklistStatsName, PeriodRange.AtLeast(5, duration)),
                         b2 => b2.DeleteUserMessage(),
-                        b2 => b2.ApplyReactionEmote()
+                        b2 => b2.ApplyReactionEmote("blacklist")
                                 .SendReactionEmote()
                                 .UserWarningsFilter(blacklistStatsName, PeriodRange.AtLeast(2, duration))
                                 .ApplyBlacklistReply()
@@ -65,12 +65,12 @@ namespace nomoretrolls.Commands
                     .If(b2 => b2.UserWarningsFilter(shoutingStatsName, PeriodRange.AtLeast(8, duration)),
                         b2 => b2.DeleteUserMessage(),
                         b2 => b2.If(b3 => b3.UserWarningsFilter(shoutingStatsName, PeriodRange.AtLeast(5, duration)),
-                                    b3 => b3.ApplyReactionEmote()
+                                    b3 => b3.ApplyReactionEmote("shouting")
                                             .SendReactionEmote()
                                             .ApplyShoutingReply()
                                             .SendUserReplyMessage(),
                                     b3 => b3.UserWarningsFilter(shoutingStatsName, PeriodRange.AtLeast(3, duration))
-                                            .ApplyReactionEmote()
+                                            .ApplyReactionEmote("shouting")
                                             .SendReactionEmote()))
                     .Build("Shouting user");
         }
@@ -90,6 +90,15 @@ namespace nomoretrolls.Commands
                     .SendDirectUserMessage()
                     .Build("Shouting user DM");
         }
+
+        public IMessageWorkflow CreateAutoEmoteWorkflow() 
+            => _wfFactory.CreateBuilder()
+                    .Receiver(new MessageReceiver())
+                    .IfEmoteAnnotationWorkflowEnabled()
+                    .UserIsEmoteAnnotated()
+                    .ApplyReactionEmote(null)
+                    .SendReactionEmote()
+                    .Build("Emote Annotation");
 
     }
 }
