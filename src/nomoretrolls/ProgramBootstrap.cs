@@ -26,9 +26,10 @@ namespace nomoretrolls
                 .AddTransient<Workflows.IMessageWorkflowExecutor, Workflows.MessageWorkflowExecutor>()
                 .AddSingleton<Statistics.IUserStatisticsProvider, Statistics.MongoDbUserStatisticsProvider>()
                 .AddSingleton<Blacklists.IBlacklistProvider, Blacklists.MongoDbBlacklistProvider>()
+                .AddSingleton<IEmoteConfigProvider, MemoryEmoteConfigProvider>()
                 .AddSingleton<Config.MemoryWorkflowConfigurationRepository>()
-                .AddSingleton < Config.MongoDbWorkflowConfigurationRepository>()
-                .AddSingleton < Config.IWorkflowConfigurationRepository>(sp => 
+                .AddSingleton<Config.MongoDbWorkflowConfigurationRepository>()
+                .AddSingleton<Config.IWorkflowConfigurationRepository>(sp => 
                     new Config.WorkflowConfigurationRepository(sp.GetService<Config.MemoryWorkflowConfigurationRepository>(), sp.GetService<Config.MongoDbWorkflowConfigurationRepository>()))
                 .AddSingleton<Knocking.IKnockingScheduleRepository, Knocking.MongoDbKnockingScheduleRepository>()
                 .AddSingleton<Scheduling.IJobScheduler, Scheduling.JobScheduler>()

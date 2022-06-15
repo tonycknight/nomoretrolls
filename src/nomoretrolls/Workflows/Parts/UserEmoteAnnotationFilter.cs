@@ -1,23 +1,36 @@
-﻿using Tk.Extensions.Tasks;
+﻿using nomoretrolls.Emotes;
 
 namespace nomoretrolls.Workflows.Parts
 {
     internal class UserEmoteAnnotationFilter : IMessageWorkflowPart
-    {        
-        public UserEmoteAnnotationFilter()
-        {            
+    {
+        private readonly IEmoteConfigProvider _emoteConfig;
+
+        public UserEmoteAnnotationFilter(IEmoteConfigProvider emoteConfig)
+        {
+            _emoteConfig = emoteConfig;
         }
 
         public async Task<MessageWorkflowContext?> ExecuteAsync(MessageWorkflowContext context)
         {
-            if (await IsCharacterMatch(context))
+            var (isMatch, emotes) = await IsCharacterMatch(context);
+            if (isMatch)
             {
-                return context.EmoteListName("farmyardanimals"); // TODO: pick up from config
+                return context.EmoteListName(emotes);
             }
 
             return null;            
         }
 
-        private Task<bool> IsCharacterMatch(MessageWorkflowContext context) => true.ToTaskResult(); // TODO: implement
+        private async Task<(bool, string)> IsCharacterMatch(MessageWorkflowContext context)
+        {
+            var userId = context.AuthorId();
+
+            var result = await _emoteConfig.GetUserEmoteAnnotationEntryAsync(userId);
+
+            if (result == null) return (false, null);
+            
+            return (true, result.EmoteListName);
+        }
     }
 }

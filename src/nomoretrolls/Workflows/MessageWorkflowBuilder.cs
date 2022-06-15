@@ -91,7 +91,7 @@ namespace nomoretrolls.Workflows
             => this.Part(new Parts.UserBlacklistFilter(_serviceProvider.GetService<IBlacklistProvider>()));
 
         public IMessageWorkflowBuilder UserIsEmoteAnnotated()
-            => this.Part(new Parts.UserEmoteAnnotationFilter());
+            => this.Part(new Parts.UserEmoteAnnotationFilter(_serviceProvider.GetService<IEmoteConfigProvider>()));
 
         public IMessageWorkflowBuilder SendDirectUserMessage()
             => this.Part(new Parts.SendDirectMessage());
