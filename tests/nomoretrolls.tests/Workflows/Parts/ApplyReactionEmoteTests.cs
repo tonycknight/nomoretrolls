@@ -15,7 +15,8 @@ namespace nomoretrolls.tests.Workflows.Parts
         public bool ExecuteAsync_EmoteApplied(NonEmptyString value)
         {
             var gen = Substitute.For<IEmoteGenerator>();
-            gen.PickDisapproveEmotes().Returns(value.Get);
+            gen.PickEmoteAsync(Arg.Any<string>()).Returns(value.Get);
+
 
             var p = new ApplyReactionEmote(gen);
 

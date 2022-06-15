@@ -14,7 +14,7 @@ namespace nomoretrolls.Workflows.Parts
         public Task<MessageWorkflowContext?> ExecuteAsync(MessageWorkflowContext context)
         {
             var result = context.DeepClone()
-                        .EmoteCode(_emoteGenerator.PickDisapproveEmotes());
+                        .EmoteCode(_emoteGenerator.PickEmoteAsync("blacklist").GetAwaiter().GetResult());
 
             return Task.FromResult(result);
         }

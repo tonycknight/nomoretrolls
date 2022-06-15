@@ -17,11 +17,9 @@ namespace nomoretrolls.Emotes
             _emoteRepo = emoteRepo.ArgNotNull(nameof(emoteRepo));
         }
 
-        public string PickDisapproveEmotes() => PickEmote("blacklist");
-
-        private string PickEmote(string name)
+        public async Task<string> PickEmoteAsync(string name)
         {
-            var emotes = _emoteRepo.GetEmotesAsync(name).GetAwaiter().GetResult();
+            var emotes = await _emoteRepo.GetEmotesAsync(name);
             if (emotes == null) return null;
 
             return emotes[_picker(emotes.Count)].Emotes.FirstOrDefault();

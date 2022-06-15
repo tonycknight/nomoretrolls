@@ -9,21 +9,21 @@ namespace nomoretrolls.tests.Emotes
     public class EmoteGeneratorTests
     {
         [Property(Verbose = true)]
-        public bool PickDisapproveEmotes_ReturnsString()
+        public bool PickEmoteAsync_ReturnsString()
         {
             var gen = new EmoteGenerator(new EmoteRepository());
-            var result = gen.PickDisapproveEmotes();
+            var result = gen.PickEmoteAsync("blacklist").GetAwaiter().GetResult();
 
             return !string.IsNullOrWhiteSpace(result);
         }
 
         [Property(Verbose = true)]
-        public bool PickDisapproveEmotes_FixedRng_ReturnsSameString(PositiveInt iterations)
+        public bool PickEmoteAsync_FixedRng_ReturnsSameString(PositiveInt iterations)
         {
             var gen = new EmoteGenerator(x => 0, new EmoteRepository());
 
             var result = Enumerable.Range(0, iterations.Get)
-                .Select(i => gen.PickDisapproveEmotes())
+                .Select(i => gen.PickEmoteAsync("blacklist").GetAwaiter().GetResult())
                 .Where(s => !string.IsNullOrWhiteSpace(s))
                 .Distinct()
                 .ToList();
@@ -32,7 +32,7 @@ namespace nomoretrolls.tests.Emotes
         }
 
         [Property(Verbose = true)]
-        public bool PickDisapproveEmotes_EmptyEmoteInfo_ReturnsNull(PositiveInt iterations)
+        public bool PickEmoteAsync_EmptyEmoteInfo_ReturnsNull(PositiveInt iterations)
         {
             var emotes = new[] { new EmoteInfo(new string[0]) };
             var emoteRepo = Substitute.For<IEmoteRepository>();
@@ -41,7 +41,7 @@ namespace nomoretrolls.tests.Emotes
             var gen = new EmoteGenerator(x => 0, emoteRepo);
 
             var result = Enumerable.Range(0, iterations.Get)
-                .Select(i => gen.PickDisapproveEmotes())
+                .Select(i => gen.PickEmoteAsync("blacklist").GetAwaiter().GetResult())
                 .Where(s => s == null)
                 .ToList();
 
