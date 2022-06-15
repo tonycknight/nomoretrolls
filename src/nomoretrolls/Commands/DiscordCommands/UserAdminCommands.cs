@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using Cronos;
 using Discord.Commands;
 using nomoretrolls.Blacklists;
 using nomoretrolls.Emotes;
@@ -19,15 +18,17 @@ namespace nomoretrolls.Commands.DiscordCommands
         private readonly IBlacklistProvider _blacklistProvider;
         private readonly IKnockingScheduleRepository _knockingProvider;
         private readonly IEmoteConfigProvider _emoteConfig;
+        private readonly IEmoteRepository _emoteRepo;
         private const string DateTimeFormat = "dd MMM yyyy HH:mm:ss UTC";
 
         public UserAdminCommands(ITelemetry telemetry, IBlacklistProvider blacklistProvider, IKnockingScheduleRepository knockingProvider,
-            IEmoteConfigProvider emoteConfig)
+            IEmoteConfigProvider emoteConfig, IEmoteRepository emoteRepo)
         {
             _telemetry = telemetry;
             _blacklistProvider = blacklistProvider;
             _knockingProvider = knockingProvider;
             _emoteConfig = emoteConfig;
+            _emoteRepo = emoteRepo;
         }
 
         [Command("deleteblacklist", RunMode = RunMode.Async)]        
@@ -260,6 +261,27 @@ namespace nomoretrolls.Commands.DiscordCommands
                 await SendMessageAsync(ex.Message);
             }
         }
+
+        [Command("emotes", RunMode = RunMode.Async)]
+        [Description("Show all emote list names.")]
+        public async Task ListEmoteListNamesAsync()
+        {
+            try
+            {
+                var names = await _emoteRepo.GetEmoteNamesAsync();
+
+                var msg = names.OrderBy(s => s)
+                               .Select(n => n.ToCode())
+                               .Join(Environment.NewLine);
+
+                await SendMessageAsync(msg);
+            }
+            catch (Exception ex)
+            {
+                await SendMessageAsync(ex.Message);
+            }
+        }
+
 
         private Task SendMessageAsync(string message)
         {
