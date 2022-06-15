@@ -241,8 +241,7 @@ namespace nomoretrolls.Commands.DiscordCommands
                     return new { userName = u.userName, blacklist = ble, knock = ke, emote = em };
                 });
 
-                var lines = userEntries.Where(a => a.blacklist != null || a.knock != null) 
-                                        .OrderBy(a => a.userName)                                        
+                var lines = userEntries.OrderBy(a => a.userName)                                        
                                         .SelectMany(a => new[] { a.userName.ToCode().ToBold(),
                                                                  a.blacklist != null ? $"Blacklisted. Expires {a.blacklist.Expiry.ToString(DateTimeFormat).ToCode()}"  : null,
                                                                  a.emote != null ? $"Emotes with {a.emote.EmoteListName.ToCode()}. Expires {a.emote.Expiry.ToString(DateTimeFormat).ToCode()}" : null,
