@@ -17,5 +17,23 @@ namespace nomoretrolls.Emotes
                 EmoteListName = emoteList,
             };
         }
+
+        public static UserEmoteAnnotationEntryDto ToDto(this UserEmoteAnnotationEntry value) 
+            => new UserEmoteAnnotationEntryDto()
+            {
+                UserId = value.UserId,
+                Start = value.Start,
+                Expiry = value.Expiry,
+                EmoteListName = value.EmoteListName,
+            };
+
+        public static UserEmoteAnnotationEntry FromDto(this UserEmoteAnnotationEntryDto value) 
+            => new UserEmoteAnnotationEntry()
+            {
+                UserId = value.UserId,
+                Start = value.Start,
+                Expiry = value.Expiry,
+                EmoteListName = value.EmoteListName,
+            };
     }
 }
