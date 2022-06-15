@@ -28,34 +28,34 @@ namespace nomoretrolls.Emotes
         private Dictionary<string, IList<EmoteInfo>> CreateEmotes() =>
             new Dictionary<string, IList<EmoteInfo>>(StringComparer.InvariantCultureIgnoreCase)
             {
-                { "blacklist", CreateBlacklistDefaults()  },
-                { "shouting", CreateShoutingDefaults() },
-                { "farmyardanimals", CreateFarmyardAnimalsDefaults() },
-                { "gay", CreateGayDefaults() },
+                { "blacklist", CreateBlacklistEmotes()  },
+                { "shouting", CreateShoutingEmotes() },
+                { "farmyardanimals", CreateFarmyardAnimalsEmotes() },
+                { "gay", CreateGayEmotes() },
             };
 
-        private IList<EmoteInfo> CreateBlacklistDefaults()
+        private IList<EmoteInfo> CreateBlacklistEmotes()
         {
             var emotes = new[] { "🍋", "👎", "🤐", "🧏‍♂️", "🧏‍♀️", "🍿", "🇸🇦", "🧇" };
 
             return ToEmotes(emotes.Select(s => new[] { s }));            
         }
 
-        private IList<EmoteInfo> CreateShoutingDefaults()
+        private IList<EmoteInfo> CreateShoutingEmotes()
         {
             var emotes = new[] { "🍋", "👎", "🤐", "🧏‍♂️", "🧏‍♀️", "🍿", "🧇" };
 
             return ToEmotes(emotes.Select(s => new[] { s }));
         }
 
-        private IList<EmoteInfo> CreateGayDefaults()
+        private IList<EmoteInfo> CreateGayEmotes()
         {
             var emotes = new[] { "🏳️‍🌈", "🏳️‍⚧️", "⚧", "👨‍❤️‍👨", "👨‍❤️‍💋‍👨" };
 
             return ToEmotes(emotes.Select(s => new[] { s }));
         }
 
-        private IList<EmoteInfo> CreateFarmyardAnimalsDefaults()
+        private IList<EmoteInfo> CreateFarmyardAnimalsEmotes()
         {
             var emotes = new[] { "🐐", "🐑", "🐮", "🐄", "🐷" };
 
