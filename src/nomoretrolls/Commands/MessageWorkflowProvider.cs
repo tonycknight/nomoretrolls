@@ -99,7 +99,7 @@ namespace nomoretrolls.Commands
                     .Receiver(new MessageReceiver())
                     .IfEmoteAnnotationWorkflowEnabled()
                     .UserIsEmoteAnnotated()
-                    .ApplyReactionEmote("farmyardanimals") // TODO: need emote name from config...
+                    .ApplyReactionEmote(null)
                     .SendReactionEmote()
                     .Build("Emote Annotation");
         }

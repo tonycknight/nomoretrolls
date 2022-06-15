@@ -6,6 +6,7 @@ namespace nomoretrolls.Workflows
     {
         private const string EmoteCodeKey = "EmoteCode";
         private const string ReplyTextKey = "ReplyText";
+        private const string EmoteListNameKey = "EmoteListName";
 
         public static MessageWorkflowContext DeepClone(this MessageWorkflowContext value)
         {
@@ -18,7 +19,14 @@ namespace nomoretrolls.Workflows
             return context;
         }
 
+        public static MessageWorkflowContext EmoteListName(this MessageWorkflowContext context, string value)
+        {
+            context.AppData[EmoteListNameKey] = value;
+            return context;
+        }
+
         public static string? EmoteCode(this MessageWorkflowContext context) => context.AppData.GetOrDefault(EmoteCodeKey);
+        public static string? EmoteListName(this MessageWorkflowContext context) => context.AppData.GetOrDefault(EmoteListNameKey);
 
         public static MessageWorkflowContext ReplyText(this MessageWorkflowContext context, string value)
         {

@@ -17,7 +17,6 @@ namespace nomoretrolls.tests.Workflows.Parts
             var gen = Substitute.For<IEmoteGenerator>();
             gen.PickEmoteAsync(Arg.Any<string>()).Returns(value.Get);
 
-
             var p = new ApplyReactionEmote(gen, null);
 
             var msg = Substitute.For<IDiscordMessageContext>();

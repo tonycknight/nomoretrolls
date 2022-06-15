@@ -12,7 +12,7 @@ namespace nomoretrolls.Workflows.Parts
         {
             if (await IsCharacterMatch(context))
             {
-                return context;
+                return context.EmoteListName("farmyardanimals"); // TODO: pick up from config
             }
 
             return null;            
