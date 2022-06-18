@@ -5,7 +5,6 @@ using nomoretrolls.Config;
 using nomoretrolls.Scheduling;
 using nomoretrolls.Telemetry;
 using nomoretrolls.Workflows;
-using Tk.Extensions;
 using Tk.Extensions.Funcs;
 using Tk.Extensions.Guards;
 using Tk.Extensions.Reflection;
@@ -46,11 +45,9 @@ namespace nomoretrolls.Commands
 
         public async Task<int> OnExecuteAsync()
         {
+            EchoServiceMetadata();
+
             var config = GetConfig();
-
-            var attrs = typeof(ProgramBootstrap).Assembly.GetCustomAttributes();
-            _telemetry.Message($"{attrs.GetAttributeValue<AssemblyProductAttribute>(a => a.Product)} {attrs.GetAttributeValue<AssemblyInformationalVersionAttribute>(a => a.InformationalVersion).Format("Version {0}")}");
-
             var client = CreateDiscordClient(config);
             await CreateAdminCommandHandler(client);
             await client.StartAsync();
@@ -80,6 +77,15 @@ namespace nomoretrolls.Commands
             WaitHandle.WaitAll(new[] { cts.Token.WaitHandle });
 
             return true.ToReturnCode();
+        }
+
+        private void EchoServiceMetadata()
+        {
+            var attrs = typeof(ProgramBootstrap).Assembly.GetCustomAttributes();
+            var product = attrs.GetAttributeValue<AssemblyProductAttribute>(a => a.Product);
+            var version = attrs.GetAttributeValue<AssemblyInformationalVersionAttribute>(a => a.InformationalVersion);
+
+            _telemetry.Message(Crayon.Output.Bright.Cyan($"{product} Version {version}"));
         }
 
         private void CreateJobScheduler()
