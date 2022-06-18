@@ -33,12 +33,12 @@ namespace nomoretrolls.Workflows.Parts
                 var c = await Condition.ExecuteAsync(context);
                 if (c != null)
                 {
-                    _telemetry.Message($"[{logPrefix}] Executing workflow {OnSuccess.GetType().Name}...");
+                    _telemetry.Event(new TelemetryTraceEvent() { Message = $"[{logPrefix}] Executing workflow {OnSuccess.GetType().Name}..." } );
                     await _exec.ExecuteAsync(OnSuccess, c.DiscordContext);
                 }
                 else
                 {
-                    _telemetry.Message($"[{logPrefix}] Executing workflow {OnFailure.GetType().Name}...");
+                    _telemetry.Event(new TelemetryTraceEvent() { Message = $"[{logPrefix}] Executing workflow {OnFailure.GetType().Name}..." } );
                     await _exec.ExecuteAsync(OnFailure, context.DiscordContext);
                 }
                 return c;

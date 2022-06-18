@@ -33,7 +33,7 @@ namespace nomoretrolls.Workflows.Parts
                 var capitalCount = content.CapitalCount();
                 var gini = content.CapitalGiniImpurity();
 
-                _telemetry.Message($"[Message {context.DiscordContext.Message.Id}] [{this.GetType().Name}] Letters {letterCount} capitals {capitalCount} gini {gini}");
+                _telemetry.Event(new TelemetryTraceEvent() { Message = $"[Message {context.DiscordContext.Message.Id}] [{this.GetType().Name}] Letters {letterCount} capitals {capitalCount} gini {gini}" } );
 
                 return letterCount >= 5 &&
                     capitalCount > letterCount / 2 && 

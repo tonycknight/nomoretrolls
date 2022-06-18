@@ -95,7 +95,7 @@ namespace nomoretrolls.Commands.DiscordCommands
             }
             catch (Exception ex)
             {
-                _telemetry.Message(ex.Message);
+                _telemetry.Error(ex.Message);
                 return Task.CompletedTask;
             }
         }
