@@ -37,7 +37,7 @@ namespace nomoretrolls.tests.Telemetry
 
             var evt = new TelemetryEvent() { Message = "test" };
 
-            aggTelemetry.Message(evt.Message);
+            aggTelemetry.Event(evt);
 
             foreach (var t in telemetries)
             {
@@ -56,7 +56,7 @@ namespace nomoretrolls.tests.Telemetry
 
             var evt = new TelemetryEvent() { Message = "test" };
 
-            aggTelemetry.Error(evt.Message);
+            aggTelemetry.Event(evt);
 
             foreach (var t in telemetries)
             {
