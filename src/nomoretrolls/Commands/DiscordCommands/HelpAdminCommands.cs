@@ -79,7 +79,9 @@ namespace nomoretrolls.Commands.DiscordCommands
         {
             try
             {
-                var line = ProgramBootstrap.GetVersionDescription().Join(Environment.NewLine).ToCode().ToBold();
+                var line = ProgramBootstrap.GetProductDescription()
+                    .Concat(ProgramBootstrap.GetVersionDescription())
+                    .Join(Environment.NewLine).ToCode().ToBold();
 
                 return SendMessageAsync(line);
             }
