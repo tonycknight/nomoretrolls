@@ -65,7 +65,7 @@ namespace nomoretrolls.tests.Knocking
 
             scheduleRepo.Received(1).GetUserEntriesAsync();
 
-            telemetry.Received(1).Message(Arg.Is<string>(s => s.StartsWith("Found 1 user(s) to knock.")));
+            telemetry.Received(1).Event(Arg.Is<TelemetryEvent>(s => s.Message.StartsWith("Found 1 user(s) to knock.")));
             telemetry.Received(1);
         }
 
@@ -106,7 +106,7 @@ namespace nomoretrolls.tests.Knocking
 
             scheduleRepo.Received(1).GetUserEntriesAsync();
 
-            telemetry.Received(1).Message(Arg.Is<string>(s => s.StartsWith($"Found {userCount} user(s) to knock.")));
+            telemetry.Received(1).Event(Arg.Is<TelemetryEvent>(s => s.Message.StartsWith($"Found {userCount} user(s) to knock.")));
             telemetry.Received(userCount).Event(Arg.Is<TelemetryTraceEvent>(s => s.Message.StartsWith("Knocking ")));
             telemetry.Received(userCount).Event(Arg.Is<TelemetryTraceEvent>(s => s.Message.StartsWith("Knocked ")));
         }
@@ -148,9 +148,9 @@ namespace nomoretrolls.tests.Knocking
 
             scheduleRepo.Received(1).GetUserEntriesAsync();
 
-            telemetry.Received(0).Message(Arg.Is<string>(s => s.StartsWith($"Found {userCount} user(s) to knock.")));
-            telemetry.Received(0).Message(Arg.Is<string>(s => s.StartsWith("Knocking ")));
-            telemetry.Received(0).Message(Arg.Is<string>(s => s.StartsWith("Knocked ")));
+            telemetry.Received(0).Event(Arg.Is<TelemetryEvent>(s => s.Message.StartsWith($"Found {userCount} user(s) to knock.")));
+            telemetry.Received(0).Event(Arg.Is<TelemetryEvent>(s => s.Message.StartsWith("Knocking ")));
+            telemetry.Received(0).Event(Arg.Is<TelemetryEvent>(s => s.Message.StartsWith("Knocked ")));
         }
 
 
@@ -232,7 +232,7 @@ namespace nomoretrolls.tests.Knocking
 
             await job.ExecuteAsync();
 
-            telemetry.Received(userCount).Error(Arg.Is<string>(s => s.StartsWith("Error occured knocking user")));
+            telemetry.Received(userCount).Event(Arg.Is<TelemetryErrorEvent>(s => s.Message.StartsWith("Error occured knocking user")));
         }
 
 

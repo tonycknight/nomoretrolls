@@ -32,14 +32,14 @@ namespace nomoretrolls.Knocking
 
             if (tasks.Length > 0)
             {
-                _telemetry.Message($"Found {tasks.Length} user(s) to knock.");
+                _telemetry.Event(new TelemetryInfoEvent() { Message = $"Found {tasks.Length} user(s) to knock." } );
                 try
                 {
                     await Task.WhenAll(tasks);
                 }
                 catch (Exception ex)
                 {
-                    _telemetry.Error(ex.Message);
+                    _telemetry.Event(new TelemetryErrorEvent() { Message = ex.Message } );
                 }
             }
         }
@@ -77,7 +77,7 @@ namespace nomoretrolls.Knocking
             }
             catch(Exception ex)
             {
-                _telemetry.Error($"Error occured knocking user {entry.UserId}{Environment.NewLine}{ex.Message}");
+                _telemetry.Event(new TelemetryErrorEvent() { Message = $"Error occured knocking user {entry.UserId}{Environment.NewLine}{ex.Message}" } );
             }
         }
 
