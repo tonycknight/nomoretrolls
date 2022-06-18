@@ -269,9 +269,18 @@ namespace nomoretrolls.Commands.DiscordCommands
             {
                 var names = await _emoteRepo.GetEmoteNamesAsync();
 
-                var msg = names.OrderBy(s => s)
-                               .Select(n => n.ToCode())
-                               .Join(Environment.NewLine);
+                var msgLines = new List<string>();
+
+                foreach(var name in names)
+                {
+                    var emotes = await _emoteRepo.GetEmotesAsync(name);
+
+                    msgLines.Add(name.ToCode());
+                    msgLines.Add(emotes.SelectMany(e => e.Emotes).Join(" "));
+                    msgLines.Add("");
+                }
+                                
+                var msg = msgLines.Join(Environment.NewLine);
 
                 await SendMessageAsync(msg);
             }
