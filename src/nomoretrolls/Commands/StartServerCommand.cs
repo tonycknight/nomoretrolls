@@ -54,9 +54,9 @@ namespace nomoretrolls.Commands
 
             CreateJobScheduler();
 
-            _telemetry.Message("Startup complete.");
-            _telemetry.Message($"Bot registration URI: {client.BotRegistrationUri}");
-            _telemetry.Message("Proxy started. Hit CTRL-C to quit");
+            _telemetry.Event(new TelemetryHeadlineEvent() { Message = "Startup complete." });
+            _telemetry.Event(new TelemetryHeadlineEvent() { Message = $"Bot registration URI: {client.BotRegistrationUri}" });
+            _telemetry.Event(new TelemetryHeadlineEvent() { Message = "Proxy started. Hit CTRL-C to quit" });
 
             var cts = new CancellationTokenSource();
 

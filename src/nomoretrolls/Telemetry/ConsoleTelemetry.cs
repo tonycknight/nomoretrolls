@@ -21,7 +21,7 @@ namespace nomoretrolls.Telemetry
             var line = evt switch
             {
                 TelemetryErrorEvent error =>    $"[{time}] {Output.Bright.Red(error.Message)}",
-                TelemetryTraceEvent trace =>    $"[{time}] {Output.White(trace.Message)}",
+                TelemetryTraceEvent trace =>    $"[{time}] {Output.Dim().White(trace.Message)}",
                 TelemetryWarningEvent warn =>   $"[{time}] {Output.Bright.Yellow(warn.Message)}",
                 TelemetryHeadlineEvent head =>  $"[{time}] {Output.Bright.Cyan(head.Message)}",
                 _ =>                            $"[{time}] {Output.Bright.White(evt.Message)}",
