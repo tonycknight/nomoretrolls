@@ -35,5 +35,11 @@ namespace nomoretrolls.Emotes
                 Expiry = value.Expiry,
                 EmoteListName = value.EmoteListName,
             };
+
+        public static IList<EmoteInfo> ToEmotes(this IEnumerable<string> emotes)
+            => emotes.Select(s => new[] { s }).ToEmotes();
+
+        private static IList<EmoteInfo> ToEmotes(this IEnumerable<string[]> emotes)
+            => emotes.Select(e => new EmoteInfo(e)).ToArray();
     }
 }

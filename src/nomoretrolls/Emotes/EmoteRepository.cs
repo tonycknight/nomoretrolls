@@ -28,48 +28,11 @@ namespace nomoretrolls.Emotes
         private Dictionary<string, IList<EmoteInfo>> CreateEmotes() =>
             new Dictionary<string, IList<EmoteInfo>>(StringComparer.InvariantCultureIgnoreCase)
             {
-                { "blacklist", CreateBlacklistEmotes()  },
-                { "shouting", CreateShoutingEmotes() },
-                { "farmyardanimals", CreateFarmyardAnimalsEmotes() },
-                { "gay", CreateGayEmotes() },
-                { "religion", CreateFaithEmotes() }
+                { "blacklist", new[] { "🍋", "👎", "🤐", "🧏‍♂️", "🧏‍♀️", "🍿", "🇸🇦", "🧇" }.ToEmotes() },
+                { "shouting", new[] { "🍋", "👎", "🤐", "🧏‍♂️", "🧏‍♀️", "🍿", "🧇" }.ToEmotes() },
+                { "farmyardanimals", new[] { "🐐", "🐑", "🐮", "🐄", "🐷" }.ToEmotes() },
+                { "gay", new[] { "🏳️‍🌈", "🏳️‍⚧️", "⚧", "👨‍❤️‍👨", "👨‍❤️‍💋‍👨" }.ToEmotes() },
+                { "religion", new[] { "✝️", "☪️", "✡️", "🕉️", "☸️", "☦️", "🕎", "🔯" }.ToEmotes() }
             };
-
-        private IList<EmoteInfo> CreateBlacklistEmotes()
-        {
-            var emotes = new[] { "🍋", "👎", "🤐", "🧏‍♂️", "🧏‍♀️", "🍿", "🇸🇦", "🧇" };
-
-            return ToEmotes(emotes.Select(s => new[] { s }));            
-        }
-
-        private IList<EmoteInfo> CreateShoutingEmotes()
-        {
-            var emotes = new[] { "🍋", "👎", "🤐", "🧏‍♂️", "🧏‍♀️", "🍿", "🧇" };
-
-            return ToEmotes(emotes.Select(s => new[] { s }));
-        }
-
-        private IList<EmoteInfo> CreateGayEmotes()
-        {
-            var emotes = new[] { "🏳️‍🌈", "🏳️‍⚧️", "⚧", "👨‍❤️‍👨", "👨‍❤️‍💋‍👨" };
-
-            return ToEmotes(emotes.Select(s => new[] { s }));
-        }
-
-        private IList<EmoteInfo> CreateFarmyardAnimalsEmotes()
-        {
-            var emotes = new[] { "🐐", "🐑", "🐮", "🐄", "🐷" };
-
-            return ToEmotes(emotes.Select(s => new[] { s }));
-        }
-
-        private IList<EmoteInfo> CreateFaithEmotes()
-        {
-            var emotes = new[] { "✝️", "☪️", "✡️", "🕉️", "☸️", "☦️", "🕎", "🔯" };
-
-            return ToEmotes(emotes.Select(s => new[] { s }));
-        }
-        private IList<EmoteInfo> ToEmotes(IEnumerable<string[]> emotes)
-            => emotes.Select(e => new EmoteInfo(e)).ToArray();
     }
 }
