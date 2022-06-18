@@ -20,7 +20,7 @@ namespace nomoretrolls.Telemetry
             var time = evt.Time.ToString("yyyy-MM-dd HH:mm:ss.fff");
             var line = evt switch
             {
-                TelemetryErrorEvent error =>    $"[{time}] {Output.Bright.Red(error.Message)}",
+                TelemetryErrorEvent error =>    $"[{time}] {Output.Bright.Red(String.IsNullOrEmpty(error.Exception?.Message) ? error.Message : error.Exception?.Message)}",
                 TelemetryTraceEvent trace =>    $"[{time}] {Output.Dim().White(trace.Message)}",
                 TelemetryWarningEvent warn =>   $"[{time}] {Output.Bright.Yellow(warn.Message)}",
                 TelemetryHeadlineEvent head =>  $"[{time}] {Output.Bright.Cyan(head.Message)}",

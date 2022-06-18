@@ -30,7 +30,7 @@ namespace nomoretrolls.Scheduling
             catch (Exception ex)
             {
                 sw.Stop();
-                _telemetry.Event(new TelemetryErrorEvent() { Message = ex.Message } );
+                _telemetry.Event(new TelemetryErrorEvent() { Exception = ex } );
                 return new JobExecuteResultError(job.Job, sw.Elapsed, ex);
             }
         }

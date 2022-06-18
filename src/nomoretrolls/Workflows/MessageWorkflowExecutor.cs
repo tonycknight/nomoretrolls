@@ -46,7 +46,7 @@ namespace nomoretrolls.Workflows
                     }
                     catch(Exception ex)
                     {
-                        _telemetry.Event(new TelemetryErrorEvent() { Message = ex.Message } );
+                        _telemetry.Event(new TelemetryErrorEvent() { Exception = ex } );
                     }
                     if (segmentResult == null)
                     {

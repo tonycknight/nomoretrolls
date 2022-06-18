@@ -39,7 +39,7 @@ namespace nomoretrolls.Knocking
                 }
                 catch (Exception ex)
                 {
-                    _telemetry.Event(new TelemetryErrorEvent() { Message = ex.Message } );
+                    _telemetry.Event(new TelemetryErrorEvent() { Exception = ex } );
                 }
             }
         }
@@ -77,7 +77,7 @@ namespace nomoretrolls.Knocking
             }
             catch(Exception ex)
             {
-                _telemetry.Event(new TelemetryErrorEvent() { Message = $"Error occured knocking user {entry.UserId}{Environment.NewLine}{ex.Message}" } );
+                _telemetry.Event(new TelemetryErrorEvent() { Message = $"Error occured knocking user {entry.UserId}{Environment.NewLine}{ex.Message}", Exception = ex } );
             }
         }
 
