@@ -25,7 +25,7 @@ namespace nomoretrolls.tests.Telemetry
 
             t.Event(evt);
 
-            r.Should().EndWith(evt.Message);
+            r.Should().Contain(evt.Message);
         }
 
         [Fact]
@@ -59,7 +59,7 @@ namespace nomoretrolls.tests.Telemetry
 
             t.Message(msg);
 
-            r.Should().EndWith(msg);
+            r.Should().Contain(msg);
         }
 
         
@@ -75,7 +75,7 @@ namespace nomoretrolls.tests.Telemetry
 
             t.Error(msg);
 
-            r.Should().EndWith(msg);
+            r.Should().Contain(msg);
         }
     }
 }

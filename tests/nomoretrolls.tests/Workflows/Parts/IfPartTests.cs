@@ -36,8 +36,8 @@ namespace nomoretrolls.tests.Workflows.Parts
             exec.Received(0).ExecuteAsync(failure, Arg.Any<IDiscordMessageContext>());
             exec.Received(1).ExecuteAsync(success, Arg.Any<IDiscordMessageContext>());
             
-            telemetry.Received(1).Message(Arg.Is<string>(s => !string.IsNullOrEmpty(s)));
-            telemetry.Received(1).Message(Arg.Is<string>(s => s.StartsWith("[Message ")));
+            telemetry.Received(1).Event(Arg.Is<TelemetryEvent>(s => !string.IsNullOrEmpty(s.Message)));
+            telemetry.Received(1).Event(Arg.Is<TelemetryEvent>(s => s.Message.StartsWith("[Message ")));
 
         }
 
@@ -67,8 +67,8 @@ namespace nomoretrolls.tests.Workflows.Parts
             exec.Received(1).ExecuteAsync(failure, Arg.Any<IDiscordMessageContext>());
 
 
-            telemetry.Received(1).Message(Arg.Is<string>(s => !string.IsNullOrEmpty(s)));
-            telemetry.Received(1).Message(Arg.Is<string>(s => s.StartsWith("[Message ")));
+            telemetry.Received(1).Event(Arg.Is<TelemetryEvent>(s => !string.IsNullOrEmpty(s.Message)));
+            telemetry.Received(1).Event(Arg.Is<TelemetryEvent>(s => s.Message.StartsWith("[Message ")));
 
         }
     }

@@ -107,8 +107,8 @@ namespace nomoretrolls.tests.Knocking
             scheduleRepo.Received(1).GetUserEntriesAsync();
 
             telemetry.Received(1).Message(Arg.Is<string>(s => s.StartsWith($"Found {userCount} user(s) to knock.")));
-            telemetry.Received(userCount).Message(Arg.Is<string>(s => s.StartsWith("Knocking ")));
-            telemetry.Received(userCount).Message(Arg.Is<string>(s => s.StartsWith("Knocked ")));
+            telemetry.Received(userCount).Event(Arg.Is<TelemetryTraceEvent>(s => s.Message.StartsWith("Knocking ")));
+            telemetry.Received(userCount).Event(Arg.Is<TelemetryTraceEvent>(s => s.Message.StartsWith("Knocked ")));
         }
 
         [Theory]

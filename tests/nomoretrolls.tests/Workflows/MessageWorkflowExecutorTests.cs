@@ -139,10 +139,10 @@ namespace nomoretrolls.tests.Workflows
 
             await exec.ExecuteAsync(workflow, context);
 
-            telemetry.Received(1).Message(Arg.Is<string>(s => s.Contains("Starting workflow")));
-            telemetry.Received(1).Message(Arg.Is<string>(s => s.Contains("Finished workflow")));
-            telemetry.Received(parts.Length).Message(Arg.Is<string>(s => s.Contains("Executing part")));
-            telemetry.Received(parts.Length + 2).Message(Arg.Is<string>(s => s.Contains("Message")));
+            telemetry.Received(1).Event(Arg.Is<TelemetryTraceEvent>(s => s.Message.Contains("Starting workflow")));
+            telemetry.Received(1).Event(Arg.Is<TelemetryEvent>(s => s.Message.Contains("Finished workflow")));
+            telemetry.Received(parts.Length).Event(Arg.Is<TelemetryEvent>(s => s.Message.Contains("Executing part")));
+            telemetry.Received(parts.Length + 2).Event(Arg.Is<TelemetryEvent>(s => s.Message.Contains("Message")));
         }
 
         [Fact]
