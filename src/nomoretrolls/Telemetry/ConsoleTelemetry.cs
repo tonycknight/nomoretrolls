@@ -29,9 +29,5 @@ namespace nomoretrolls.Telemetry
 
             _writeMessage(line);
         }
-
-        public void Message(string message) => Event(new TelemetryInfoEvent { Message = message });
-        
-        public void Error(string message) => Event(new TelemetryErrorEvent { Message = message });
     }
 }

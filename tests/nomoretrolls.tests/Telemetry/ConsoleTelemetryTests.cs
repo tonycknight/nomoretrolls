@@ -57,7 +57,7 @@ namespace nomoretrolls.tests.Telemetry
             var t = new ConsoleTelemetry(w);
             var msg = "test";
 
-            t.Message(msg);
+            t.Event(new TelemetryEvent() { Message = msg } );
 
             r.Should().Contain(msg);
         }
@@ -73,7 +73,7 @@ namespace nomoretrolls.tests.Telemetry
             var t = new ConsoleTelemetry(w);
             var msg = "test";
 
-            t.Error(msg);
+            t.Event(new TelemetryErrorEvent() { Message = msg } );
 
             r.Should().Contain(msg);
         }
