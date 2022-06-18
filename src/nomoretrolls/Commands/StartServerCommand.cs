@@ -85,7 +85,7 @@ namespace nomoretrolls.Commands
             var product = attrs.GetAttributeValue<AssemblyProductAttribute>(a => a.Product);
             var version = attrs.GetAttributeValue<AssemblyInformationalVersionAttribute>(a => a.InformationalVersion);
 
-            _telemetry.Message(Crayon.Output.Bright.Cyan($"{product} Version {version}"));
+            _telemetry.Event(new TelemetryHeadlineEvent() { Message = $"{product} Version {version}" });
         }
 
         private void CreateJobScheduler()

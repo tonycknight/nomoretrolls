@@ -19,13 +19,13 @@
 
         public void Message(string message)
         {
-            var evt = new TelemetryEvent() { Message = message };
+            var evt = new TelemetryInfoEvent() { Message = message };
             Event(evt);
         }
 
         public void Error(string message)
         {
-            var evt = new TelemetryEvent() { Message = message };
+            var evt = new TelemetryErrorEvent() { Message = message };
             Event(evt);
         }
     }
