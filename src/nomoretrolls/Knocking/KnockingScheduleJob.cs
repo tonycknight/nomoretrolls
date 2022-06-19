@@ -32,14 +32,14 @@ namespace nomoretrolls.Knocking
 
             if (tasks.Length > 0)
             {
-                _telemetry.Message($"Found {tasks.Length} user(s) to knock.");
+                _telemetry.Event(new TelemetryInfoEvent() { Message = $"Found {tasks.Length} user(s) to knock." } );
                 try
                 {
                     await Task.WhenAll(tasks);
                 }
                 catch (Exception ex)
                 {
-                    _telemetry.Error(ex.Message);
+                    _telemetry.Event(new TelemetryErrorEvent() { Exception = ex } );
                 }
             }
         }
@@ -63,7 +63,7 @@ namespace nomoretrolls.Knocking
                 var user = (await _discordClient.GetUsersAsync(new[] { entry.UserId })).FirstOrDefault();
                 if (user != null)
                 {
-                    _telemetry.Message($"Knocking {user.Username}#{user.Discriminator}...");
+                    _telemetry.Event(new TelemetryTraceEvent() { Message = $"Knocking {user.Username}#{user.Discriminator}..." });
                     var channel = await user.CreateDMChannelAsync();
                     if (channel != null)
                     {
@@ -71,13 +71,13 @@ namespace nomoretrolls.Knocking
 
                         await msg.DeleteAsync();
 
-                        _telemetry.Message($"Knocked {user.Username}#{user.Discriminator}.");
+                        _telemetry.Event(new TelemetryTraceEvent() { Message = $"Knocked {user.Username}#{user.Discriminator}." } );
                     }
                 }
             }
             catch(Exception ex)
             {
-                _telemetry.Error($"Error occured knocking user {entry.UserId}{Environment.NewLine}{ex.Message}");
+                _telemetry.Event(new TelemetryErrorEvent() { Message = $"Error occured knocking user {entry.UserId}{Environment.NewLine}{ex.Message}", Exception = ex } );
             }
         }
 

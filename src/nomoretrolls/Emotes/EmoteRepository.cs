@@ -29,7 +29,7 @@ namespace nomoretrolls.Emotes
             new Dictionary<string, IList<EmoteInfo>>(StringComparer.InvariantCultureIgnoreCase)
             {
                 { "blacklist", new[] { "🍋", "👎", "🤐", "🧏‍♂️", "🧏‍♀️", "🍿", "🇸🇦", "🧇" }.ToEmotes() },
-                { "shouting", new[] { "🍋", "👎", "🤐", "🧏‍♂️", "🧏‍♀️", "🍿", "🧇" }.ToEmotes() },
+                { "shouting", new[] { "🍋", "👎", "🤐", "🧏‍♂️", "🧏‍♀️", "🧇" }.ToEmotes() },
                 { "farmyardanimals", new[] { "🐐", "🐑", "🐮", "🐄", "🐷" }.ToEmotes() },
                 { "gay", new[] { "🏳️‍🌈", "🏳️‍⚧️", "⚧", "👨‍❤️‍👨", "👨‍❤️‍💋‍👨" }.ToEmotes() },
                 { "religion", new[] { "✝️", "☪️", "✡️", "🕉️", "☸️", "☦️", "🕎", "🔯" }.ToEmotes() },

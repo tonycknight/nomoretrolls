@@ -1,4 +1,6 @@
-﻿namespace nomoretrolls.Telemetry
+﻿using Crayon;
+
+namespace nomoretrolls.Telemetry
 {
     internal class ConsoleTelemetry : ITelemetry
     {
@@ -15,15 +17,29 @@
 
         public void Event(TelemetryEvent evt)
         {
-            var line = $"[{evt.Time.ToString("yyyy-MM-dd HH:mm:ss.fff")}] {evt.Message}";
+            var time = evt.Time.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            
+            var line = $"[{time}] {Colourise(evt)(Message(evt))}";
 
             _writeMessage(line);
         }
 
-        public void Message(string message) =>
-            Event(new TelemetryEvent { Message = message });
-        
-        public void Error(string message) =>
-            Event(new TelemetryEvent { Message = message });
+        private string Message(TelemetryEvent evt) => evt switch
+        {
+            TelemetryErrorEvent error => String.IsNullOrEmpty(error.Exception?.Message) ? error.Message : error.Exception?.Message,
+            TelemetryDependencyEvent dep => $"[{dep.Dependency}] [{dep.RequestId}] {dep.Message}",
+            _ => evt.Message,
+        };
+
+        private Func<string, string> Colourise(TelemetryEvent evt)
+            => evt switch
+            {
+                TelemetryErrorEvent error =>    Output.Bright.Red,
+                TelemetryTraceEvent trace =>    Output.Dim().White,
+                TelemetryDependencyEvent dep => Output.Dim().White,
+                TelemetryWarningEvent warn =>   Output.Bright.Yellow,
+                TelemetryHeadlineEvent head =>  Output.Bright.Cyan,
+                _ =>                            Output.Bright.White,
+            };
     }
 }

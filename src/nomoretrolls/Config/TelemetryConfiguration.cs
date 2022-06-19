@@ -6,5 +6,8 @@ namespace nomoretrolls.Config
     {
         [JsonProperty("logMessageContent")]
         public bool LogMessageContent { get; set; } = false;
+
+        [JsonProperty("LogTelemetryTypes")]
+        public IList<string> LogTelemetryTypes { get; set; }
     }
 }

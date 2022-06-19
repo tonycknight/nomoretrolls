@@ -34,7 +34,7 @@ namespace nomoretrolls.Commands.DiscordCommands
             }
             catch (Exception ex)
             {
-                _telemetry.Error(ex.Message);
+                _telemetry.Event(new TelemetryErrorEvent() { Exception = ex });
                 return ReplyAsync(ex.Message);
             }
         }
@@ -79,7 +79,9 @@ namespace nomoretrolls.Commands.DiscordCommands
         {
             try
             {
-                var line = ProgramBootstrap.GetVersionDescription().Join(Environment.NewLine).ToCode().ToBold();
+                var line = ProgramBootstrap.GetProductDescription()
+                    .Concat(ProgramBootstrap.GetVersionDescription())
+                    .Join(Environment.NewLine).ToCode().ToBold();
 
                 return SendMessageAsync(line);
             }
@@ -97,7 +99,7 @@ namespace nomoretrolls.Commands.DiscordCommands
             }
             catch (Exception ex)
             {
-                _telemetry.Message(ex.Message);
+                _telemetry.Event(new TelemetryErrorEvent() { Exception = ex } );
                 return Task.CompletedTask;
             }
         }

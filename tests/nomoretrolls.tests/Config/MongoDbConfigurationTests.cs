@@ -31,5 +31,26 @@ namespace nomoretrolls.tests.Config
             var config = new MongoDbConfiguration();
             config.UserStatsCollectionName.Should().NotBeNullOrWhiteSpace();
         }
+
+        [Fact]
+        public void UserEmoteAnnotationsCollectionName_HasWorkableDefault()
+        {
+            var config = new MongoDbConfiguration();
+            config.UserEmoteAnnotationsCollectionName.Should().NotBeNullOrWhiteSpace();
+        }
+
+        [Fact]
+        public void WorkflowConfigCollectionName_HasWorkableDefault()
+        {
+            var config = new MongoDbConfiguration();
+            config.WorkflowConfigCollectionName.Should().NotBeNullOrWhiteSpace();
+        }
+
+        [Fact]
+        public void UserKnockingScheduleCollectionName_HasWorkableDefault()
+        {
+            var config = new MongoDbConfiguration();
+            config.UserKnockingScheduleCollectionName.Should().NotBeNullOrWhiteSpace();
+        }
     }
 }

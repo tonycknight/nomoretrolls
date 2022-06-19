@@ -2,6 +2,7 @@
 using MongoDB.Driver;
 using nomoretrolls.Config;
 using nomoretrolls.Io;
+using nomoretrolls.Telemetry;
 
 namespace nomoretrolls.Blacklists
 {
@@ -9,10 +10,12 @@ namespace nomoretrolls.Blacklists
     internal class MongoDbBlacklistProvider : IBlacklistProvider
     {
         private readonly Lazy<IMongoCollection<UserBlacklistEntryDto>> _blacklistCol;
+        private readonly ITelemetry _telemetry;
 
-        public MongoDbBlacklistProvider(Config.IConfigurationProvider configProvider)
+        public MongoDbBlacklistProvider(Config.IConfigurationProvider configProvider, ITelemetry telemetry)
         {
             _blacklistCol = new Lazy<IMongoCollection<UserBlacklistEntryDto>>(() => InitialiseDb(configProvider));
+            _telemetry = telemetry;
         }
 
         public async Task DeleteUserEntryAsync(ulong userId)
@@ -67,7 +70,7 @@ namespace nomoretrolls.Blacklists
         {
             var config = configProvider.GetValidateConfig();
 
-            var db = config.MongoDb.GetDb();
+            var db = config.MongoDb.GetDb(_telemetry);
 
             return CreateBlacklistCollection(config.MongoDb, db);
         }

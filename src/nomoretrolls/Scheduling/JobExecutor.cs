@@ -20,9 +20,9 @@ namespace nomoretrolls.Scheduling
             {
                 sw.Start();
 
-                _telemetry.Message($"Starting job {job.Job.GetType().Name}...");
+                _telemetry.Event(new TelemetryTraceEvent() { Message = $"Starting job {job.Job.GetType().Name}..." });
                 await job.Job.ExecuteAsync();
-                _telemetry.Message($"Finished job {job.Job.GetType().Name}.");
+                _telemetry.Event(new TelemetryTraceEvent() { Message = $"Finished job {job.Job.GetType().Name}." });
                 sw.Stop();
 
                 return new JobExecuteResultOk(job.Job, sw.Elapsed);
@@ -30,7 +30,7 @@ namespace nomoretrolls.Scheduling
             catch (Exception ex)
             {
                 sw.Stop();
-                _telemetry.Error(ex.Message);
+                _telemetry.Event(new TelemetryErrorEvent() { Exception = ex } );
                 return new JobExecuteResultError(job.Job, sw.Elapsed, ex);
             }
         }

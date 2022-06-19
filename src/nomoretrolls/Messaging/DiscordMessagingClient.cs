@@ -60,7 +60,7 @@ namespace nomoretrolls.Messaging
 
         public async Task StartAsync()
         {
-            await _client.LoginAsync(Discord.TokenType.Bot, _getClientToken(_config));
+            await _client.LoginAsync(TokenType.Bot, _getClientToken(_config));
             await _client.StartAsync();            
         }
 
@@ -123,9 +123,17 @@ namespace nomoretrolls.Messaging
         }
 
         private Task client_Log(LogMessage arg) 
-        {            
-            _telemetry.Message(arg.Message);
-
+        {
+            TelemetryEvent evt = arg.Severity switch
+            {
+                LogSeverity.Error => new TelemetryErrorEvent() {  Message = arg.Message },
+                LogSeverity.Warning => new TelemetryWarningEvent() { Message = arg.Message },
+                LogSeverity.Debug => new TelemetryTraceEvent() { Message = arg.Message },
+                _ => new TelemetryInfoEvent() { Message = arg.Message },
+            };
+            
+            _telemetry.Event(evt);
+            
             return Task.CompletedTask;
         }
 
@@ -163,7 +171,6 @@ namespace nomoretrolls.Messaging
 
         private string UserLogPrefix(IUser user) => $"{user.Id} {user.Username}#{user.Discriminator}";
 
-
         private void LogMessageContent(IUserMessage msg)
         {
             if (_config.Telemetry?.LogMessageContent == true)
@@ -174,7 +181,7 @@ namespace nomoretrolls.Messaging
                     : $"[{msg.Channel.Name}]";
                 
                 var line = $"{prefix} [Message {msg.Id}] [{UserLogPrefix(msg.Author)}] {msg.Content}";
-                _telemetry.Message(line);
+                _telemetry.Event(new TelemetryTraceEvent() {  Message = line });
             }
         }
 

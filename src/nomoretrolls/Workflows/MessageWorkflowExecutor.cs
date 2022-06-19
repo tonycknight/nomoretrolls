@@ -29,7 +29,7 @@ namespace nomoretrolls.Workflows
         {
             var logPrefix = $"Message {context.Message?.Id}";
 
-            _telemetry.Message($"[{logPrefix}] Starting workflow '{workflow.Name}'...");
+            _telemetry.Event(new TelemetryTraceEvent() { Message = $"[{logPrefix}] Starting workflow '{workflow.Name}'..." });
             
             var msgContext = await workflow.Receiver.ReceiveAsync(context);
             
@@ -37,7 +37,7 @@ namespace nomoretrolls.Workflows
             {
                 foreach (var part in workflow.Parts)
                 {
-                    _telemetry.Message($"[{logPrefix}] Executing part '{workflow.Name}.{part.GetType().Name}'...");
+                    _telemetry.Event(new TelemetryTraceEvent() { Message = $"[{logPrefix}] Executing part '{workflow.Name}.{part.GetType().Name}'..." });
 
                     MessageWorkflowContext? segmentResult = null;
                     try
@@ -46,7 +46,7 @@ namespace nomoretrolls.Workflows
                     }
                     catch(Exception ex)
                     {
-                        _telemetry.Error(ex.Message);                     
+                        _telemetry.Event(new TelemetryErrorEvent() { Exception = ex } );
                     }
                     if (segmentResult == null)
                     {
@@ -55,7 +55,7 @@ namespace nomoretrolls.Workflows
                     msgContext = segmentResult;
                 }
             }
-            _telemetry.Message($"[{logPrefix}] Finished workflow '{workflow.Name}'.");
+            _telemetry.Event(new TelemetryTraceEvent() { Message = $"[{logPrefix}] Finished workflow '{workflow.Name}'." });
         }
     }
 }

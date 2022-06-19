@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FluentAssertions;
 using nomoretrolls.Telemetry;
 using Xunit;
@@ -11,21 +9,19 @@ namespace nomoretrolls.tests.Telemetry
 {
     public class ConsoleTelemetryTests
     {
-        [Fact]
-        public void Event_MessageSent()
+        [Theory]
+        [MemberData(nameof(GetTelemetryEvents), "test")]
+        public void Event_MessageSent(object evto)
         {
+            var evt = (TelemetryEvent)evto;
             string? r = null;
             var w = (string s) => { r = s; };
 
             var t = new ConsoleTelemetry(w);
-            var evt = new TelemetryEvent()
-            {
-                Message = "test"
-            };
-
+            
             t.Event(evt);
 
-            r.Should().EndWith(evt.Message);
+            r.Should().Contain(evt.Message);
         }
 
         [Fact]
@@ -57,9 +53,9 @@ namespace nomoretrolls.tests.Telemetry
             var t = new ConsoleTelemetry(w);
             var msg = "test";
 
-            t.Message(msg);
+            t.Event(new TelemetryEvent() { Message = msg } );
 
-            r.Should().EndWith(msg);
+            r.Should().Contain(msg);
         }
 
         
@@ -73,9 +69,54 @@ namespace nomoretrolls.tests.Telemetry
             var t = new ConsoleTelemetry(w);
             var msg = "test";
 
-            t.Error(msg);
+            t.Event(new TelemetryErrorEvent() { Message = msg } );
 
-            r.Should().EndWith(msg);
+            r.Should().Contain(msg);
+        }
+
+
+        [Fact]
+        public void Error_Exception_MessageSent()
+        {
+            string? r = null;
+            var w = (string s) => { r = s; };
+
+            var t = new ConsoleTelemetry(w);
+            var msg1 = "test1";
+            var msg2 = "test2";
+
+            t.Event(new TelemetryErrorEvent() { Exception = new ApplicationException(msg2) });
+
+            r.Should().Contain(msg2);
+            r.Should().NotContain(msg1);
+        }
+
+        [Fact]
+        public void Error_Exception_EmptyExceptionMessage_MessageSent()
+        {
+            string? r = null;
+            var w = (string s) => { r = s; };
+
+            var t = new ConsoleTelemetry(w);
+            var msg1 = "test1";
+            var msg2 = "test2";
+
+            t.Event(new TelemetryErrorEvent() { Exception = new ApplicationException(""), Message = msg1 });
+
+            r.Should().NotContain(msg2);
+            r.Should().Contain(msg1);
+        }
+
+        private static IEnumerable<object[]> GetTelemetryEvents(string message)
+        {
+            return new[] { new TelemetryEvent() { Message = message },
+                new TelemetryTraceEvent() { Message = message },
+                new TelemetryErrorEvent() { Message = message },
+                new TelemetryInfoEvent() { Message = message },
+                new TelemetryWarningEvent { Message = message },
+                new TelemetryDependencyEvent { Message = message },
+                new TelemetryHeadlineEvent() { Message = message } }
+                    .Select(e => new[] { e });
         }
     }
 }

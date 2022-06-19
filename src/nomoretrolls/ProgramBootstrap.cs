@@ -36,24 +36,22 @@ namespace nomoretrolls
                 .AddSingleton<Knocking.KnockingScheduleJob>()
                 .BuildServiceProvider();
 
-
-
-        public static string GetDescription() => 
-            GetVersionDescription().Concat(GetCopyrightDescriptions())
-                .Where(x => x != null)
-                .Join(Environment.NewLine);
-
-        public static IEnumerable<string> GetVersionDescription()
+        public static IEnumerable<string> GetProductDescription()
         {
             var attrs = typeof(ProgramBootstrap).Assembly.GetCustomAttributes();
 
             return new[]
                 {
                     attrs.GetAttributeValue<AssemblyProductAttribute>(a => a.Product),
-                    attrs.GetAttributeValue<AssemblyDescriptionAttribute>(a => a.Description),
-                    "",
-                    $"{attrs.GetAttributeValue<AssemblyInformationalVersionAttribute>(a => a.InformationalVersion).Format("Version {0} beta")}",
+                    attrs.GetAttributeValue<AssemblyDescriptionAttribute>(a => a.Description),                    
             };
+        }
+
+        public static IEnumerable<string> GetVersionDescription()
+        {
+            var attrs = typeof(ProgramBootstrap).Assembly.GetCustomAttributes();
+
+            yield return $"{attrs.GetAttributeValue<AssemblyInformationalVersionAttribute>(a => a.InformationalVersion).Format("Version {0} beta")}";
         }
 
         public static IEnumerable<string> GetCopyrightDescriptions()

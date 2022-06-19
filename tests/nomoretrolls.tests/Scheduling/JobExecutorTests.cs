@@ -26,8 +26,8 @@ namespace nomoretrolls.Tests.Scheduling
             result.Should().BeOfType<JobExecuteResultOk>();
             result.Duration.Should().BeGreaterThan(TimeSpan.Zero);
             await job.Received(1).ExecuteAsync();
-            t.Received(2).Message(Arg.Is<string>(s => !string.IsNullOrWhiteSpace(s)));
-            t.Received(0).Error(Arg.Any<string>());
+            t.Received(2).Event(Arg.Is<TelemetryTraceEvent>(s => !string.IsNullOrWhiteSpace(s.Message)));
+            t.Received(0).Event(Arg.Any<TelemetryErrorEvent>());
         }
 
         [Fact]
@@ -49,8 +49,8 @@ namespace nomoretrolls.Tests.Scheduling
             result.Exception.Should().NotBeNull();
             result.Duration.Should().BeGreaterThan(TimeSpan.Zero);
             await job.Received(1).ExecuteAsync();
-            t.Received(1).Message(Arg.Is<string>(s => !string.IsNullOrWhiteSpace(s)));
-            t.Received(1).Error(Arg.Is<string>(s => !string.IsNullOrWhiteSpace(s)));
+            t.Received(1).Event(Arg.Is<TelemetryTraceEvent>(s => !string.IsNullOrWhiteSpace(s.Message)));
+            t.Received(1).Event(Arg.Is<TelemetryErrorEvent>(s => s.Exception != null));
             
         }
 

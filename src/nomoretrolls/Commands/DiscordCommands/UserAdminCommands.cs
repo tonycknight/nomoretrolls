@@ -299,7 +299,7 @@ namespace nomoretrolls.Commands.DiscordCommands
             }
             catch (Exception ex)
             {
-                _telemetry.Message(ex.Message);
+                _telemetry.Event(new TelemetryErrorEvent() { Exception = ex } );
                 return Task.CompletedTask;
             }
         }

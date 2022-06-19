@@ -5,7 +5,6 @@ using nomoretrolls.Config;
 using nomoretrolls.Scheduling;
 using nomoretrolls.Telemetry;
 using nomoretrolls.Workflows;
-using Tk.Extensions;
 using Tk.Extensions.Funcs;
 using Tk.Extensions.Guards;
 using Tk.Extensions.Reflection;
@@ -45,36 +44,33 @@ namespace nomoretrolls.Commands
         public string ConfigurationFile { get; set; }
 
         public async Task<int> OnExecuteAsync()
-        {
+        {            
             var config = GetConfig();
-
-            var attrs = typeof(ProgramBootstrap).Assembly.GetCustomAttributes();
-            _telemetry.Message($"{attrs.GetAttributeValue<AssemblyProductAttribute>(a => a.Product)} {attrs.GetAttributeValue<AssemblyInformationalVersionAttribute>(a => a.InformationalVersion).Format("Version {0}")}");
-
+            EchoServiceMetadata();
             var client = CreateDiscordClient(config);
             await CreateAdminCommandHandler(client);
             await client.StartAsync();
 
             CreateJobScheduler();
 
-            _telemetry.Message("Startup complete.");
-            _telemetry.Message($"Bot registration URI: {client.BotRegistrationUri}");
-            _telemetry.Message("Proxy started. Hit CTRL-C to quit");
+            _telemetry.Event(new TelemetryHeadlineEvent() { Message = "Startup complete." });
+            _telemetry.Event(new TelemetryHeadlineEvent() { Message = $"Bot registration URI: {client.BotRegistrationUri}" });
+            _telemetry.Event(new TelemetryHeadlineEvent() { Message = "Proxy started. Hit CTRL-C to quit" });
 
             var cts = new CancellationTokenSource();
 
             Console.CancelKeyPress += async (object? sender, ConsoleCancelEventArgs e) =>
             {
-                _telemetry.Message("Shutting down job scheduler...");
+                _telemetry.Event(new TelemetryInfoEvent() { Message = "Shutting down job scheduler..." } );
                 _jobScheduler.Stop();
-                _telemetry.Message("Job scheduler shutdown.");
+                _telemetry.Event(new TelemetryInfoEvent() { Message = "Job scheduler shutdown." } );
 
-                _telemetry.Message("Shutting down services...");
+                _telemetry.Event(new TelemetryInfoEvent() { Message = "Shutting down services..." } );
                 await client.StopAsync();
                 client.Dispose();
                 client = null;
                 cts.Cancel();
-                _telemetry.Message("Services shutdown");
+                _telemetry.Event(new TelemetryInfoEvent() { Message = "Services shutdown" } );
             };
 
             WaitHandle.WaitAll(new[] { cts.Token.WaitHandle });
@@ -82,19 +78,28 @@ namespace nomoretrolls.Commands
             return true.ToReturnCode();
         }
 
+        private void EchoServiceMetadata()
+        {
+            var attrs = typeof(ProgramBootstrap).Assembly.GetCustomAttributes();
+            var product = attrs.GetAttributeValue<AssemblyProductAttribute>(a => a.Product);
+            var version = attrs.GetAttributeValue<AssemblyInformationalVersionAttribute>(a => a.InformationalVersion);
+
+            _telemetry.Event(new TelemetryHeadlineEvent() { Message = $"{product} Version {version}" });
+        }
+
         private void CreateJobScheduler()
         {
-            _telemetry.Message("Starting job scheduler...");
+            _telemetry.Event(new TelemetryInfoEvent() { Message = "Starting job scheduler..." } );
             var jobs = GetJobSchedules().ToList();
-            _telemetry.Message($"Found {jobs.Count} scheduled job(s).");
+            _telemetry.Event(new TelemetryInfoEvent() { Message = $"Found {jobs.Count} scheduled job(s)." } );
             _jobScheduler.Register(jobs);
             _jobScheduler.Start();
-            _telemetry.Message("Finished creating job scheduler.");
+            _telemetry.Event(new TelemetryInfoEvent() { Message = "Finished creating job scheduler." } );
         }
 
         private Messaging.DiscordMessagingClient CreateDiscordClient(AppConfiguration config)
         {
-            _telemetry.Message("Starting client...");
+            _telemetry.Event(new TelemetryInfoEvent() { Message = "Starting client..." } );
             var client = new Messaging.DiscordMessagingClient(config, _telemetry,
                                                                 395338442822,
                                                                 c => c.Discord?.DiscordClientToken,

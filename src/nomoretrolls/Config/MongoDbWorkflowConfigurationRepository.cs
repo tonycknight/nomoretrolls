@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using MongoDB.Driver;
 using nomoretrolls.Io;
+using nomoretrolls.Telemetry;
 
 namespace nomoretrolls.Config
 {
@@ -8,10 +9,12 @@ namespace nomoretrolls.Config
     internal class MongoDbWorkflowConfigurationRepository : IWorkflowConfigurationRepository
     {
         private readonly Lazy<IMongoCollection<WorkflowConfigurationDto>> _configCol;
+        private readonly ITelemetry _telemetry;
 
-        public MongoDbWorkflowConfigurationRepository(Config.IConfigurationProvider configProvider)
+        public MongoDbWorkflowConfigurationRepository(Config.IConfigurationProvider configProvider, ITelemetry telemetry)
         {
             _configCol = new Lazy<IMongoCollection<WorkflowConfigurationDto>>(() => InitialiseDb(configProvider));
+            _telemetry = telemetry;
         }
 
         public async Task<IList<WorkflowConfiguration>> GetWorkflowConfigsAsync()
@@ -75,7 +78,7 @@ namespace nomoretrolls.Config
         {
             var config = configProvider.GetValidateConfig();
 
-            var db = config.MongoDb.GetDb();
+            var db = config.MongoDb.GetDb(_telemetry);
 
             return CreateWorkflowConfigCollection(config.MongoDb, db);
         }
