@@ -7,3 +7,4 @@ MongoDB.Driver
 Tk.Extensions
 cronos
 CronExpressionDescriptor
+Microsoft.Extensions.Caching.Memory
