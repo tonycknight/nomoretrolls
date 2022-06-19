@@ -16,6 +16,7 @@ namespace nomoretrolls
                 .AddSingleton<IList<Telemetry.ITelemetry>>(sp => new Telemetry.ITelemetry[] { new Telemetry.ConsoleTelemetry() })
                 .AddSingleton<Telemetry.ITelemetry, Telemetry.AggregatedTelemetry>()
                 .AddSingleton<Io.IIoProvider, Io.IoProvider>()
+                .AddMemoryCache()
                 .AddSingleton<Tk.Extensions.Time.ITimeProvider, Tk.Extensions.Time.TimeProvider>()
                 .AddSingleton<Messaging.IDiscordMessagingClientProvider, Messaging.DiscordMessagingClientProvider>()
                 .AddSingleton<Workflows.Reactions.IBlacklistReplyTextGenerator, Workflows.Reactions.BlacklistReplyTextGenerator>()
