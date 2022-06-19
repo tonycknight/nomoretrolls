@@ -44,10 +44,9 @@ namespace nomoretrolls.Commands
         public string ConfigurationFile { get; set; }
 
         public async Task<int> OnExecuteAsync()
-        {
-            EchoServiceMetadata();
-
+        {            
             var config = GetConfig();
+            EchoServiceMetadata();
             var client = CreateDiscordClient(config);
             await CreateAdminCommandHandler(client);
             await client.StartAsync();
