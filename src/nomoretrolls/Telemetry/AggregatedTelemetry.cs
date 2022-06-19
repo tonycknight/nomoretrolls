@@ -1,12 +1,16 @@
-﻿namespace nomoretrolls.Telemetry
+﻿using nomoretrolls.Config;
+
+namespace nomoretrolls.Telemetry
 {
     internal class AggregatedTelemetry : ITelemetry
     {
         private readonly IList<ITelemetry> _telemetries;
+        private readonly TelemetryConfiguration? _telemetryConfig;
 
-        public AggregatedTelemetry(IList<ITelemetry> telemetries)
+        public AggregatedTelemetry(IList<ITelemetry> telemetries, IConfigurationProvider configProvider)
         {
-            _telemetries = telemetries;
+            _telemetries = telemetries;            
+            _telemetryConfig = configProvider.GetAppConfiguration().Telemetry;
         }
 
         public void Event(TelemetryEvent evt)
