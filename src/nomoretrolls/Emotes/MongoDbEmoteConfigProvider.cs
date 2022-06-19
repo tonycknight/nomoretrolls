@@ -2,6 +2,7 @@
 using MongoDB.Driver;
 using nomoretrolls.Config;
 using nomoretrolls.Io;
+using nomoretrolls.Telemetry;
 
 namespace nomoretrolls.Emotes
 {
@@ -9,10 +10,12 @@ namespace nomoretrolls.Emotes
     internal class MongoDbEmoteConfigProvider : IEmoteConfigProvider
     {
         private readonly Lazy<IMongoCollection<UserEmoteAnnotationEntryDto>> _col;
+        private readonly ITelemetry _telemetry;
 
-        public MongoDbEmoteConfigProvider(IConfigurationProvider configProvider)
+        public MongoDbEmoteConfigProvider(IConfigurationProvider configProvider, ITelemetry telemetry)
         {
             _col = new Lazy<IMongoCollection<UserEmoteAnnotationEntryDto>>(() => InitialiseDb(configProvider));
+            _telemetry = telemetry;
         }
 
         public async Task DeleteUserEmoteAnnotationEntryAsync(ulong userId)
@@ -66,8 +69,8 @@ namespace nomoretrolls.Emotes
         private IMongoCollection<UserEmoteAnnotationEntryDto> InitialiseDb(IConfigurationProvider configProvider)
         {
             var config = configProvider.GetValidateConfig();
-
-            var db = config.MongoDb.GetDb();
+            
+            var db = config.MongoDb.GetDb(_telemetry);
 
             return CreateCollection(config.MongoDb, db);
         }

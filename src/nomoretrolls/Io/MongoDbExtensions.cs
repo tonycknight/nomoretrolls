@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using MongoDB.Driver;
+using nomoretrolls.Telemetry;
 using Tk.Extensions.Guards;
 
 namespace nomoretrolls.Io
@@ -21,13 +22,15 @@ namespace nomoretrolls.Io
         }
 
         [ExcludeFromCodeCoverage]
-        public static IMongoDatabase GetDb(this Config.MongoDbConfiguration config)
+        public static IMongoDatabase GetDb(this Config.MongoDbConfiguration config, ITelemetry telemetry)
         {
             var settings = MongoClientSettings.FromConnectionString(config.Connection);
+
             settings.AllowInsecureTls = false;
             settings.UseTls = true;
             settings.ConnectTimeout = TimeSpan.FromSeconds(15);
             settings.ServerSelectionTimeout = settings.ConnectTimeout;
+            settings.ClusterConfigurator = SetCommandLogging(telemetry);
 
             var client = new MongoClient(settings);
 
@@ -45,6 +48,20 @@ namespace nomoretrolls.Io
             config.MongoDb?.UserKnockingScheduleCollectionName.InvalidOpArg(string.IsNullOrWhiteSpace, "Missing user knocking schedule collection name.");
 
             return config;
+        }
+
+        private static Action<MongoDB.Driver.Core.Configuration.ClusterBuilder> SetCommandLogging(ITelemetry telemetry)
+        {
+            return cb =>
+            {
+                cb.Subscribe<MongoDB.Driver.Core.Events.CommandStartedEvent>(e =>
+                {
+                    telemetry.Event(new TelemetryTraceEvent()
+                    {
+                        Message = $"[MONGODB] {e.Command.ToString()}"
+                    });
+                });
+            };
         }
     }
 }

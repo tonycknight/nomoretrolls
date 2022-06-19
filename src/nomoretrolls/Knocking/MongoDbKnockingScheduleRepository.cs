@@ -2,6 +2,7 @@
 using MongoDB.Driver;
 using nomoretrolls.Config;
 using nomoretrolls.Io;
+using nomoretrolls.Telemetry;
 
 namespace nomoretrolls.Knocking
 {
@@ -9,10 +10,12 @@ namespace nomoretrolls.Knocking
     internal class MongoDbKnockingScheduleRepository : IKnockingScheduleRepository
     {
         private readonly Lazy<IMongoCollection<KnockingScheduleEntryDto>> _knockScheduleCol;
+        private readonly ITelemetry _telemetry;
 
-        public MongoDbKnockingScheduleRepository(Config.IConfigurationProvider configProvider)
+        public MongoDbKnockingScheduleRepository(Config.IConfigurationProvider configProvider, ITelemetry telemetry)
         {
             _knockScheduleCol = new Lazy<IMongoCollection<KnockingScheduleEntryDto>>(() => InitialiseDb(configProvider));
+            _telemetry = telemetry;
         }
 
         public async Task DeleteUserEntryAsync(ulong userId)
@@ -56,7 +59,7 @@ namespace nomoretrolls.Knocking
         {
             var config = configProvider.GetValidateConfig();
 
-            var db = config.MongoDb.GetDb();
+            var db = config.MongoDb.GetDb(_telemetry);
 
             return CreateScheduleCollection(config.MongoDb, db);
         }

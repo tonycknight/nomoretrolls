@@ -3,6 +3,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using nomoretrolls.Config;
 using nomoretrolls.Io;
+using nomoretrolls.Telemetry;
 
 namespace nomoretrolls.Statistics
 {
@@ -10,10 +11,12 @@ namespace nomoretrolls.Statistics
     internal class MongoDbUserStatisticsProvider : IUserStatisticsProvider
     {
         private readonly Lazy<IMongoCollection<UserStatisticsEntryDto>> _statsCol;
+        private readonly ITelemetry _telemetry;
 
-        public MongoDbUserStatisticsProvider(IConfigurationProvider config)
+        public MongoDbUserStatisticsProvider(IConfigurationProvider config, ITelemetry telemetry)
         {
             _statsCol = new Lazy<IMongoCollection<UserStatisticsEntryDto>>(() => InitialiseDb(config));
+            _telemetry = telemetry;
         }
 
         public Task BumpUserStatisticAsync(ulong userId, string statName)
@@ -72,7 +75,7 @@ namespace nomoretrolls.Statistics
         {
             var config = configProvider.GetValidateConfig();
 
-            var db = config.MongoDb.GetDb();
+            var db = config.MongoDb.GetDb(_telemetry);
 
             return CreateUserStatsCollection(config.MongoDb, db);
         }
