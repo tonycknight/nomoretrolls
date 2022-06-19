@@ -30,4 +30,10 @@
     {
         public Exception Exception { get; init; } = default!;
     }
+
+    internal record TelemetryDependencyEvent : TelemetryEvent
+    {
+        public string Dependency { get; init; }
+        public string RequestId { get; init; }
+    }
 }

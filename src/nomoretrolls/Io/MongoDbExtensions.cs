@@ -50,15 +50,18 @@ namespace nomoretrolls.Io
             return config;
         }
 
+        [ExcludeFromCodeCoverage]
         private static Action<MongoDB.Driver.Core.Configuration.ClusterBuilder> SetCommandLogging(ITelemetry telemetry)
         {
             return cb =>
             {
                 cb.Subscribe<MongoDB.Driver.Core.Events.CommandStartedEvent>(e =>
                 {
-                    telemetry.Event(new TelemetryTraceEvent()
+                    telemetry.Event(new TelemetryDependencyEvent()
                     {
-                        Message = $"[MONGODB] {e.Command.ToString()}"
+                        Dependency = "MONGODB",
+                        RequestId = e.RequestId.ToString(),
+                        Message = e.Command.ToString()
                     });
                 });
             };

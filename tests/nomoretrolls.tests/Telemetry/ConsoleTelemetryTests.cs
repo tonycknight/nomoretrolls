@@ -114,6 +114,7 @@ namespace nomoretrolls.tests.Telemetry
                 new TelemetryErrorEvent() { Message = message },
                 new TelemetryInfoEvent() { Message = message },
                 new TelemetryWarningEvent { Message = message },
+                new TelemetryDependencyEvent { Message = message },
                 new TelemetryHeadlineEvent() { Message = message } }
                     .Select(e => new[] { e });
         }
