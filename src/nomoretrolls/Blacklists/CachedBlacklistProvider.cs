@@ -48,7 +48,7 @@ namespace nomoretrolls.Blacklists
 
             await _sourceProvider.SetUserEntryAsync(entry);
 
-            _cache.Set(key, entry, entry.Expiry);            
+            _cache.Set(key, entry, entry.Expiry);
         }
 
         private string CacheEntryKey(ulong userId) => $"{CacheEntryKeyPrefix}-{userId}";

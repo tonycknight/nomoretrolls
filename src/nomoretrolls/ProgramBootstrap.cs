@@ -28,7 +28,8 @@ namespace nomoretrolls
                 .AddSingleton<Statistics.IUserStatisticsProvider, Statistics.MongoDbUserStatisticsProvider>()
                 .AddSingleton<Blacklists.MongoDbBlacklistProvider>()
                 .AddSingleton<Blacklists.IBlacklistProvider, Blacklists.CachedBlacklistProvider>()
-                .AddSingleton<IEmoteConfigProvider, MongoDbEmoteConfigProvider>()
+                .AddSingleton<IEmoteConfigProvider, CachedEmoteConfigProvider>()
+                .AddSingleton<MongoDbEmoteConfigProvider>()
                 .AddSingleton<Config.MemoryWorkflowConfigurationRepository>()
                 .AddSingleton<Config.MongoDbWorkflowConfigurationRepository>()
                 .AddSingleton<Config.IWorkflowConfigurationRepository>(sp => 
