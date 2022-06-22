@@ -7,9 +7,9 @@ namespace nomoretrolls.Emotes
         private const string CacheEntryKeyPrefix = $"{nameof(CachedEmoteConfigProvider)}-User";
 
         private readonly IMemoryCache _cache;
-        private readonly MongoDbEmoteConfigProvider _sourceRepo;
+        private readonly IEmoteConfigProvider _sourceRepo;
 
-        public CachedEmoteConfigProvider(IMemoryCache cache, MongoDbEmoteConfigProvider sourceRepo)
+        public CachedEmoteConfigProvider(IMemoryCache cache, IEmoteConfigProvider sourceRepo)
         {
             _cache = cache;
             _sourceRepo = sourceRepo;

@@ -9,7 +9,7 @@ namespace nomoretrolls.Blacklists
         private readonly IMemoryCache _cache;
         private readonly IBlacklistProvider _sourceProvider;
 
-        public CachedBlacklistProvider(IMemoryCache cache, MongoDbBlacklistProvider sourceProvider)
+        public CachedBlacklistProvider(IMemoryCache cache, IBlacklistProvider sourceProvider)
         {
             _cache = cache;
             _sourceProvider = sourceProvider;
