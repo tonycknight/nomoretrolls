@@ -5,7 +5,7 @@ namespace nomoretrolls.Knocking
     internal class CachedKnockingScheduleRepository : IKnockingScheduleRepository
     {
         private const string CacheKeyPrefix = $"{nameof(CachedKnockingScheduleRepository)}-Users";
-        private static readonly TimeSpan CacheSlidingExpiry = TimeSpan.FromMinutes(60);
+        private static readonly TimeSpan CacheExpiry = TimeSpan.FromMinutes(60);
 
         private readonly IMemoryCache _cache;
         private readonly IKnockingScheduleRepository _sourceRepo;
@@ -32,12 +32,9 @@ namespace nomoretrolls.Knocking
                 var r = await _sourceRepo.GetUserEntriesAsync();
                 if (r != null)
                 {
-                    DateTime expiry = DateTime.UtcNow.Add(CacheSlidingExpiry);
-                    if (r.Any())
-                    {
-                        expiry = r.Min(e => e.Expiry);
-                    }
-                    e.AbsoluteExpiration = expiry;
+                    e.AbsoluteExpiration = r.Any() 
+                                            ? r.Min(e => e.Expiry) 
+                                            : DateTime.UtcNow.Add(CacheExpiry);
                     return r;
                 }
                 return null;
