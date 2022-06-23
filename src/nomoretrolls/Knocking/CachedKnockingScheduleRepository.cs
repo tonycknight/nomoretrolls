@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
+using Tk.Extensions.Time;
 
 namespace nomoretrolls.Knocking
 {
@@ -9,11 +10,13 @@ namespace nomoretrolls.Knocking
 
         private readonly IMemoryCache _cache;
         private readonly IKnockingScheduleRepository _sourceRepo;
+        private readonly ITimeProvider _timeProvider;
 
-        public CachedKnockingScheduleRepository(IMemoryCache cache, IKnockingScheduleRepository sourceRepo)
+        public CachedKnockingScheduleRepository(IMemoryCache cache, IKnockingScheduleRepository sourceRepo, ITimeProvider timeProvider)
         {
             _cache = cache;
             _sourceRepo = sourceRepo;
+            _timeProvider = timeProvider;
         }
 
         public async Task DeleteUserEntryAsync(ulong userId)
@@ -34,7 +37,7 @@ namespace nomoretrolls.Knocking
                 {
                     e.AbsoluteExpiration = r.Any() 
                                             ? r.Min(e => e.Expiry) 
-                                            : DateTime.UtcNow.Add(CacheExpiry);
+                                            : _timeProvider.UtcNow().Add(CacheExpiry);
                     return r;
                 }
                 return null;

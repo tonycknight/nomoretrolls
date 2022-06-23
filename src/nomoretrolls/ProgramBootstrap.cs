@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using nomoretrolls.Emotes;
 using Tk.Extensions;
 using Tk.Extensions.Reflection;
+using Tk.Extensions.Time;
 
 namespace nomoretrolls
 {
@@ -43,7 +44,8 @@ namespace nomoretrolls
 
                 .AddSingleton<Knocking.MongoDbKnockingScheduleRepository>()
                 .AddSingleton<Knocking.IKnockingScheduleRepository>((IServiceProvider sp) => new Knocking.CachedKnockingScheduleRepository(sp.GetRequiredService<IMemoryCache>(),
-                                                                                                                                           sp.GetRequiredService<Knocking.MongoDbKnockingScheduleRepository>()))
+                                                                                                                                           sp.GetRequiredService<Knocking.MongoDbKnockingScheduleRepository>(),
+                                                                                                                                           sp.GetRequiredService<ITimeProvider>()))
                 .AddSingleton<Scheduling.IJobScheduler, Scheduling.JobScheduler>()
                 .AddSingleton<Knocking.KnockingScheduleJob>()
                 .BuildServiceProvider();

@@ -23,8 +23,9 @@ namespace nomoretrolls.tests.Knocking
 
             var cache = CreateMockMemoryCache();
             var sourceRepo = Substitute.For<IKnockingScheduleRepository>();
+            var tp = Substitute.For<ITimeProvider>();
 
-            var repo = new CachedKnockingScheduleRepository(cache, sourceRepo);
+            var repo = new CachedKnockingScheduleRepository(cache, sourceRepo, tp);
 
             await repo.DeleteUserEntryAsync(userId);
 
@@ -39,8 +40,9 @@ namespace nomoretrolls.tests.Knocking
 
             var cache = CreateMockMemoryCache();
             var sourceRepo = Substitute.For<IKnockingScheduleRepository>();
+            var tp = Substitute.For<ITimeProvider>();
 
-            var repo = new CachedKnockingScheduleRepository(cache, sourceRepo);
+            var repo = new CachedKnockingScheduleRepository(cache, sourceRepo, tp);
 
             await repo.SetUserEntryAsync(e);
 
@@ -56,8 +58,9 @@ namespace nomoretrolls.tests.Knocking
             var cache = CreateMockMemoryCache();
             var sourceRepo = Substitute.For<IKnockingScheduleRepository>();
             sourceRepo.GetUserEntriesAsync().Returns(entries.ToTaskResult<IList<KnockingScheduleEntry>>());
+            var tp = Substitute.For<ITimeProvider>();
 
-            var repo = new CachedKnockingScheduleRepository(cache, sourceRepo);
+            var repo = new CachedKnockingScheduleRepository(cache, sourceRepo, tp);
 
             var result = await repo.GetUserEntriesAsync();
 
@@ -74,8 +77,9 @@ namespace nomoretrolls.tests.Knocking
             var cache = CreateMockMemoryCache();
             var sourceRepo = Substitute.For<IKnockingScheduleRepository>();
             sourceRepo.GetUserEntriesAsync().Returns(entries.ToTaskResult<IList<KnockingScheduleEntry>>());
+            var tp = Substitute.For<ITimeProvider>();
 
-            var repo = new CachedKnockingScheduleRepository(cache, sourceRepo);
+            var repo = new CachedKnockingScheduleRepository(cache, sourceRepo, tp);
 
             var result = await repo.GetUserEntriesAsync();
 
