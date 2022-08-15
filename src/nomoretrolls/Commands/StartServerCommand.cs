@@ -63,6 +63,10 @@ namespace nomoretrolls.Commands
             {
                 _telemetry.Event(new TelemetryInfoEvent() { Message = "Shutting down job scheduler..." } );
                 _jobScheduler.Stop();
+                if (_jobScheduler is IDisposable disposable)
+                {
+                    disposable.Dispose();
+                }
                 _telemetry.Event(new TelemetryInfoEvent() { Message = "Job scheduler shutdown." } );
 
                 _telemetry.Event(new TelemetryInfoEvent() { Message = "Shutting down services..." } );
@@ -71,6 +75,7 @@ namespace nomoretrolls.Commands
                 client = null;
                 cts.Cancel();
                 _telemetry.Event(new TelemetryInfoEvent() { Message = "Services shutdown" } );
+                e.Cancel = true;
             };
 
             WaitHandle.WaitAll(new[] { cts.Token.WaitHandle });
@@ -100,8 +105,9 @@ namespace nomoretrolls.Commands
         private Messaging.DiscordMessagingClient CreateDiscordClient(AppConfiguration config)
         {
             _telemetry.Event(new TelemetryInfoEvent() { Message = "Starting client..." } );
+            const ulong requiredPermissions = 395338442822;
             var client = new Messaging.DiscordMessagingClient(config, _telemetry,
-                                                                395338442822,
+                                                                requiredPermissions,
                                                                 c => c.Discord?.DiscordClientToken,
                                                                 c => c.Discord?.DiscordClientId);
 
