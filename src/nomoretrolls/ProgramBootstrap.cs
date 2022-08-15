@@ -1,21 +1,24 @@
 ﻿using System.Reflection;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using nomoretrolls.Emotes;
 using Tk.Extensions;
 using Tk.Extensions.Reflection;
+using Tk.Extensions.Time;
 
 namespace nomoretrolls
 {
     internal class ProgramBootstrap
     {
-        public static IServiceProvider CreateServiceCollection() => 
+        public static IServiceProvider CreateServiceCollection() =>
             new ServiceCollection()
                 .AddSingleton<Config.FileConfigurationProvider>()
                 .AddSingleton<Config.EnvVarConfigurationProvider>()
-                .AddSingleton<Config.IConfigurationProvider, Config.ConfigurationProvider>()                
+                .AddSingleton<Config.IConfigurationProvider, Config.ConfigurationProvider>()
                 .AddSingleton<IList<Telemetry.ITelemetry>>(sp => new Telemetry.ITelemetry[] { new Telemetry.ConsoleTelemetry() })
                 .AddSingleton<Telemetry.ITelemetry, Telemetry.AggregatedTelemetry>()
                 .AddSingleton<Io.IIoProvider, Io.IoProvider>()
+                .AddMemoryCache()
                 .AddSingleton<Tk.Extensions.Time.ITimeProvider, Tk.Extensions.Time.TimeProvider>()
                 .AddSingleton<Messaging.IDiscordMessagingClientProvider, Messaging.DiscordMessagingClientProvider>()
                 .AddSingleton<Workflows.Reactions.IBlacklistReplyTextGenerator, Workflows.Reactions.BlacklistReplyTextGenerator>()
@@ -25,13 +28,26 @@ namespace nomoretrolls
                 .AddSingleton<Workflows.IMessageWorkflowFactory, Workflows.MessageWorkflowFactory>()
                 .AddTransient<Workflows.IMessageWorkflowExecutor, Workflows.MessageWorkflowExecutor>()
                 .AddSingleton<Statistics.IUserStatisticsProvider, Statistics.MongoDbUserStatisticsProvider>()
-                .AddSingleton<Blacklists.IBlacklistProvider, Blacklists.MongoDbBlacklistProvider>()
-                .AddSingleton<IEmoteConfigProvider, MongoDbEmoteConfigProvider>()
+
+                .AddSingleton<Blacklists.MongoDbBlacklistProvider>()
+                .AddSingleton<Blacklists.IBlacklistProvider>((IServiceProvider sp) => new Blacklists.CachedBlacklistProvider(sp.GetRequiredService<IMemoryCache>(),
+                                                                                                                             sp.GetRequiredService<Blacklists.MongoDbBlacklistProvider>()))
+
+                .AddSingleton<MongoDbEmoteConfigProvider>()                
+                .AddSingleton<IEmoteConfigProvider>((IServiceProvider sp) => new CachedEmoteConfigProvider(sp.GetRequiredService<IMemoryCache>(), 
+                                                                                                           sp.GetRequiredService<MongoDbEmoteConfigProvider>()))
+                
                 .AddSingleton<Config.MemoryWorkflowConfigurationRepository>()
                 .AddSingleton<Config.MongoDbWorkflowConfigurationRepository>()
                 .AddSingleton<Config.IWorkflowConfigurationRepository>(sp => 
-                    new Config.WorkflowConfigurationRepository(sp.GetService<Config.MemoryWorkflowConfigurationRepository>(), sp.GetService<Config.MongoDbWorkflowConfigurationRepository>()))
-                .AddSingleton<Knocking.IKnockingScheduleRepository, Knocking.MongoDbKnockingScheduleRepository>()
+                    new Config.WorkflowConfigurationRepository(sp.GetService<Config.MemoryWorkflowConfigurationRepository>(), 
+                                                               sp.GetService<Config.MongoDbWorkflowConfigurationRepository>()))
+
+                .AddSingleton<Knocking.MongoDbKnockingScheduleRepository>()
+                .AddSingleton<Knocking.IKnockingScheduleRepository>((IServiceProvider sp) 
+                => new Knocking.CachedKnockingScheduleRepository(sp.GetRequiredService<IMemoryCache>(),
+                                                                 sp.GetRequiredService<Knocking.MongoDbKnockingScheduleRepository>(),
+                                                                 sp.GetRequiredService<ITimeProvider>()))
                 .AddSingleton<Scheduling.IJobScheduler, Scheduling.JobScheduler>()
                 .AddSingleton<Knocking.KnockingScheduleJob>()
                 .BuildServiceProvider();
