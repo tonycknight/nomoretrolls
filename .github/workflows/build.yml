@@ -13,6 +13,41 @@ env:
   
 
 jobs:
+  sca:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v1.9.0
+        with:
+          dotnet-version: "6.0.x"
+        
+      - name: dotnet SCA
+        run: |
+          dotnet tool restore
+          dotnet restore
+          dotnet list package --vulnerable --include-transitive | tee results.log
+
+          FOUND_VULN=`grep -c 'has the following vulnerable packages' results.log` || true
+          FOUND_CRIT=`grep -c 'Critical' results.log` || true
+          FOUND_HIGH=`grep -c 'High' results.log` || true
+          
+          if [[ "$FOUND_VULN" != "0" ]]
+          then
+            if [ "$FOUND_CRIT" == "0" -a "$FOUND_HIGH" == "0"]
+            then
+              echo "### Vulnerable packages found ###"
+              exit 0
+            fi
+            echo "### Critical/High vulnerable packages found ###"
+            exit 1
+          fi
+          echo "## No problems found ##"
+          exit 0
+
+
   build:
     name: Build & Test
     runs-on: ubuntu-latest
@@ -80,12 +115,11 @@ jobs:
 
   codeql:
     uses: ./.github/workflows/codeql-analysis.yml
-    needs:   [ build ]
-
+    
   build-release-docker-image:
     name: Build & Release Docker image
     runs-on: ubuntu-latest
-    needs:   [ build ]
+    needs:   [ build, sca, codeql ]
 
     steps:
       - uses: actions/checkout@v2
