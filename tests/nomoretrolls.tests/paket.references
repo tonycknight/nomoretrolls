@@ -6,3 +6,4 @@ xunit.runner.visualstudio
 NSubstitute
 FluentAssertions
 FsCheck.Xunit
+System.Net.Http
