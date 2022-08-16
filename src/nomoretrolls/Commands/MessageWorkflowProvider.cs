@@ -8,6 +8,7 @@ namespace nomoretrolls.Commands
         private const string shoutingStatsName = "all_shouting_messages";
         private const string altCapsStatsName = "all_altcaps_messages";
         private const string shoutingStatsNotificationName = shoutingStatsName + "_notifications";
+        private const string altCapsStatsNotificationName = altCapsStatsName + "_notifications";
         private const string blacklistStatsName = "blacklisted_user";
         private const string blacklistStatsNotificationName = blacklistStatsName + "_notifications";
 
@@ -114,6 +115,23 @@ namespace nomoretrolls.Commands
                     .ApplyDirectMessage("{0} You have been warned. No more shouting.")
                     .SendDirectUserMessage()
                     .Build("Shouting user DM");
+        }
+
+
+        public IMessageWorkflow CreateAltCapsPersonalReplyWorkflow()
+        {
+            var window = TimeSpan.FromDays(1);
+
+            return _wfFactory.CreateBuilder()
+                    .Receiver(new MessageReceiver())
+                    .IfAltCapsWorkflowEnabled()
+                    .MessageIsAltCaps()
+                    .UserWarningsFilter(altCapsStatsName, PeriodRange.AtLeast(1, window))
+                    .UserWarningsFilter(altCapsStatsNotificationName, PeriodRange.AtMost(0, window))
+                    .BumpUserWarnings(altCapsStatsNotificationName)
+                    .ApplyDirectMessage("{0} You have been warned. Alternating caps makes you look dumb.")
+                    .SendDirectUserMessage()
+                    .Build("Alt caps user DM");
         }
 
         public IMessageWorkflow CreateAutoEmoteWorkflow() 

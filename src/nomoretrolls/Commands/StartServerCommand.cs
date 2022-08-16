@@ -38,7 +38,8 @@ namespace nomoretrolls.Commands
                                               wfProvider.CreateShoutingWorkflow(),
                                               wfProvider.CreateShoutingPersonalReplyWorkflow(),
                                               wfProvider.CreateAutoEmoteWorkflow(),
-                                              wfProvider.CreateAltCapsWorkflow()};
+                                              wfProvider.CreateAltCapsWorkflow(),
+                                              wfProvider.CreateAltCapsPersonalReplyWorkflow()};
         }
 
         [Option(CommandOptionType.SingleValue, Description = "The configuration file's path.", LongName = "config", ShortName = "c")]
