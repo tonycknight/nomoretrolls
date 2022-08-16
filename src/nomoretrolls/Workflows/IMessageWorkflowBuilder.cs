@@ -6,6 +6,7 @@
         IMessageWorkflowBuilder Part(IMessageWorkflowPart part);
 
         IMessageWorkflowBuilder IfShoutingWorkflowEnabled();
+        IMessageWorkflowBuilder IfAltCapsWorkflowEnabled();
         IMessageWorkflowBuilder IfBlacklistWorkflowEnabled();
         IMessageWorkflowBuilder IfEmoteAnnotationWorkflowEnabled();
 
@@ -13,6 +14,7 @@
         IMessageWorkflowBuilder UserWarningsFilter(string statName, PeriodRange period);
         IMessageWorkflowBuilder BumpUserWarnings(string statName);
         IMessageWorkflowBuilder MessageIsShouting();
+        IMessageWorkflowBuilder MessageIsAltCaps();
         IMessageWorkflowBuilder UserIsBlacklisted();
         IMessageWorkflowBuilder UserIsEmoteAnnotated();
         IMessageWorkflowBuilder SendReactionEmote();
@@ -21,6 +23,7 @@
         IMessageWorkflowBuilder DeleteUserMessage();
         IMessageWorkflowBuilder ApplyBlacklistReply();
         IMessageWorkflowBuilder ApplyShoutingReply();
+        IMessageWorkflowBuilder ApplyAltCapsReply();
         IMessageWorkflowBuilder ApplyReactionEmote(string emotesName);
         IMessageWorkflowBuilder ApplyDirectMessage(string message);
         IMessageWorkflowBuilder Noop();
