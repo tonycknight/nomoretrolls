@@ -24,22 +24,14 @@ namespace nomoretrolls.Commands
 
         public StartServerCommand(Config.IConfigurationProvider configProvider, Telemetry.ITelemetry telemetry, 
                                   Workflows.IMessageWorkflowFactory wfFactory, Workflows.IMessageWorkflowExecutor workflowExecutor,
-                                  Config.IWorkflowConfigurationRepository workflowConfig,
                                   IServiceProvider serviceProvider, IJobScheduler jobScheduler)
         {
             _configProvider = configProvider.ArgNotNull(nameof(configProvider));
             _telemetry = telemetry.ArgNotNull(nameof(telemetry));            
             _workflowExecutor = workflowExecutor.ArgNotNull(nameof(workflowExecutor));
-            _serviceProvider = serviceProvider;
+            _serviceProvider = serviceProvider.ArgNotNull(nameof(serviceProvider));
             _jobScheduler = jobScheduler;
-            var wfProvider = new MessageWorkflowProvider(wfFactory);
-
-            _clientMessageWorkflows = new[] { wfProvider.CreateBlacklistedUserWorkflow(),
-                                              wfProvider.CreateShoutingWorkflow(),
-                                              wfProvider.CreateShoutingPersonalReplyWorkflow(),
-                                              wfProvider.CreateAutoEmoteWorkflow(),
-                                              wfProvider.CreateAltCapsWorkflow(),
-                                              wfProvider.CreateAltCapsPersonalReplyWorkflow()};
+            _clientMessageWorkflows = CreateMessageWorkflows(wfFactory.ArgNotNull(nameof(wfFactory)));
         }
 
         [Option(CommandOptionType.SingleValue, Description = "The configuration file's path.", LongName = "config", ShortName = "c")]
@@ -83,6 +75,18 @@ namespace nomoretrolls.Commands
             WaitHandle.WaitAll(new[] { cts.Token.WaitHandle });
 
             return true.ToReturnCode();
+        }
+
+        private IMessageWorkflow[] CreateMessageWorkflows(Workflows.IMessageWorkflowFactory wfFactory)
+        {
+            var wfProvider = new MessageWorkflowProvider(wfFactory);
+
+            return new[] { wfProvider.CreateBlacklistedUserWorkflow(),
+                                              wfProvider.CreateShoutingWorkflow(),
+                                              wfProvider.CreateShoutingPersonalReplyWorkflow(),
+                                              wfProvider.CreateAutoEmoteWorkflow(),
+                                              wfProvider.CreateAltCapsWorkflow(),
+                                              wfProvider.CreateAltCapsPersonalReplyWorkflow()};
         }
 
         private void EchoServiceMetadata()
