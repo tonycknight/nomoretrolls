@@ -52,6 +52,20 @@ namespace nomoretrolls.Parsing
 
         }
         
+        public static TextCapitalsAnalysis AnalyseCapitals(this string value)
+        {
+            var letters = value.LetterCount();
+            var capitals = value.CapitalCount();
+
+            return new TextCapitalsAnalysis()
+            {
+                LetterCount = (int)letters,
+                CapitalCount = (int)capitals,
+                CapitalRatio = letters == 0 ? 0.0 : capitals / letters,
+                CapitalGini = value.CapitalGiniImpurity(),
+            };
+        }
+
         public static double LetterCount(this string value)
             => value.Count(char.IsLetter);
 

@@ -29,15 +29,13 @@ namespace nomoretrolls.Workflows.Parts
             var content = context.Content();
             if (!string.IsNullOrWhiteSpace(content))
             {
-                var letterCount = content.LetterCount();
-                var capitalCount = content.CapitalCount();
-                var gini = content.CapitalGiniImpurity();
+                var analysis = content.AnalyseCapitals();
 
-                _telemetry.Event(new TelemetryTraceEvent() { Message = $"[Message {context.DiscordContext.Message.Id}] [{this.GetType().Name}] Letters {letterCount} capitals {capitalCount} gini {gini}" } );
-
-                return letterCount >= 5 &&
-                    capitalCount >= letterCount / 2 &&
-                    gini <= 0.6;
+                _telemetry.Event(new TelemetryTraceEvent() { Message = $"[Message {context.DiscordContext.Message.Id}] [{this.GetType().Name}] Letters {analysis.LetterCount} capitals {analysis.CapitalCount} gini {analysis.CapitalGini}" } );
+                                
+                return analysis.LetterCount >= 5 &&
+                    analysis.CapitalRatio >= 0.4 && analysis.CapitalRatio <= 0.6 &&
+                    analysis.CapitalGini <= 0.6;
             }
             
             return false;

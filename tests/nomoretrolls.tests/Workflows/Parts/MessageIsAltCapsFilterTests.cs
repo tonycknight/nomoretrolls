@@ -9,13 +9,13 @@ using Xunit;
 
 namespace nomoretrolls.tests.Workflows.Parts
 {
-    public class MessageIsShoutingFilterTests
+    public class MessageIsAltCapsFilterTests
     {
         
         [Fact]
         public async Task ExecuteAsync_NullContent_ReturnsNull()
         {
-            var f = new MessageIsShoutingFilter(Substitute.For<ITelemetry>());
+            var f = new MessageIsAltCapsFilter(Substitute.For<ITelemetry>());
 
             var msg = Substitute.For<IDiscordMessageContext>();
             var context = new MessageWorkflowContext(msg);
@@ -30,7 +30,7 @@ namespace nomoretrolls.tests.Workflows.Parts
         [InlineData(" ")]
         public async Task ExecuteAsync_EmptyContent_ReturnsNull(string content)
         {
-            var f = new MessageIsShoutingFilter(Substitute.For<ITelemetry>());
+            var f = new MessageIsAltCapsFilter(Substitute.For<ITelemetry>());
 
             var socketMsg = Substitute.For<Discord.IMessage>();
             socketMsg.Content.Returns(content);
@@ -52,7 +52,7 @@ namespace nomoretrolls.tests.Workflows.Parts
         [InlineData(" B ")]
         public async Task ExecuteAsync_NonEmptyContent_ReturnsNull(string content)
         {
-            var f = new MessageIsShoutingFilter(Substitute.For<ITelemetry>());
+            var f = new MessageIsAltCapsFilter(Substitute.For<ITelemetry>());
 
             var socketMsg = Substitute.For<Discord.IMessage>();
             socketMsg.Content.Returns(content);
@@ -68,13 +68,12 @@ namespace nomoretrolls.tests.Workflows.Parts
         }
 
         [Theory]
-        [InlineData("SHOUT")]
-        [InlineData(" SHOUTing SHOUTing  ")]
-        [InlineData(" will you STOP SHOUTING")]
-        [InlineData(" TESt TeST TEsT")]        
-        public async Task ExecuteAsync_Shouting_ReturnsNonNull(string content)
+        [InlineData(" will you STOP SHOUTing")]
+        [InlineData(" TeSt TeSt TeSt")]
+        [InlineData(" this AND this AND this OR that AND NO SHOUTING")]
+        public async Task ExecuteAsync_AltCaps_ReturnsNonNull(string content)
         {
-            var f = new MessageIsShoutingFilter(Substitute.For<ITelemetry>());
+            var f = new MessageIsAltCapsFilter(Substitute.For<ITelemetry>());
 
             var socketMsg = Substitute.For<Discord.IMessage>();
             socketMsg.Content.Returns(content);
@@ -92,9 +91,13 @@ namespace nomoretrolls.tests.Workflows.Parts
         [Theory]
         [InlineData("shout")]
         [InlineData(" this AND this AND this OR that")]
-        public async Task ExecuteAsync_NotShouting_ReturnsNull(string content)
+        [InlineData("SHOUT")]
+        [InlineData(" SHOUTing SHOUTing  ")]
+        [InlineData(" will you STOP SHOUTING")]
+        [InlineData(" TESt TeST TEsT")]
+        public async Task ExecuteAsync_NotAltCaps_ReturnsNull(string content)
         {
-            var f = new MessageIsShoutingFilter(Substitute.For<ITelemetry>());
+            var f = new MessageIsAltCapsFilter(Substitute.For<ITelemetry>());
 
             var socketMsg = Substitute.For<Discord.IMessage>();
             socketMsg.Content.Returns(content);
