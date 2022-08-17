@@ -20,7 +20,7 @@ Details on features and their configuration can be found [here](./docs/bot_actio
 
 * You'll need to install the [.Net 6 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/6.0) to build. All project dependencies are managed by the build process.
 
-* You'll need access to a Mongo DB server. [MongoDB Atlas](https://www.mongodb.com/atlas/database) will be useful for initial trials.
+* You'll need access to a [Mongo DB](/docs/mongo.md) server. [MongoDB Atlas](https://www.mongodb.com/atlas/database) will be useful for initial trials.
 
 * To build, run
 
