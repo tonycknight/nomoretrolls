@@ -10,6 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{F4D6324A-E
 		docs\bot_actions.md = docs\bot_actions.md
 		docs\bot_config.md = docs\bot_config.md
 		docs\discord_config.md = docs\discord_config.md
+		docs\mongo.md = docs\mongo.md
 		README.md = README.md
 	EndProjectSection
 EndProject
