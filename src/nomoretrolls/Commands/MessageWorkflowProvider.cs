@@ -6,7 +6,9 @@ namespace nomoretrolls.Commands
     internal class MessageWorkflowProvider
     {
         private const string shoutingStatsName = "all_shouting_messages";
+        private const string altCapsStatsName = "all_altcaps_messages";
         private const string shoutingStatsNotificationName = shoutingStatsName + "_notifications";
+        private const string altCapsStatsNotificationName = altCapsStatsName + "_notifications";
         private const string blacklistStatsName = "blacklisted_user";
         private const string blacklistStatsNotificationName = blacklistStatsName + "_notifications";
 
@@ -75,6 +77,30 @@ namespace nomoretrolls.Commands
                     .Build("Shouting user");
         }
 
+
+        public IMessageWorkflow CreateAltCapsWorkflow()
+        {
+            var duration = TimeSpan.FromMinutes(5);
+
+            return _wfFactory.CreateBuilder()
+                    .Receiver(new MessageReceiver())
+                    .IfAltCapsWorkflowEnabled()
+                    .MessageIsAltCaps()
+                    .BumpUserWarnings(altCapsStatsName)
+                    .If(b2 => b2.UserWarningsFilter(altCapsStatsName, PeriodRange.AtLeast(8, duration)),
+                        b2 => b2.DeleteUserMessage(),
+                        b2 => b2.If(b3 => b3.UserWarningsFilter(altCapsStatsName, PeriodRange.AtLeast(5, duration)),
+                                    b3 => b3.ApplyReactionEmote("altcaps")
+                                            .SendReactionEmote()
+                                            .ApplyAltCapsReply()
+                                            .SendUserReplyMessage(),
+                                    b3 => b3.UserWarningsFilter(altCapsStatsName, PeriodRange.AtLeast(3, duration))
+                                            .ApplyReactionEmote("altcaps")
+                                            .SendReactionEmote()))
+                    .Build("Alt caps user");
+        }
+
+
         public IMessageWorkflow CreateShoutingPersonalReplyWorkflow()
         {            
             var window = TimeSpan.FromDays(1);
@@ -89,6 +115,23 @@ namespace nomoretrolls.Commands
                     .ApplyDirectMessage("{0} You have been warned. No more shouting.")
                     .SendDirectUserMessage()
                     .Build("Shouting user DM");
+        }
+
+
+        public IMessageWorkflow CreateAltCapsPersonalReplyWorkflow()
+        {
+            var window = TimeSpan.FromDays(1);
+
+            return _wfFactory.CreateBuilder()
+                    .Receiver(new MessageReceiver())
+                    .IfAltCapsWorkflowEnabled()
+                    .MessageIsAltCaps()
+                    .UserWarningsFilter(altCapsStatsName, PeriodRange.AtLeast(1, window))
+                    .UserWarningsFilter(altCapsStatsNotificationName, PeriodRange.AtMost(0, window))
+                    .BumpUserWarnings(altCapsStatsNotificationName)
+                    .ApplyDirectMessage("{0} You have been warned. Alternating caps makes you look dumb.")
+                    .SendDirectUserMessage()
+                    .Build("Alt caps user DM");
         }
 
         public IMessageWorkflow CreateAutoEmoteWorkflow() 

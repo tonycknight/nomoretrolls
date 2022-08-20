@@ -3,11 +3,11 @@ using nomoretrolls.Telemetry;
 
 namespace nomoretrolls.Workflows.Parts
 {
-    internal class MessageIsShoutingFilter : IMessageWorkflowPart
+    internal class MessageIsAltCapsFilter : IMessageWorkflowPart
     {
         private readonly ITelemetry _telemetry;
 
-        public MessageIsShoutingFilter(ITelemetry telemetry)
+        public MessageIsAltCapsFilter(ITelemetry telemetry)
         {
             _telemetry = telemetry;
         }
@@ -16,7 +16,7 @@ namespace nomoretrolls.Workflows.Parts
         {
             MessageWorkflowContext? result = null;
 
-            if (IsCapitals(context))
+            if (IsAltCaps(context))
             {                
                 result = context;
             }
@@ -24,18 +24,18 @@ namespace nomoretrolls.Workflows.Parts
             return Task.FromResult(result);
         }
 
-        private bool IsCapitals(MessageWorkflowContext context)
+        private bool IsAltCaps(MessageWorkflowContext context)
         {            
             var content = context.Content();
             if (!string.IsNullOrWhiteSpace(content))
             {
                 var analysis = content.AnalyseCapitals();
 
-                _telemetry.Event(new TelemetryTraceEvent() { Message = $"[Message {context.DiscordContext.Message.Id}] [{this.GetType().Name}] Letters {analysis.LetterCount} capitals {analysis.CapitalCount} gini {analysis.CapitalGini}" });
-
+                _telemetry.Event(new TelemetryTraceEvent() { Message = $"[Message {context.DiscordContext.Message.Id}] [{this.GetType().Name}] Letters {analysis.LetterCount} capitals {analysis.CapitalCount} gini {analysis.CapitalGini}" } );
+                                
                 return analysis.LetterCount >= 5 &&
-                    analysis.CapitalRatio > 0.6 &&
-                    analysis.CapitalGini < 0.5;
+                    analysis.CapitalRatio >= 0.4 && analysis.CapitalRatio <= 0.6 &&
+                    analysis.CapitalGini <= 0.6;
             }
             
             return false;

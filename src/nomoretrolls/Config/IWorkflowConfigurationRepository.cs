@@ -5,6 +5,7 @@
         public const string ShoutingWorkflow = "shouting";
         public const string BlacklistWorkflow = "blacklist";
         public const string EmoteAnnotationWorkflow = "emotes";
+        public const string AltCapsWorkflow = "altcaps";
 
         public Task<IList<WorkflowConfiguration>> GetWorkflowConfigsAsync();
 

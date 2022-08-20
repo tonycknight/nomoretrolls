@@ -25,6 +25,7 @@ namespace nomoretrolls
                 .AddSingleton<IEmoteRepository, EmoteRepository>()
                 .AddSingleton<IEmoteGenerator, EmoteGenerator>()
                 .AddSingleton<Workflows.Reactions.IShoutingReplyTextGenerator, Workflows.Reactions.ShoutingReplyTextGenerator>()
+                .AddSingleton<Workflows.Reactions.IAltCapsReplyTextGenerator, Workflows.Reactions.AltCapsReplyTextGenerator>()
                 .AddSingleton<Workflows.IMessageWorkflowFactory, Workflows.MessageWorkflowFactory>()
                 .AddTransient<Workflows.IMessageWorkflowExecutor, Workflows.MessageWorkflowExecutor>()
                 .AddSingleton<Statistics.IUserStatisticsProvider, Statistics.MongoDbUserStatisticsProvider>()

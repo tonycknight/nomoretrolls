@@ -79,5 +79,27 @@ namespace nomoretrolls.tests.Parsing
             un.Should().Be(expectedName);
             d.Should().Be(expectedDiscriminator);
         }
+
+
+        [Theory]
+        [InlineData("", 0.0)]
+        [InlineData(" ", 0.0)]
+        [InlineData(" a ", 0.0)]
+        [InlineData(" aA ", 0.5)]
+        [InlineData(" Aa ", 0.5)]
+        [InlineData(" A ", 1.0)]
+        [InlineData(" AB ", 1.0)]
+        [InlineData(" TESTING TESTING TESTing ", 0.8571428571428571)]
+        [InlineData(" TeStInG tEsTiNg TeStInG ", 0.5238095238095238)]
+        [InlineData(" TeStInG tEsTiNg TeStiNg ", 0.47619047619047616)]
+        [InlineData(" TeSt TeSt ", 0.5)]
+        public void AnalyseCapitals_CapitalRatio(string value, double expected)
+        {
+            var r = value.AnalyseCapitals();
+
+            r.CapitalRatio.Should().Be(expected);
+        }
+
+
     }
 }
