@@ -35,6 +35,7 @@ Valid ``<feature name>`` values are:
 * ``shouting``
 * ``altcaps``
 * ``emotes``
+* ``knocking``
 
 ## Listing configured users
 
