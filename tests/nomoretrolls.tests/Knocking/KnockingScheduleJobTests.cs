@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using nomoretrolls.Config;
 using nomoretrolls.Knocking;
 using nomoretrolls.Messaging;
 using nomoretrolls.Telemetry;
@@ -18,16 +19,19 @@ namespace nomoretrolls.tests.Knocking
         public void Ctor_AllOK()
         {
             var job = new KnockingScheduleJob(CreateMockTimeProvider(), CreateMockTelemetry(), 
-                                              CreateMockDiscordClientProvider(), CerateMockScheduleRepo());
+                                              CreateMockDiscordClientProvider(), 
+                                              CreateMockScheduleRepo(),
+                                              CreateWorkflowConfigRepo(true));
         }
 
         [Fact]
         public async Task ExecuteAsync_EmptySchedules_NoEffects()
         {
             var telemetry = CreateMockTelemetry();
-            var scheduleRepo = CerateMockScheduleRepo();
+            var scheduleRepo = CreateMockScheduleRepo();
             var job = new KnockingScheduleJob(CreateMockTimeProvider(), telemetry,
-                                              CreateMockDiscordClientProvider(), scheduleRepo);
+                                              CreateMockDiscordClientProvider(), scheduleRepo,
+                                              CreateWorkflowConfigRepo(true));
 
             await job.ExecuteAsync();
 
@@ -48,7 +52,7 @@ namespace nomoretrolls.tests.Knocking
             var now = DateTime.UtcNow;
             time.UtcNow().Returns(now);
 
-            var scheduleRepo = CerateMockScheduleRepo();
+            var scheduleRepo = CreateMockScheduleRepo();
             var schedules = new[] { new KnockingScheduleEntry()
             {
                 Start = now,
@@ -59,7 +63,8 @@ namespace nomoretrolls.tests.Knocking
             scheduleRepo.GetUserEntriesAsync().Returns(schedules);
 
             var job = new KnockingScheduleJob(time, telemetry,
-                                              clientProvider, scheduleRepo);
+                                              clientProvider, scheduleRepo,
+                                              CreateWorkflowConfigRepo(true));
 
             await job.ExecuteAsync();
 
@@ -88,7 +93,7 @@ namespace nomoretrolls.tests.Knocking
             var now = DateTime.UtcNow;
             time.UtcNow().Returns(now);
 
-            var scheduleRepo = CerateMockScheduleRepo();
+            var scheduleRepo = CreateMockScheduleRepo();
             var schedules = users.Select(u => new KnockingScheduleEntry()
             {
                 UserId = u.Id,
@@ -100,7 +105,8 @@ namespace nomoretrolls.tests.Knocking
             scheduleRepo.GetUserEntriesAsync().Returns(schedules);
 
             var job = new KnockingScheduleJob(time, telemetry,
-                                              clientProvider, scheduleRepo);
+                                              clientProvider, scheduleRepo,
+                                              CreateWorkflowConfigRepo(true));
 
             await job.ExecuteAsync();
 
@@ -130,7 +136,7 @@ namespace nomoretrolls.tests.Knocking
             var now = new DateTime(2022, 12, 1, 1, 0, 0, DateTimeKind.Utc);
             time.UtcNow().Returns(now);
 
-            var scheduleRepo = CerateMockScheduleRepo();
+            var scheduleRepo = CreateMockScheduleRepo();
             var schedules = users.Select(u => new KnockingScheduleEntry()
             {
                 UserId = u.Id,
@@ -142,7 +148,8 @@ namespace nomoretrolls.tests.Knocking
             scheduleRepo.GetUserEntriesAsync().Returns(schedules);
 
             var job = new KnockingScheduleJob(time, telemetry,
-                                              clientProvider, scheduleRepo);
+                                              clientProvider, scheduleRepo,
+                                              CreateWorkflowConfigRepo(true));
 
             await job.ExecuteAsync();
 
@@ -176,7 +183,7 @@ namespace nomoretrolls.tests.Knocking
             var now = DateTime.UtcNow;
             time.UtcNow().Returns(now);
 
-            var scheduleRepo = CerateMockScheduleRepo();
+            var scheduleRepo = CreateMockScheduleRepo();
             var schedules = users.Select(u => new KnockingScheduleEntry()
             {
                 UserId = u.Id,
@@ -188,12 +195,56 @@ namespace nomoretrolls.tests.Knocking
             scheduleRepo.GetUserEntriesAsync().Returns(schedules);
 
             var job = new KnockingScheduleJob(time, telemetry,
-                                              clientProvider, scheduleRepo);
+                                              clientProvider, scheduleRepo,
+                                              CreateWorkflowConfigRepo(true));
 
             await job.ExecuteAsync();
 
             dmChannel.Received(userCount).SendMessageAsync(Arg.Is<string>(s => s.Contains("Knock knock")));
             userMessage.Received(userCount).DeleteAsync();
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(7)]
+        public async Task ExecuteAsync_MultipleSchedules_MatchingUser_FeatureOff_NoMessagesSent(int userCount)
+        {
+
+            var client = CreateMockDiscordClient();
+            var userMessage = CreateMockUserMessage();
+            var dmChannel = CreateMockDmChannel(userMessage);
+
+            var users = Enumerable.Range(1, userCount).Select(x => CreateMockDiscordUser((ulong)x, dmChannel)).ToList() as IList<Discord.IUser>;
+            client.GetUsersAsync(Arg.Any<IEnumerable<ulong>>()).Returns(users.ToTaskResult());
+            var clientProvider = CreateMockDiscordClientProvider(client);
+
+            var telemetry = CreateMockTelemetry();
+
+            var time = CreateMockTimeProvider();
+            var now = DateTime.UtcNow;
+            time.UtcNow().Returns(now);
+
+            var scheduleRepo = CreateMockScheduleRepo();
+            var schedules = users.Select(u => new KnockingScheduleEntry()
+            {
+                UserId = u.Id,
+                Start = now,
+                Expiry = now.AddYears(1),
+                Frequency = "*/1 * * * *"
+            }).ToList();
+
+            scheduleRepo.GetUserEntriesAsync().Returns(schedules);
+
+            var job = new KnockingScheduleJob(time, telemetry,
+                                              clientProvider, scheduleRepo,
+                                              CreateWorkflowConfigRepo(false));
+
+            await job.ExecuteAsync();
+
+            dmChannel.Received(0).SendMessageAsync(Arg.Is<string>(s => s.Contains("Knock knock")));
+            userMessage.Received(0).DeleteAsync();
         }
 
 
@@ -216,7 +267,7 @@ namespace nomoretrolls.tests.Knocking
             var now = DateTime.UtcNow;
             time.UtcNow().Returns(now);
 
-            var scheduleRepo = CerateMockScheduleRepo();
+            var scheduleRepo = CreateMockScheduleRepo();
             var schedules = users.Select(u => new KnockingScheduleEntry()
             {
                 UserId = u.Id,
@@ -228,7 +279,8 @@ namespace nomoretrolls.tests.Knocking
             scheduleRepo.GetUserEntriesAsync().Returns(schedules);
 
             var job = new KnockingScheduleJob(time, telemetry,
-                                              clientProvider, scheduleRepo);
+                                              clientProvider, scheduleRepo,
+                                              CreateWorkflowConfigRepo(true));
 
             await job.ExecuteAsync();
 
@@ -248,7 +300,17 @@ namespace nomoretrolls.tests.Knocking
         }
 
         private IDiscordMessagingClient CreateMockDiscordClient() => Substitute.For<IDiscordMessagingClient>();
-        private IKnockingScheduleRepository CerateMockScheduleRepo() => Substitute.For<IKnockingScheduleRepository>();
+        private IKnockingScheduleRepository CreateMockScheduleRepo() => Substitute.For<IKnockingScheduleRepository>();
+        private IWorkflowConfigurationRepository CreateWorkflowConfigRepo(bool enabled)
+        {
+            var result = Substitute.For<IWorkflowConfigurationRepository>();
+
+            result.GetWorkflowConfigAsync(IWorkflowConfigurationRepository.KnockingWorkflow)
+                .Returns(Task.FromResult(new WorkflowConfiguration() {  Enabled = enabled }));
+
+            return result;
+        }
+
         private Discord.IUser CreateMockDiscordUser(ulong id, Discord.IDMChannel dmChannel = null)
         {
             var result = Substitute.For<Discord.IUser>();

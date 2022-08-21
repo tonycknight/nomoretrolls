@@ -7,6 +7,7 @@
 
         IMessageWorkflowBuilder IfShoutingWorkflowEnabled();
         IMessageWorkflowBuilder IfAltCapsWorkflowEnabled();
+        IMessageWorkflowBuilder IfKnockingWorkflowEnabled();
         IMessageWorkflowBuilder IfBlacklistWorkflowEnabled();
         IMessageWorkflowBuilder IfEmoteAnnotationWorkflowEnabled();
 

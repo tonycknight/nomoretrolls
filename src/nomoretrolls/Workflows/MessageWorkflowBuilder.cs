@@ -49,6 +49,9 @@ namespace nomoretrolls.Workflows
         public IMessageWorkflowBuilder IfAltCapsWorkflowEnabled()
             => this.Part(new Parts.WorkflowConfigEnabled(_serviceProvider.GetService<Config.IWorkflowConfigurationRepository>(), Config.IWorkflowConfigurationRepository.AltCapsWorkflow));
 
+        public IMessageWorkflowBuilder IfKnockingWorkflowEnabled()
+            => this.Part(new Parts.WorkflowConfigEnabled(_serviceProvider.GetService<Config.IWorkflowConfigurationRepository>(), Config.IWorkflowConfigurationRepository.KnockingWorkflow));
+
         public IMessageWorkflowBuilder IfEmoteAnnotationWorkflowEnabled()
             => this.Part(new Parts.WorkflowConfigEnabled(_serviceProvider.GetService<Config.IWorkflowConfigurationRepository>(), Config.IWorkflowConfigurationRepository.EmoteAnnotationWorkflow));
         public IMessageWorkflowBuilder If(Func<IMessageWorkflowBuilder, IMessageWorkflowBuilder> condition, Func<IMessageWorkflowBuilder, IMessageWorkflowBuilder> onSuccess, Func<IMessageWorkflowBuilder, IMessageWorkflowBuilder> onFailure)

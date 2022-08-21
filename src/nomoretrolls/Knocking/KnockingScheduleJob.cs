@@ -1,4 +1,5 @@
-﻿using nomoretrolls.Messaging;
+﻿using nomoretrolls.Config;
+using nomoretrolls.Messaging;
 using nomoretrolls.Scheduling;
 using nomoretrolls.Telemetry;
 using Tk.Extensions.Time;
@@ -11,19 +12,31 @@ namespace nomoretrolls.Knocking
         private readonly ITelemetry _telemetry;
         private readonly IDiscordMessagingClient _discordClient;
         private readonly IKnockingScheduleRepository _scheduleRepo;
+        private readonly IWorkflowConfigurationRepository _workflowConfig;
 
-        public KnockingScheduleJob(ITimeProvider timeProvider, ITelemetry telemetry, IDiscordMessagingClientProvider discordClientProvider, IKnockingScheduleRepository scheduleRepo)
+        public KnockingScheduleJob(ITimeProvider timeProvider, ITelemetry telemetry, 
+                                    IDiscordMessagingClientProvider discordClientProvider, 
+                                    IKnockingScheduleRepository scheduleRepo,
+                                    IWorkflowConfigurationRepository workflowConfig)
         {
             _timeProvider = timeProvider;
             _telemetry = telemetry;
             _discordClient = discordClientProvider.GetClient();
             _scheduleRepo = scheduleRepo;
+            _workflowConfig = workflowConfig;
         }
 
         public TimeSpan Frequency => TimeSpan.FromMinutes(1);
 
         public async Task ExecuteAsync()
-        {            
+        {
+            var wfConfig = await _workflowConfig.GetWorkflowConfigAsync(IWorkflowConfigurationRepository.KnockingWorkflow);
+            if(wfConfig?.Enabled != true)
+            {
+                _telemetry.Event(new TelemetryTraceEvent() { Message = $"Workflow {IWorkflowConfigurationRepository.KnockingWorkflow} is disabled, aborting." });
+                return;
+            }
+
             var scheds = await _scheduleRepo.GetUserEntriesAsync();
 
             var tasks = scheds.Where(IsKnockDue)
