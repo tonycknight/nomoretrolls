@@ -65,7 +65,7 @@ jobs:
         run: dotnet tool restore
               
       - name: Run build
-        run: dotnet fake run "build.fsx" -t "All"
+        run: dotnet fake run "build.fsx" -t "Consolidate code coverage"
 
       - name: Archive Test results
         uses: actions/upload-artifact@v3
