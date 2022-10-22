@@ -69,10 +69,10 @@ namespace nomoretrolls.Scheduling
                 Enabled = true,
             };
 
-            timer.Elapsed += (sender, e) =>
+            timer.Elapsed += async (sender, e) =>
             {
                 timer.Stop();
-                var r = ExecuteJob(info).GetAwaiter().GetResult();
+                var r = await ExecuteJob(info);
                 timer.Start();
             };
 

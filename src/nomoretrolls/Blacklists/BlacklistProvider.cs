@@ -2,12 +2,12 @@
 {
     internal class BlacklistProvider : IBlacklistProvider
     {
-        private readonly Lazy<IBlacklistProvider> _cache;
+        private readonly Lazy<Task<IBlacklistProvider>> _cache;
         private readonly IBlacklistProvider _persistent;
 
         public BlacklistProvider(IBlacklistProvider cache, IBlacklistProvider persistent)
         {
-            _cache = new Lazy<IBlacklistProvider>(() => HydrateCache(cache, persistent).GetAwaiter().GetResult());
+            _cache = new Lazy<Task<IBlacklistProvider>>(async () => await HydrateCache(cache, persistent));
             _persistent = persistent;
 
         }
@@ -15,20 +15,27 @@
         public async Task DeleteUserEntryAsync(ulong userId)
         {
             await _persistent.DeleteUserEntryAsync(userId);
-            await _cache.Value.DeleteUserEntryAsync(userId);            
+            var cache = await _cache.Value;
+            cache.DeleteUserEntryAsync(userId);            
         }
 
-        public Task<IList<UserBlacklistEntry>> GetUserEntriesAsync()
-            => _cache.Value.GetUserEntriesAsync();
-        
+        public async Task<IList<UserBlacklistEntry>> GetUserEntriesAsync()
+        {
+            var cache = await _cache.Value;
+            return await cache.GetUserEntriesAsync();
+        }
 
-        public Task<UserBlacklistEntry?> GetUserEntryAsync(ulong userId)
-            => _cache.Value.GetUserEntryAsync(userId);
+        public async Task<UserBlacklistEntry?> GetUserEntryAsync(ulong userId)
+        {
+            var cache = await _cache.Value;
+            return await cache.GetUserEntryAsync(userId);
+        }
 
         public async Task SetUserEntryAsync(UserBlacklistEntry entry)
         {
             await _persistent.SetUserEntryAsync(entry);
-            await _cache.Value.SetUserEntryAsync(entry);
+            var cache = await _cache.Value;
+            await cache.SetUserEntryAsync(entry);
         }
 
         private static async Task<IBlacklistProvider> HydrateCache(IBlacklistProvider cache, IBlacklistProvider source)

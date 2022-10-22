@@ -13,14 +13,13 @@ namespace nomoretrolls.Workflows.Parts
             _emotesName = emotesName;
         }
 
-        public Task<MessageWorkflowContext?> ExecuteAsync(MessageWorkflowContext context)
+        public async Task<MessageWorkflowContext?> ExecuteAsync(MessageWorkflowContext context)
         {
             var emotesName = _emotesName ?? context.EmoteListName();
 
-            var result = context.DeepClone()
-                        .EmoteCode(_emoteGenerator.PickEmoteAsync(emotesName).GetAwaiter().GetResult());
+            var e = await _emoteGenerator.PickEmoteAsync(emotesName);
 
-            return Task.FromResult(result);
+            return context.DeepClone().EmoteCode(e);
         }
     }
 }

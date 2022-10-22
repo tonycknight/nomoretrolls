@@ -15,9 +15,9 @@ namespace nomoretrolls.tests.Workflows.Parts
         {
             var receiver = new MessageReceiver();
 
-            var f = () => receiver.ReceiveAsync(null as IDiscordMessageContext).GetAwaiter().GetResult();
+            var f = async () => await receiver.ReceiveAsync(null as IDiscordMessageContext);
 
-            f.Should().Throw<ArgumentNullException>().WithMessage("?*");
+            f.Should().ThrowAsync<ArgumentNullException>().WithMessage("?*");
         }
 
         [Fact]
