@@ -111,7 +111,7 @@ namespace nomoretrolls.tests.Blacklists
         }
 
         [Fact]
-        public async Task SetUserEntryAsync_PersistThrowsExceptionThenNoCacheAttempt()
+        public void SetUserEntryAsync_PersistThrowsExceptionThenNoCacheAttempt()
         {
             var entry = new UserBlacklistEntry();
 
@@ -150,7 +150,7 @@ namespace nomoretrolls.tests.Blacklists
         }
 
         [Fact]
-        public async Task DeleteUserEntryAsync_PersistThrowsExceptionCacheNotInvoked()
+        public void DeleteUserEntryAsync_PersistThrowsExceptionCacheNotInvoked()
         {
             ulong entryId = 1;
 
