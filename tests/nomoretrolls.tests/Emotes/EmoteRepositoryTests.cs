@@ -15,7 +15,7 @@ namespace nomoretrolls.tests.Emotes
         {
             var repo = new EmoteRepository();
 
-            var names = repo.GetEmoteNamesAsync().GetAwaiter().GetResult();
+            var names = repo.GetEmoteNamesAsync().Result;
 
             return names.Select(n => new[] { n });
         }
