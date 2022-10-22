@@ -18,10 +18,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Setup .NET Core SDK
-        uses: actions/setup-dotnet@v1.9.0
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: "6.0.x"
         
@@ -54,10 +54,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Setup .NET Core SDK
-        uses: actions/setup-dotnet@v1.9.0
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: "6.0.x"
         
@@ -68,7 +68,7 @@ jobs:
         run: dotnet fake run "build.fsx" -t "All"
 
       - name: Archive Test results
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: always()
         with:
           name: tests.results
@@ -76,7 +76,7 @@ jobs:
             ./tests/**/TestResults/*
             
       - name: Archive Stryker results
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: always()
         with:
           name: stryker.results
@@ -84,7 +84,7 @@ jobs:
             ./StrykerOutput/**
 
       - name: Archive Code coverage
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: always()
         with:
           name: codecoverage
@@ -123,7 +123,7 @@ jobs:
     needs:   [ build, sca, codeql ]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Set Preview Docker image name
         if: ${{ github.ref != 'refs/heads/main' }}
@@ -152,7 +152,7 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
     steps:    
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Create Release
         uses: ncipollo/release-action@v1
