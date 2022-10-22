@@ -9,7 +9,7 @@ nuget CronExpressionDescriptor
 nuget cronos
 nuget Discord.Net 3.3.2
 nuget FluentAssertions
-nuget FsCheck.Xunit
+nuget FsCheck.Xunit 3.0.0-beta2 beta
 nuget McMaster.Extensions.CommandLineUtils 4.0.1
 nuget Microsoft.Extensions.Caching.Memory
 nuget Microsoft.Extensions.DependencyInjection 6.0

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using FsCheck;
 using FsCheck.Xunit;
 using nomoretrolls.Emotes;
@@ -9,10 +10,10 @@ namespace nomoretrolls.tests.Emotes
     public class EmoteGeneratorTests
     {
         [Property(Verbose = true)]
-        public bool PickEmoteAsync_ReturnsString()
+        public async Task<bool> PickEmoteAsync_ReturnsString()
         {
             var gen = new EmoteGenerator(new EmoteRepository());
-            var result = gen.PickEmoteAsync("blacklist").GetAwaiter().GetResult();
+            var result = await gen.PickEmoteAsync("blacklist");
 
             return !string.IsNullOrWhiteSpace(result);
         }

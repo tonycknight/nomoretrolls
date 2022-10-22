@@ -8,3 +8,4 @@ Tk.Extensions
 cronos
 CronExpressionDescriptor
 Microsoft.Extensions.Caching.Memory
+FsCheck.Xunit
