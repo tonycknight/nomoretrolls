@@ -8,3 +8,6 @@ Tk.Extensions
 cronos
 CronExpressionDescriptor
 Microsoft.Extensions.Caching.Memory
+FsCheck.Xunit
+System.Net.Http
+System.Text.RegularExpressions

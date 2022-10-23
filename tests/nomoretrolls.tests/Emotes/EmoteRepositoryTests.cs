@@ -15,7 +15,7 @@ namespace nomoretrolls.tests.Emotes
         {
             var repo = new EmoteRepository();
 
-            var names = repo.GetEmoteNamesAsync().GetAwaiter().GetResult();
+            var names = repo.GetEmoteNamesAsync().Result;
 
             return names.Select(n => new[] { n });
         }
@@ -45,12 +45,12 @@ namespace nomoretrolls.tests.Emotes
         }
 
         [Property(Verbose = true)]
-        public bool GetEmotesAsync_UnknownNameReturnsNull(Guid name)
+        public async Task<bool> GetEmotesAsync_UnknownNameReturnsNull(Guid name)
         {
             var listName = Guid.NewGuid().ToString();
             var repo = new EmoteRepository();
 
-            var emotes = repo.GetEmotesAsync(listName).GetAwaiter().GetResult();
+            var emotes = await repo.GetEmotesAsync(listName);
 
             return emotes == null;
         }

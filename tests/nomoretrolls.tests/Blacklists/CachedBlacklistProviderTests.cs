@@ -29,7 +29,7 @@ namespace nomoretrolls.tests.Blacklists
         }
 
         [Property(Verbose = true)]
-        public bool SetUserEntryAsync_DependenciesInvoked(ulong userId, DateTime expiry)
+        public async Task<bool> SetUserEntryAsync_DependenciesInvoked(ulong userId, DateTime expiry)
         {
             var e = new UserBlacklistEntry() { UserId = userId, Expiry = expiry };
 
@@ -38,7 +38,7 @@ namespace nomoretrolls.tests.Blacklists
 
             var repo = new CachedBlacklistProvider(cache, sourceRepo);
 
-            repo.SetUserEntryAsync(e).GetAwaiter().GetResult();
+            await repo.SetUserEntryAsync(e);
 
             sourceRepo.Received(1).SetUserEntryAsync(e);
             cache.Received(1).Set(Arg.Any<object>(), e, new DateTimeOffset(e.Expiry));
@@ -48,7 +48,7 @@ namespace nomoretrolls.tests.Blacklists
 
 
         [Property(Verbose = true)]
-        public bool GetUserEntryAsync_DependenciesInvoked(ulong userId, DateTime expiry)
+        public async Task<bool> GetUserEntryAsync_DependenciesInvoked(ulong userId, DateTime expiry)
         {
             var cache = CreateMockMemoryCache();
 
@@ -57,7 +57,7 @@ namespace nomoretrolls.tests.Blacklists
             sourceRepo.GetUserEntryAsync(userId).Returns(e.ToTaskResult());
             var repo = new CachedBlacklistProvider(cache, sourceRepo);
 
-            var result = repo.GetUserEntryAsync(userId).GetAwaiter().GetResult();
+            var result = await repo.GetUserEntryAsync(userId);
             cache.Received(1).Set(Arg.Any<object>(), Arg.Any<Func<ICacheEntry, Task<UserBlacklistEntry>>>);
 
             return result == e;
@@ -66,14 +66,14 @@ namespace nomoretrolls.tests.Blacklists
 
 
         [Property(Verbose = true)]
-        public bool DeleteUserEntryAsync_DependenciesInvoked(ulong userId, DateTime expiry)
+        public async Task<bool> DeleteUserEntryAsync_DependenciesInvoked(ulong userId, DateTime expiry)
         {
             var cache = CreateMockMemoryCache();
             var sourceRepo = Substitute.For<IBlacklistProvider>();
 
             var repo = new CachedBlacklistProvider(cache, sourceRepo);
 
-            repo.DeleteUserEntryAsync(userId).GetAwaiter().GetResult();
+            await repo.DeleteUserEntryAsync(userId);
 
             sourceRepo.Received(1).DeleteUserEntryAsync(userId);
             cache.Received(1).Remove(Arg.Any<object>());

@@ -12,9 +12,6 @@
     <NoWarn>1701;1702;CS8619;CS8604;CS8620;CS8634;CS8600;CS8625;CS4014;CS8603;CS8618;CS8602</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\src\nomoretrolls\nomoretrolls.csproj" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />

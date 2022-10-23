@@ -1,4 +1,5 @@
-﻿using FsCheck;
+﻿using System.Threading.Tasks;
+using FsCheck;
 using FsCheck.Xunit;
 using nomoretrolls.Messaging;
 using nomoretrolls.Workflows;
@@ -12,7 +13,7 @@ namespace nomoretrolls.tests.Workflows.Parts
     {
 
         [Property(Verbose = true)]
-        public bool ExecuteAsync_EmoteApplied(NonEmptyString value)
+        public async Task<bool> ExecuteAsync_EmoteApplied(NonEmptyString value)
         {
             var gen = Substitute.For<IBlacklistReplyTextGenerator>();
             gen.GenerateReply(Arg.Any<string>()).Returns(value.Get);
@@ -22,7 +23,7 @@ namespace nomoretrolls.tests.Workflows.Parts
             var msg = Substitute.For<IDiscordMessageContext>();
             var context = new MessageWorkflowContext(msg);
 
-            var r = p.ExecuteAsync(context).GetAwaiter().GetResult();
+            var r = await p.ExecuteAsync(context);
 
             return r.ReplyText().Contains(value.Get);
         }

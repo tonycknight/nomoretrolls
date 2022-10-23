@@ -29,7 +29,7 @@ namespace nomoretrolls.tests.Emotes
         }
 
         [Property(Verbose = true)]
-        public bool SetUserEmoteAnnotationEntryAsync_DependenciesInvoked(ulong userId, DateTime expiry)
+        public async Task<bool> SetUserEmoteAnnotationEntryAsync_DependenciesInvoked(ulong userId, DateTime expiry)
         {
             var e = new UserEmoteAnnotationEntry() { UserId = userId, Expiry = expiry };
 
@@ -38,7 +38,7 @@ namespace nomoretrolls.tests.Emotes
 
             var repo = new CachedEmoteConfigProvider(cache, sourceRepo);
 
-            repo.SetUserEmoteAnnotationEntryAsync(e).GetAwaiter().GetResult();
+            await repo.SetUserEmoteAnnotationEntryAsync(e);
 
             sourceRepo.Received(1).SetUserEmoteAnnotationEntryAsync(e);
             cache.Received(1).Set(Arg.Any<object>(), e, new DateTimeOffset(e.Expiry));
@@ -48,7 +48,7 @@ namespace nomoretrolls.tests.Emotes
 
 
         [Property(Verbose = true)]
-        public bool GetUserEmoteAnnotationEntryAsync_DependenciesInvoked(ulong userId, DateTime expiry)
+        public async Task<bool> GetUserEmoteAnnotationEntryAsync_DependenciesInvoked(ulong userId, DateTime expiry)
         {
             var cache = CreateMockMemoryCache();
             
@@ -57,7 +57,7 @@ namespace nomoretrolls.tests.Emotes
             sourceRepo.GetUserEmoteAnnotationEntryAsync(userId).Returns(e.ToTaskResult());
             var repo = new CachedEmoteConfigProvider(cache, sourceRepo);
 
-            var result = repo.GetUserEmoteAnnotationEntryAsync(userId).GetAwaiter().GetResult();
+            var result = await repo.GetUserEmoteAnnotationEntryAsync(userId);
             cache.Received(1).Set(Arg.Any<object>(), Arg.Any<Func<ICacheEntry, Task<UserEmoteAnnotationEntry>>>);
 
             return result == e;
@@ -66,14 +66,14 @@ namespace nomoretrolls.tests.Emotes
 
 
         [Property(Verbose = true)]
-        public bool DeleteUserEmoteAnnotationEntryAsync_DependenciesInvoked(ulong userId, DateTime expiry)
+        public async Task<bool> DeleteUserEmoteAnnotationEntryAsync_DependenciesInvoked(ulong userId, DateTime expiry)
         {            
             var cache = CreateMockMemoryCache();
             var sourceRepo = Substitute.For<IEmoteConfigProvider>();
 
             var repo = new CachedEmoteConfigProvider(cache, sourceRepo);
 
-            repo.DeleteUserEmoteAnnotationEntryAsync(userId).GetAwaiter().GetResult();
+            await repo.DeleteUserEmoteAnnotationEntryAsync(userId);
 
             sourceRepo.Received(1).DeleteUserEmoteAnnotationEntryAsync(userId);
             cache.Received(1).Remove(Arg.Any<object>());

@@ -121,9 +121,13 @@ namespace nomoretrolls.tests.Blacklists
 
             var p = new BlacklistProvider(cache, persist);
 
-            Action a = () => p.SetUserEntryAsync(entry).GetAwaiter().GetResult();
+            var a = async () =>
+            {
+                await p.SetUserEntryAsync(entry);
+                return true;
+            };
 
-            a.Should().Throw<Exception>();
+            a.Should().ThrowAsync<Exception>();
             persist.Received(1).SetUserEntryAsync(entry);
             cache.Received(0).SetUserEntryAsync(entry);
         }
@@ -156,9 +160,13 @@ namespace nomoretrolls.tests.Blacklists
 
             var p = new BlacklistProvider(cache, persist);
 
-            Action a = () => p.DeleteUserEntryAsync(entryId).GetAwaiter().GetResult();
+            var a = async () =>
+            {
+                await p.DeleteUserEntryAsync(entryId);
+                return true;
+            };
 
-            a.Should().Throw<Exception>();
+            a.Should().ThrowAsync<Exception>();
 
             persist.Received(1).DeleteUserEntryAsync(entryId);
             cache.Received(0).DeleteUserEntryAsync(entryId);

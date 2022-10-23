@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using FsCheck;
 using FsCheck.Xunit;
 using nomoretrolls.Emotes;
@@ -9,30 +10,34 @@ namespace nomoretrolls.tests.Emotes
     public class EmoteGeneratorTests
     {
         [Property(Verbose = true)]
-        public bool PickEmoteAsync_ReturnsString()
+        public async Task<bool> PickEmoteAsync_ReturnsString()
         {
             var gen = new EmoteGenerator(new EmoteRepository());
-            var result = gen.PickEmoteAsync("blacklist").GetAwaiter().GetResult();
+            var result = await gen.PickEmoteAsync("blacklist");
 
             return !string.IsNullOrWhiteSpace(result);
         }
 
         [Property(Verbose = true)]
-        public bool PickEmoteAsync_FixedRng_ReturnsSameString(PositiveInt iterations)
+        public async Task<bool> PickEmoteAsync_FixedRng_ReturnsSameString(PositiveInt iterations)
         {
             var gen = new EmoteGenerator(x => 0, new EmoteRepository());
 
-            var result = Enumerable.Range(0, iterations.Get)
-                .Select(i => gen.PickEmoteAsync("blacklist").GetAwaiter().GetResult())
-                .Where(s => !string.IsNullOrWhiteSpace(s))
-                .Distinct()
-                .ToList();
+            var emoteTasks = Enumerable.Range(0, iterations.Get)
+                .Select(i => gen.PickEmoteAsync("blacklist"))
+                .ToArray();
+
+            var emotes = await Task.WhenAll(emoteTasks);
+
+            var result = emotes.Where(s => !string.IsNullOrWhiteSpace(s))
+                               .Distinct()
+                               .ToList();
 
             return result.Count == 1;
         }
 
         [Property(Verbose = true)]
-        public bool PickEmoteAsync_EmptyEmoteInfo_ReturnsNull(PositiveInt iterations)
+        public async Task<bool> PickEmoteAsync_EmptyEmoteInfo_ReturnsNull(PositiveInt iterations)
         {
             var emotes = new[] { new EmoteInfo(new string[0]) };
             var emoteRepo = Substitute.For<IEmoteRepository>();
@@ -40,8 +45,13 @@ namespace nomoretrolls.tests.Emotes
 
             var gen = new EmoteGenerator(x => 0, emoteRepo);
 
-            var result = Enumerable.Range(0, iterations.Get)
-                .Select(i => gen.PickEmoteAsync("blacklist").GetAwaiter().GetResult())
+            var emoteTasks = Enumerable.Range(0, iterations.Get)
+                                    .Select(i => gen.PickEmoteAsync("blacklist"))
+                                    .ToArray();
+
+            var emoteResults = await Task.WhenAll(emoteTasks);
+
+            var result = emoteResults
                 .Where(s => s == null)
                 .ToList();
 
