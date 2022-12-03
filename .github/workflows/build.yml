@@ -95,7 +95,7 @@ jobs:
         uses: 5monkeys/cobertura-action@master
         if: always()
         with:
-          path: ${{ github.workspace }}/tests/nomoretrolls.tests/TestResults/coverage.cobertura.xml
+          path: ${{ github.workspace }}/tests/nomoretrolls.tests/**/coverage.cobertura.xml
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           minimum_coverage: 0
           fail_below_threshold: true
