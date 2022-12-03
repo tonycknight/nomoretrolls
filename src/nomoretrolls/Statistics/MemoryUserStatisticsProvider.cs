@@ -18,7 +18,7 @@ namespace nomoretrolls.Statistics
             _userStats = new ConcurrentDictionary<(ulong, string), UserStatistics>();
         }
 
-        public Task BumpUserStatisticAsync(ulong userId, string statName)
+        public Task BumpUserStatisticAsync(ulong userId, string statName, TimeSpan expiry)
         {
             var key = GetMapKey(userId, statName);
             var now = _getTime();
