@@ -17,7 +17,7 @@ namespace nomoretrolls.tests.Statistics
             
             for (var i = 0; i < iterations; i++)
             {
-                await p.BumpUserStatisticAsync(userId, key);                
+                await p.BumpUserStatisticAsync(userId, key, TimeSpan.Zero);
             }
 
             var result = await p.GetUserStatisticCountAsync(userId, key, TimeSpan.FromHours(5));
@@ -41,7 +41,7 @@ namespace nomoretrolls.tests.Statistics
 
             for (var i = 0; i < iterations; i++)
             {
-                await p.BumpUserStatisticAsync(userId, key);
+                await p.BumpUserStatisticAsync(userId, key, TimeSpan.Zero);
             }
             
             timeframe = TimeSpan.FromSeconds(timeframeSecs); // bump the clock

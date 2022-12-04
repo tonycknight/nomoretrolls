@@ -10,6 +10,7 @@
         IMessageWorkflowBuilder IfKnockingWorkflowEnabled();
         IMessageWorkflowBuilder IfBlacklistWorkflowEnabled();
         IMessageWorkflowBuilder IfEmoteAnnotationWorkflowEnabled();
+        IMessageWorkflowBuilder IfNotDmChannel();
 
         IMessageWorkflowBuilder If(Func<IMessageWorkflowBuilder, IMessageWorkflowBuilder> part, Func<IMessageWorkflowBuilder, IMessageWorkflowBuilder> onSuccess, Func<IMessageWorkflowBuilder, IMessageWorkflowBuilder> onFailure);
         IMessageWorkflowBuilder UserWarningsFilter(string statName, PeriodRange period);

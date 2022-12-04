@@ -19,17 +19,21 @@ namespace nomoretrolls.Statistics
             _telemetry = telemetry;
         }
 
-        public Task BumpUserStatisticAsync(ulong userId, string statName)
+        public Task BumpUserStatisticAsync(ulong userId, string statName, TimeSpan expiry)
         {            
             var col = _statsCol.Value;
                         
             var now = DateTime.UtcNow;            
             var time = new TimeSpan(now.TimeOfDay.Hours, now.TimeOfDay.Minutes, 0);
             var timeFrame = now.Date + time;
+                        
+            var expiresOn = timeFrame.AddMinutes(1).Add(expiry);
 
             var filter = CreateEqualityFilter(userId, statName, timeFrame);
-            
-            var update = Builders<UserStatisticsEntryDto>.Update.Inc(us => us.Count, 1);
+
+            var update = Builders<UserStatisticsEntryDto>.Update
+                .Inc(us => us.Count, 1)                
+                .Set(us => us.ExpiryTime, expiresOn);
 
             return col.UpdateOneAsync(filter, update, new UpdateOptions() { IsUpsert = true });
         }
@@ -112,12 +116,12 @@ namespace nomoretrolls.Statistics
         
         private void CreateTtlIndex(string name, IMongoCollection<UserStatisticsEntryDto> col)
         {
-            var expiresAfter = TimeSpan.FromHours(48);
+            var expiresAfter = TimeSpan.FromMinutes(1);
 
             var build = Builders<UserStatisticsEntryDto>.IndexKeys;            
 
             var ttlIndexModel = new CreateIndexModel<UserStatisticsEntryDto>(
-                    build.Ascending(x => x.Time),
+                    build.Ascending(x => x.ExpiryTime),
                     new CreateIndexOptions() { Name = name, Unique = false, ExpireAfter = expiresAfter, Background = false });
             
             col.Indexes.CreateOne(ttlIndexModel);

@@ -60,6 +60,7 @@ let testOptions (opts: DotNet.TestOptions)=
     { opts with NoBuild = false; 
                 Configuration = DotNet.BuildConfiguration.Debug;  // Temporary, to ensure Coverlet can find otherwise optimised-out code
                 Logger = Some "trx;LogFileName=test_results.trx";
+                Collect = Some "XPlat Code Coverage"
                 Filter = Some "OS!=Windows";
                 MSBuildParams = { opts.MSBuildParams with Properties = properties } }
 
@@ -145,7 +146,7 @@ Target.create "Stryker" (fun _ ->
 )
 
 Target.create "Consolidate code coverage" (fun _ ->  
-    let args = sprintf @"-reports:""./tests/**/coverage.info"" -targetdir:""./%s/codecoverage"" -reporttypes:""Html""" publishDir
+    let args = sprintf @"-reports:""./tests/**/coverage.cobertura.xml"" -targetdir:""./%s/codecoverage"" -reporttypes:""Html""" publishDir
     let result = DotNet.exec id "reportgenerator" args
   
     if not result.OK then failwithf "reportgenerator failed!"  

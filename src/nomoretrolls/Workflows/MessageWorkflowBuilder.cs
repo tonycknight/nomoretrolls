@@ -54,6 +54,10 @@ namespace nomoretrolls.Workflows
 
         public IMessageWorkflowBuilder IfEmoteAnnotationWorkflowEnabled()
             => this.Part(new Parts.WorkflowConfigEnabled(_serviceProvider.GetService<Config.IWorkflowConfigurationRepository>(), Config.IWorkflowConfigurationRepository.EmoteAnnotationWorkflow));
+
+        public IMessageWorkflowBuilder IfNotDmChannel()
+            => this.Part(new Parts.NonDmChannelFilter());
+
         public IMessageWorkflowBuilder If(Func<IMessageWorkflowBuilder, IMessageWorkflowBuilder> condition, Func<IMessageWorkflowBuilder, IMessageWorkflowBuilder> onSuccess, Func<IMessageWorkflowBuilder, IMessageWorkflowBuilder> onFailure)
         {
             var b1 = new MessageWorkflowBuilder(_serviceProvider).Receiver(_receiver);

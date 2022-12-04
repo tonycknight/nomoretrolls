@@ -26,6 +26,7 @@ namespace nomoretrolls.Commands
             return _wfFactory.CreateBuilder()
                     .Receiver(new MessageReceiver())
                     .IfBlacklistWorkflowEnabled()
+                    .IfNotDmChannel()
                     .UserIsBlacklisted()
                     .BumpUserWarnings(blacklistStatsName)
                     .If(b2 => b2.UserWarningsFilter(blacklistStatsName, PeriodRange.AtLeast(5, duration)),
@@ -62,6 +63,7 @@ namespace nomoretrolls.Commands
             return _wfFactory.CreateBuilder()
                     .Receiver(new MessageReceiver())
                     .IfShoutingWorkflowEnabled()
+                    .IfNotDmChannel()
                     .MessageIsShouting()
                     .BumpUserWarnings(shoutingStatsName)
                     .If(b2 => b2.UserWarningsFilter(shoutingStatsName, PeriodRange.AtLeast(8, duration)),
@@ -85,6 +87,7 @@ namespace nomoretrolls.Commands
             return _wfFactory.CreateBuilder()
                     .Receiver(new MessageReceiver())
                     .IfAltCapsWorkflowEnabled()
+                    .IfNotDmChannel()
                     .MessageIsAltCaps()
                     .BumpUserWarnings(altCapsStatsName)
                     .If(b2 => b2.UserWarningsFilter(altCapsStatsName, PeriodRange.AtLeast(8, duration)),

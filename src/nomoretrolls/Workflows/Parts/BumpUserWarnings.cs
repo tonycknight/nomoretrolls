@@ -7,6 +7,7 @@ namespace nomoretrolls.Workflows.Parts
     {
         private readonly IUserStatisticsProvider _statsProvider;
         private readonly string _statsName;
+        private readonly TimeSpan _statsExpiry = TimeSpan.FromDays(2);
 
         public BumpUserWarnings(IUserStatisticsProvider statsProvider, string statsName)
         {
@@ -20,7 +21,7 @@ namespace nomoretrolls.Workflows.Parts
         {
             var userId = context.AuthorId();
             
-            await _statsProvider.BumpUserStatisticAsync(userId, _statsName);
+            await _statsProvider.BumpUserStatisticAsync(userId, _statsName, _statsExpiry);
 
             return context;
         }

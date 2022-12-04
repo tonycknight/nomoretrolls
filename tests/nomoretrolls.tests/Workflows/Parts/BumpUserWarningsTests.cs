@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Discord;
 using FluentAssertions;
 using nomoretrolls.Messaging;
@@ -31,8 +32,7 @@ namespace nomoretrolls.tests.Workflows.Parts
 
             r.Should().NotBeNull();
 
-            stats.Received(1).BumpUserStatisticAsync(authorId, name);
-
+            stats.Received(1).BumpUserStatisticAsync(authorId, name, Arg.Any<TimeSpan>());
         }
     }
 }
