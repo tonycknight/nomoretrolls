@@ -125,6 +125,9 @@ namespace nomoretrolls.Workflows
 
         public IMessageWorkflowBuilder ApplyDirectMessage(string message)
             => this.Part(new Parts.ApplyReplyText(new ArbitraryTextGenerator(message)));
+
+        public IMessageWorkflowBuilder BumpUserMessage()
+            => this.Part(new Parts.BumpUserMessage(_serviceProvider.GetService<IUserStatisticsProvider>()));
     }
 
 }

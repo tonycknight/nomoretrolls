@@ -28,6 +28,7 @@
         IMessageWorkflowBuilder ApplyAltCapsReply();
         IMessageWorkflowBuilder ApplyReactionEmote(string emotesName);
         IMessageWorkflowBuilder ApplyDirectMessage(string message);
+        IMessageWorkflowBuilder BumpUserMessage();
         IMessageWorkflowBuilder Noop();
 
         IMessageWorkflow Build(string name);

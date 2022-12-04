@@ -81,12 +81,13 @@ namespace nomoretrolls.Commands
         {
             var wfProvider = new MessageWorkflowProvider(wfFactory);
 
-            return new[] { wfProvider.CreateBlacklistedUserWorkflow(),
-                                              wfProvider.CreateShoutingWorkflow(),
-                                              wfProvider.CreateShoutingPersonalReplyWorkflow(),
-                                              wfProvider.CreateAutoEmoteWorkflow(),
-                                              wfProvider.CreateAltCapsWorkflow(),
-                                              wfProvider.CreateAltCapsPersonalReplyWorkflow()};
+            return new[] {  wfProvider.CreateBlacklistedUserWorkflow(),
+                            wfProvider.CreateShoutingWorkflow(),
+                            wfProvider.CreateShoutingPersonalReplyWorkflow(),
+                            wfProvider.CreateAutoEmoteWorkflow(),
+                            wfProvider.CreateAltCapsWorkflow(),
+                            wfProvider.CreateAltCapsPersonalReplyWorkflow(),
+                            wfProvider.CreateStatCountWorkflow()};
         }
 
         private void EchoServiceMetadata()

@@ -19,6 +19,15 @@ namespace nomoretrolls.Commands
             _wfFactory = wfFactory;
         }
 
+        public IMessageWorkflow CreateStatCountWorkflow()
+        {            
+            return _wfFactory.CreateBuilder()
+                    .Receiver(new MessageReceiver())
+                    .IfNotDmChannel()
+                    .BumpUserMessage()
+                    .Build("User message stat counts");
+        }
+
         public IMessageWorkflow CreateBlacklistedUserWorkflow()
         {        
             var duration = TimeSpan.FromMinutes(1);
