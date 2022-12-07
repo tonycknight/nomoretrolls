@@ -124,7 +124,7 @@ namespace nomoretrolls.Commands
                     .UserWarningsFilter(shoutingStatsName, PeriodRange.AtLeast(1, window))
                     .UserWarningsFilter(shoutingStatsNotificationName, PeriodRange.AtMost(0, window))
                     .BumpUserWarnings(shoutingStatsNotificationName)
-                    .ApplyDirectMessage("{0} You have been warned. No more shouting.")
+                    .ApplyDirectMessage("{0} You have been warned. No more SHOUTING.")
                     .SendDirectUserMessage()
                     .Build("Shouting user DM");
         }
