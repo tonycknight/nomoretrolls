@@ -15,6 +15,7 @@ nuget Microsoft.Extensions.Caching.Memory
 nuget Microsoft.Extensions.DependencyInjection 6.0
 nuget Microsoft.NET.Test.Sdk 16.11.0
 nuget MongoDB.Driver
+nuget Newtonsoft.Json 13.0.2
 nuget NSubstitute
 nuget System.Net.Http
 nuget Tk.Extensions
