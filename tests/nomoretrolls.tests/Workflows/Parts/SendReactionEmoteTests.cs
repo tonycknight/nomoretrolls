@@ -2,6 +2,7 @@
 using Discord;
 using FluentAssertions;
 using nomoretrolls.Messaging;
+using nomoretrolls.Telemetry;
 using nomoretrolls.Workflows;
 using nomoretrolls.Workflows.Parts;
 using NSubstitute;
@@ -14,7 +15,7 @@ namespace nomoretrolls.tests.Workflows.Parts
         [Fact]
         public async Task ExecuteAsync_EmptyEmote_DiscordNotInvoked()
         {
-            var part = new SendReactionEmote();
+            var part = new SendReactionEmote(Substitute.For<ITelemetry>());
 
             var msg = Substitute.For<IMessage>();
             var messageContext = Substitute.For<IDiscordMessageContext>();
@@ -36,7 +37,7 @@ namespace nomoretrolls.tests.Workflows.Parts
         public async Task ExecuteAsync_NonEmptyEmote_DiscordInvoked()
         {
 
-            var part = new SendReactionEmote();
+            var part = new SendReactionEmote(Substitute.For<ITelemetry>());
 
             var msg = Substitute.For<IMessage>();
             var messageContext = Substitute.For<IDiscordMessageContext>();

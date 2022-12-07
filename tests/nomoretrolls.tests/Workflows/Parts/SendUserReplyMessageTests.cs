@@ -2,6 +2,7 @@
 using Discord;
 using FluentAssertions;
 using nomoretrolls.Messaging;
+using nomoretrolls.Telemetry;
 using nomoretrolls.Workflows;
 using nomoretrolls.Workflows.Parts;
 using NSubstitute;
@@ -14,7 +15,7 @@ namespace nomoretrolls.tests.Workflows.Parts
         [Fact]
         public async Task ExecuteAsync_EmptyText_DiscordNotInvoked()
         {
-            var part = new SendUserReplyMessage();
+            var part = new SendUserReplyMessage(Substitute.For<ITelemetry>());
 
             var channel = Substitute.For<IMessageChannel>();
             var msg = Substitute.For<IMessage>();       
@@ -38,7 +39,7 @@ namespace nomoretrolls.tests.Workflows.Parts
         {
             var msgId = 1234uL;
 
-            var part = new SendUserReplyMessage();
+            var part = new SendUserReplyMessage(Substitute.For<ITelemetry>());
 
             var channel = Substitute.For<IMessageChannel>();
             var msg = Substitute.For<IMessage>();

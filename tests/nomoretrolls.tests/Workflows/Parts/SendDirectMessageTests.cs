@@ -2,6 +2,7 @@
 using Discord;
 using FluentAssertions;
 using nomoretrolls.Messaging;
+using nomoretrolls.Telemetry;
 using nomoretrolls.Workflows;
 using nomoretrolls.Workflows.Parts;
 using NSubstitute;
@@ -17,7 +18,7 @@ namespace nomoretrolls.tests.Workflows.Parts
             var msgId = 1234uL;
             var authorId = 4321uL;
 
-            var part = new SendDirectMessage();
+            var part = new SendDirectMessage(Substitute.For<ITelemetry>());
 
             var author = Substitute.For<IUser>();
             author.Id.Returns(authorId);
@@ -50,7 +51,7 @@ namespace nomoretrolls.tests.Workflows.Parts
             var msgId = 1234uL;
             var authorId = 4321uL;
 
-            var part = new SendDirectMessage();
+            var part = new SendDirectMessage(Substitute.For<ITelemetry>());
 
             var author = Substitute.For<IUser>();
             author.Id.Returns(authorId);

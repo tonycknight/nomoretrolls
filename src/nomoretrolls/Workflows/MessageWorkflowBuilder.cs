@@ -88,10 +88,10 @@ namespace nomoretrolls.Workflows
             => this.Part(new Parts.Noop());
 
         public IMessageWorkflowBuilder SendReactionEmote() 
-            => this.Part(new Parts.SendReactionEmote());
-        
-        public IMessageWorkflowBuilder SendUserReplyMessage() 
-            => this.Part(new Parts.SendUserReplyMessage());
+            => this.Part(new Parts.SendReactionEmote(_serviceProvider.GetService<ITelemetry>()));
+
+        public IMessageWorkflowBuilder SendUserReplyMessage()
+            => this.Part(new Parts.SendUserReplyMessage(_serviceProvider.GetService<ITelemetry>()));
 
         public IMessageWorkflowBuilder UserWarningsFilter(string statName, PeriodRange period)
             => this.Part(new Parts.UserWarningsFilter(_serviceProvider.GetService<IUserStatisticsProvider>(), statName, period));
@@ -106,7 +106,7 @@ namespace nomoretrolls.Workflows
             => this.Part(new Parts.UserEmoteAnnotationFilter(_serviceProvider.GetService<IEmoteConfigProvider>()));
 
         public IMessageWorkflowBuilder SendDirectUserMessage()
-            => this.Part(new Parts.SendDirectMessage());
+            => this.Part(new Parts.SendDirectMessage(_serviceProvider.GetService<ITelemetry>()));
 
         public IMessageWorkflowBuilder DeleteUserMessage() 
             => this.Part(new Parts.DeleteUserMessage());
