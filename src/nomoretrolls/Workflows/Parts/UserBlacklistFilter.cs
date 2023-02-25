@@ -6,14 +6,14 @@ namespace nomoretrolls.Workflows.Parts
     internal class UserBlacklistFilter : IMessageWorkflowPart
     {
         private readonly IBlacklistProvider _blacklistProvider;
-        
+
         public UserBlacklistFilter(IBlacklistProvider blacklistProvider)
         {
-            _blacklistProvider = blacklistProvider.ArgNotNull(nameof(blacklistProvider));            
+            _blacklistProvider = blacklistProvider.ArgNotNull(nameof(blacklistProvider));
         }
 
         public async Task<MessageWorkflowContext?> ExecuteAsync(MessageWorkflowContext context)
-        {            
+        {
             if (await IsCharacterMatch(context))
             {
                 return context;

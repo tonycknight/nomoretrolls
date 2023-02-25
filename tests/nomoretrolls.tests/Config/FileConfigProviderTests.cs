@@ -48,7 +48,7 @@ namespace nomoretrolls.tests.Config
         [InlineData("test_token")]
         [InlineData("test_token\tvalue")]
         public void ConfigurationProvider_ExceptionThrown(string token)
-        {            
+        {
             var jsonbuff = System.Text.Encoding.UTF8.GetBytes(token);
             using var s = new MemoryStream(jsonbuff);
             using var srdr = new StreamReader(s);

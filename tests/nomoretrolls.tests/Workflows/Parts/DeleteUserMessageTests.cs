@@ -12,9 +12,9 @@ namespace nomoretrolls.tests.Workflows.Parts
     {
         [Fact]
         public async Task ExecuteAsync_DiscordInvoked()
-        {           
+        {
             var part = new DeleteUserMessage();
-                       
+
             var msg = Substitute.For<IMessage>();
             var messageContext = Substitute.For<IDiscordMessageContext>();
             messageContext.Message.Returns(msg);

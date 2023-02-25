@@ -6,12 +6,12 @@ using Tk.Extensions.Linq;
 
 namespace nomoretrolls.Commands.DiscordCommands
 {
-    internal  class CommandHelpInfo
+    internal class CommandHelpInfo
     {
         public MethodInfo Method { get; init; }
         public CommandAttribute? Command { get; init; }
         public DescriptionAttribute? Description { get; init; }
-        public AliasAttribute? Alias {  get; init; }
+        public AliasAttribute? Alias { get; init; }
         public CommandFormAttribute? Form { get; init; }
     }
 
@@ -33,14 +33,14 @@ namespace nomoretrolls.Commands.DiscordCommands
                                              Alias = mi.GetCustomAttributes(false).OfType<AliasAttribute>().FirstOrDefault(),
                                              Form = mi.GetCustomAttributes(false).OfType<CommandFormAttribute>().FirstOrDefault()
                                          })
-                                         .Where(i =>!string.IsNullOrWhiteSpace(i.Command?.Text));
+                                         .Where(i => !string.IsNullOrWhiteSpace(i.Command?.Text));
         }
 
         public static IEnumerable<string> FormatCommandHelp(this IEnumerable<CommandHelpInfo> helpInfos)
         {
             Func<IEnumerable<string>, string> joinAliases = xs => xs.Select(s => $"``{HelpExtensions.CommandPrefix}{s}``").Join(", ");
-            
-            foreach(var helpInfo in helpInfos.OrderBy(i => i.Command.Text))
+
+            foreach (var helpInfo in helpInfos.OrderBy(i => i.Command.Text))
             {
                 var cmd = $"{HelpExtensions.CommandPrefix}{helpInfo.Command.Text}";
                 var aliases = (helpInfo.Alias?.Aliases).NullToEmpty().Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
@@ -57,7 +57,7 @@ namespace nomoretrolls.Commands.DiscordCommands
                 if (helpInfo.Form != null)
                 {
                     yield return $"Form: ``{cmd} {helpInfo.Form.Parameters}``";
-                    
+
 
                     if (helpInfo.Form.Example != null)
                     {

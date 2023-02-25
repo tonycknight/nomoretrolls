@@ -22,7 +22,7 @@ namespace nomoretrolls.tests.Workflows.Parts
 
             var author = Substitute.For<IUser>();
             author.Id.Returns(authorId);
-            
+
             var channel = Substitute.For<IMessageChannel>();
             var replyChannel = Substitute.For<IDMChannel>();
             replyChannel.Recipient.Returns(author);
@@ -59,9 +59,9 @@ namespace nomoretrolls.tests.Workflows.Parts
 
             var channel = Substitute.For<IMessageChannel>();
             var replyChannel = Substitute.For<IDMChannel>();
-            replyChannel.Recipient.Returns(author);                        
+            replyChannel.Recipient.Returns(author);
             author.CreateDMChannelAsync().Returns(replyChannel);
-                
+
             var msg = Substitute.For<IMessage>();
             msg.Channel.Returns(channel);
             msg.Id.Returns(msgId);
@@ -71,12 +71,12 @@ namespace nomoretrolls.tests.Workflows.Parts
 
             var context = new MessageWorkflowContext(messageContext);
             context.ReplyText("hello world");
-            
+
             var r = await part.ExecuteAsync(context);
 
             r.Should().Be(context);
 
-            replyChannel.Received(1).SendMessageAsync(Arg.Is<string>(s => !string.IsNullOrWhiteSpace(s)));            
+            replyChannel.Received(1).SendMessageAsync(Arg.Is<string>(s => !string.IsNullOrWhiteSpace(s)));
         }
     }
 }

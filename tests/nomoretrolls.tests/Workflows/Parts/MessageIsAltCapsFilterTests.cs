@@ -11,7 +11,7 @@ namespace nomoretrolls.tests.Workflows.Parts
 {
     public class MessageIsAltCapsFilterTests
     {
-        
+
         [Fact]
         public async Task ExecuteAsync_NullContent_ReturnsNull()
         {

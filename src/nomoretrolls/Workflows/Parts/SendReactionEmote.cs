@@ -24,7 +24,7 @@ namespace nomoretrolls.Workflows.Parts
                 var emo = new Discord.Emoji(emoteCode);
                 await context.DiscordContext.Message.AddReactionAsync(emo);
             }
-             return context;
+            return context;
         }
     }
 }

@@ -35,8 +35,8 @@ namespace nomoretrolls.Knocking
                 var r = await _sourceRepo.GetUserEntriesAsync();
                 if (r != null)
                 {
-                    e.AbsoluteExpiration = r.Any() 
-                                            ? r.Min(e => e.Expiry) 
+                    e.AbsoluteExpiration = r.Any()
+                                            ? r.Min(e => e.Expiry)
                                             : _timeProvider.UtcNow().Add(CacheExpiry);
                     return r;
                 }

@@ -18,8 +18,8 @@ namespace nomoretrolls.tests.Knocking
         [Fact]
         public void Ctor_AllOK()
         {
-            var job = new KnockingScheduleJob(CreateMockTimeProvider(), CreateMockTelemetry(), 
-                                              CreateMockDiscordClientProvider(), 
+            var job = new KnockingScheduleJob(CreateMockTimeProvider(), CreateMockTelemetry(),
+                                              CreateMockDiscordClientProvider(),
                                               CreateMockScheduleRepo(),
                                               CreateWorkflowConfigRepo(true));
         }
@@ -45,9 +45,9 @@ namespace nomoretrolls.tests.Knocking
             var client = CreateMockDiscordClient();
             client.GetUsersAsync(Arg.Any<IEnumerable<ulong>>()).Returns(new Discord.IUser[0]);
             var clientProvider = CreateMockDiscordClientProvider(client);
-            
+
             var telemetry = CreateMockTelemetry();
-            
+
             var time = CreateMockTimeProvider();
             var now = DateTime.UtcNow;
             time.UtcNow().Returns(now);
@@ -59,7 +59,7 @@ namespace nomoretrolls.tests.Knocking
                 Expiry = now.AddYears(1),
                 Frequency = "*/1 * * * *"
             } };
-            
+
             scheduleRepo.GetUserEntriesAsync().Returns(schedules);
 
             var job = new KnockingScheduleJob(time, telemetry,
@@ -142,7 +142,7 @@ namespace nomoretrolls.tests.Knocking
                 UserId = u.Id,
                 Start = now,
                 Expiry = now.AddYears(1),
-                Frequency = $"*/1 * {now.Day+1} * *"
+                Frequency = $"*/1 * {now.Day + 1} * *"
             }).ToList();
 
             scheduleRepo.GetUserEntriesAsync().Returns(schedules);
@@ -172,7 +172,7 @@ namespace nomoretrolls.tests.Knocking
             var client = CreateMockDiscordClient();
             var userMessage = CreateMockUserMessage();
             var dmChannel = CreateMockDmChannel(userMessage);
-            
+
             var users = Enumerable.Range(1, userCount).Select(x => CreateMockDiscordUser((ulong)x, dmChannel)).ToList() as IList<Discord.IUser>;
             client.GetUsersAsync(Arg.Any<IEnumerable<ulong>>()).Returns(users.ToTaskResult());
             var clientProvider = CreateMockDiscordClientProvider(client);
@@ -256,7 +256,7 @@ namespace nomoretrolls.tests.Knocking
         public async Task ExecuteAsync_MultipleSchedules_MatchingUser_ExceptionThrown(int userCount)
         {
 
-            var client = CreateMockDiscordClient();            
+            var client = CreateMockDiscordClient();
             var users = Enumerable.Range(1, userCount).Select(x => CreateMockDiscordUser((ulong)x)).ToList() as IList<Discord.IUser>;
             client.GetUsersAsync(Arg.Any<IEnumerable<ulong>>()).Returns(Task.FromException<IList<Discord.IUser>>(new Exception()));
             var clientProvider = CreateMockDiscordClientProvider(client);
@@ -306,7 +306,7 @@ namespace nomoretrolls.tests.Knocking
             var result = Substitute.For<IWorkflowConfigurationRepository>();
 
             result.GetWorkflowConfigAsync(IWorkflowConfigurationRepository.KnockingWorkflow)
-                .Returns(Task.FromResult(new WorkflowConfiguration() {  Enabled = enabled }));
+                .Returns(Task.FromResult(new WorkflowConfiguration() { Enabled = enabled }));
 
             return result;
         }
@@ -331,7 +331,7 @@ namespace nomoretrolls.tests.Knocking
 
             return result;
         }
-        
+
         private Discord.IUserMessage CreateMockUserMessage()
         {
             var result = Substitute.For<Discord.IUserMessage>();

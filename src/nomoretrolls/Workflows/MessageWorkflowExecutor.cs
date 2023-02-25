@@ -21,7 +21,7 @@ namespace nomoretrolls.Workflows
             {
                 Task.Run(() => ExecuteAsync(wf, context));
             }
-            
+
             return Task.CompletedTask;
         }
 
@@ -30,9 +30,9 @@ namespace nomoretrolls.Workflows
             var logPrefix = $"Message {context.Message?.Id}";
 
             _telemetry.Event(new TelemetryTraceEvent() { Message = $"[{logPrefix}] Starting workflow '{workflow.Name}'..." });
-            
+
             var msgContext = await workflow.Receiver.ReceiveAsync(context);
-            
+
             if (msgContext != null)
             {
                 foreach (var part in workflow.Parts)
@@ -42,11 +42,11 @@ namespace nomoretrolls.Workflows
                     MessageWorkflowContext? segmentResult = null;
                     try
                     {
-                        segmentResult = await part.ExecuteAsync(msgContext);                        
+                        segmentResult = await part.ExecuteAsync(msgContext);
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
-                        _telemetry.Event(new TelemetryErrorEvent() { Exception = ex } );
+                        _telemetry.Event(new TelemetryErrorEvent() { Exception = ex });
                     }
                     if (segmentResult == null)
                     {

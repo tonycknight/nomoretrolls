@@ -16,11 +16,11 @@ namespace nomoretrolls.Config
 
         public AppConfiguration GetAppConfiguration()
         {
-            if(_filePath == null)
+            if (_filePath == null)
             {
                 throw new InvalidOperationException("File path not set.");
             }
-            
+
             return GetAppConfiguration(_filePath);
         }
 

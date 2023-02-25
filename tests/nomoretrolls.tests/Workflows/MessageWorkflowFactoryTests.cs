@@ -12,7 +12,7 @@ namespace nomoretrolls.tests.Workflows
         public void CreateBuilder_ReturnsBuilder()
         {
             var sp = Substitute.For<IServiceProvider>();
-            
+
             var fact = new MessageWorkflowFactory(sp);
 
             var result = fact.CreateBuilder();

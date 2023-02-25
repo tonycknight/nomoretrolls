@@ -17,7 +17,7 @@ namespace nomoretrolls.Workflows.Parts
             MessageWorkflowContext? result = null;
 
             if (IsCapitals(context))
-            {                
+            {
                 result = context;
             }
 
@@ -25,7 +25,7 @@ namespace nomoretrolls.Workflows.Parts
         }
 
         private bool IsCapitals(MessageWorkflowContext context)
-        {            
+        {
             var content = context.Content();
             if (!string.IsNullOrWhiteSpace(content))
             {
@@ -37,7 +37,7 @@ namespace nomoretrolls.Workflows.Parts
                     analysis.CapitalRatio > 0.6 &&
                     analysis.CapitalGini < 0.5;
             }
-            
+
             return false;
         }
     }

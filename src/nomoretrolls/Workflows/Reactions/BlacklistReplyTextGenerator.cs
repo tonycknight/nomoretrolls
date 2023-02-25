@@ -3,7 +3,7 @@
     internal class BlacklistReplyTextGenerator : ReplyTextGenerator, IBlacklistReplyTextGenerator
     {
         private readonly string[] _formats;
-        
+
         public BlacklistReplyTextGenerator() : this(PickRandom())
         {
         }
@@ -22,9 +22,9 @@
             };
         }
 
-        
+
         public string GenerateReply(string userMention)
-        {            
+        {
             var format = PickRandomFormat(_formats);
 
             return String.Format(format, userMention);

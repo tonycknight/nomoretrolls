@@ -17,7 +17,7 @@ namespace nomoretrolls.Workflows.Parts
             MessageWorkflowContext? result = null;
 
             if (IsAltCaps(context))
-            {                
+            {
                 result = context;
             }
 
@@ -25,19 +25,19 @@ namespace nomoretrolls.Workflows.Parts
         }
 
         private bool IsAltCaps(MessageWorkflowContext context)
-        {            
+        {
             var content = context.Content();
             if (!string.IsNullOrWhiteSpace(content))
             {
                 var analysis = content.AnalyseCapitals();
 
-                _telemetry.Event(new TelemetryTraceEvent() { Message = $"[Message {context.DiscordContext.Message.Id}] [{this.GetType().Name}] Letters {analysis.LetterCount} capitals {analysis.CapitalCount} gini {analysis.CapitalGini}" } );
-                                
+                _telemetry.Event(new TelemetryTraceEvent() { Message = $"[Message {context.DiscordContext.Message.Id}] [{this.GetType().Name}] Letters {analysis.LetterCount} capitals {analysis.CapitalCount} gini {analysis.CapitalGini}" });
+
                 return analysis.LetterCount >= 5 &&
                     analysis.CapitalRatio >= 0.4 && analysis.CapitalRatio <= 0.6 &&
                     analysis.CapitalGini <= 0.6;
             }
-            
+
             return false;
         }
     }

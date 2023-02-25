@@ -9,7 +9,7 @@ namespace nomoretrolls.Workflows.Parts
             var msg = context.DiscordContext.Message;
             // Can't delete messages from DM channels!
             var chnl = msg.Channel as SocketDMChannel;
-            if(chnl?.Recipient != null)
+            if (chnl?.Recipient != null)
             {
                 return context;
             }

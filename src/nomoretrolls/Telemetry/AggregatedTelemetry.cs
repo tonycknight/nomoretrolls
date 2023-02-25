@@ -7,7 +7,7 @@ namespace nomoretrolls.Telemetry
     {
         private readonly IList<ITelemetry> _telemetries;
         private readonly IConfigurationProvider _configProvider;
-        
+
         private readonly Lazy<HashSet<string>> _telemetryTypesLogged;
 
         public AggregatedTelemetry(IList<ITelemetry> telemetries, IConfigurationProvider configProvider)

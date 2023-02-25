@@ -62,7 +62,7 @@ namespace nomoretrolls.tests.Knocking
 
         [Property(Verbose = true)]
         public bool CreateScheduleEntry_Start_StartSet(DateTime start)
-        {            
+        {
             var user = Substitute.For<IUser>();
 
             var r = nomoretrolls.Knocking.Extensions.CreateScheduleEntry(user, start, TimeSpan.Zero, "* * * * *");

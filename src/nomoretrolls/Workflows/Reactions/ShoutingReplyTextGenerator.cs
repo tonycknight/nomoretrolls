@@ -3,7 +3,7 @@
     internal class ShoutingReplyTextGenerator : ReplyTextGenerator, IShoutingReplyTextGenerator
     {
         private readonly string[] _formats;
-        
+
         public ShoutingReplyTextGenerator() : this(PickRandom())
         {
         }

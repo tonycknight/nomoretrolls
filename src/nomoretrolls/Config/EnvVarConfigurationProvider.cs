@@ -33,21 +33,21 @@ namespace nomoretrolls.Config
             throw new NotSupportedException();
         }
 
-        private static AppConfiguration CreateConfiguration() 
+        private static AppConfiguration CreateConfiguration()
             => new AppConfiguration()
+            {
+                Discord = new DiscordConfiguration()
                 {
-                    Discord = new DiscordConfiguration()
-                    {
 
-                    },
-                    MongoDb = new MongoDbConfiguration()
-                    {
+                },
+                MongoDb = new MongoDbConfiguration()
+                {
 
-                    },
-                    Telemetry = new TelemetryConfiguration()
-                    {
-                        LogMessageContent = false,
-                    }
-                };
+                },
+                Telemetry = new TelemetryConfiguration()
+                {
+                    LogMessageContent = false,
+                }
+            };
     }
 }

@@ -16,7 +16,7 @@ namespace nomoretrolls.tests.Config
         {
             IList<WorkflowConfiguration>? entries = Enumerable.Range(0, entryCount)
                 .Select(x => new WorkflowConfiguration()
-                                { Name = $"config{x}", Enabled = true })
+                { Name = $"config{x}", Enabled = true })
                 .ToList();
 
             var cache = CreateCache();
@@ -27,7 +27,7 @@ namespace nomoretrolls.tests.Config
 
             var result = await p.GetWorkflowConfigsAsync();
 
-            
+
             cache.Received(entryCount).SetWorkflowConfigAsync(Arg.Any<WorkflowConfiguration>());
             persist.Received(1).GetWorkflowConfigsAsync();
         }
@@ -37,7 +37,7 @@ namespace nomoretrolls.tests.Config
         {
             var cache = CreateCache();
             var persist = CreatePersistent();
-            
+
             var p = new WorkflowConfigurationRepository(cache, persist);
 
             var r = await p.GetWorkflowConfigAsync("test");

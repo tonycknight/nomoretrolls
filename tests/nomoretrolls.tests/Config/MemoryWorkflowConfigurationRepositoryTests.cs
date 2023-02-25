@@ -13,8 +13,8 @@ namespace nomoretrolls.tests.Config
         {
             var p = new MemoryWorkflowConfigurationRepository();
 
-            var config = new WorkflowConfiguration() {  Name = "test" };
-            
+            var config = new WorkflowConfiguration() { Name = "test" };
+
             await p.SetWorkflowConfigAsync(config);
 
             var r = await p.GetWorkflowConfigAsync(config.Name);
@@ -48,7 +48,7 @@ namespace nomoretrolls.tests.Config
 
             var p = new MemoryWorkflowConfigurationRepository();
 
-            foreach(var c in configs)
+            foreach (var c in configs)
             {
                 await p.SetWorkflowConfigAsync(c);
             }

@@ -10,9 +10,9 @@ namespace nomoretrolls.Workflows
 
         public static MessageWorkflowContext DeepClone(this MessageWorkflowContext value)
         {
-            return value with { AppData = new Dictionary<string, string>(value.AppData) };            
+            return value with { AppData = new Dictionary<string, string>(value.AppData) };
         }
-                
+
         public static MessageWorkflowContext EmoteCode(this MessageWorkflowContext context, string emote)
         {
             context.AppData[EmoteCodeKey] = emote;

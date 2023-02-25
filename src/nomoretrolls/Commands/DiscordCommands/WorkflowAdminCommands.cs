@@ -86,7 +86,7 @@ namespace nomoretrolls.Commands.DiscordCommands
                 await SendMessageAsync(ex.Message);
             }
         }
-        
+
         private Task SendMessageAsync(string message)
         {
             try
@@ -95,7 +95,7 @@ namespace nomoretrolls.Commands.DiscordCommands
             }
             catch (Exception ex)
             {
-                _telemetry.Event(new TelemetryErrorEvent() { Exception = ex } );
+                _telemetry.Event(new TelemetryErrorEvent() { Exception = ex });
                 return Task.CompletedTask;
             }
         }

@@ -37,10 +37,10 @@ namespace nomoretrolls.Config
                 IWorkflowConfigurationRepository.KnockingWorkflow
             };
 
-            foreach(var n in names)
+            foreach (var n in names)
             {
                 if (!configs.ContainsKey(n))
-                {                    
+                {
                     var config = new WorkflowConfiguration() { Name = n, Enabled = true };
                     configs[n] = config;
                 }
@@ -57,8 +57,8 @@ namespace nomoretrolls.Config
 
             var result = (await col.FindAsync(filter)).FirstOrDefault();
 
-            result = result ?? new WorkflowConfigurationDto() {  Name = name, Enabled = true };
-                        
+            result = result ?? new WorkflowConfigurationDto() { Name = name, Enabled = true };
+
             return result.FromDto();
         }
 
@@ -96,7 +96,7 @@ namespace nomoretrolls.Config
             col = db.GetCollection<WorkflowConfigurationDto>(config.WorkflowConfigCollectionName);
 
             col.RecreateIndex("unique", (n, c) => CreateUniqueIndex(n, col));
-            
+
             return col;
         }
 

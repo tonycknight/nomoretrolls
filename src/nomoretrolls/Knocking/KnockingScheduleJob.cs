@@ -14,8 +14,8 @@ namespace nomoretrolls.Knocking
         private readonly IKnockingScheduleRepository _scheduleRepo;
         private readonly IWorkflowConfigurationRepository _workflowConfig;
 
-        public KnockingScheduleJob(ITimeProvider timeProvider, ITelemetry telemetry, 
-                                    IDiscordMessagingClientProvider discordClientProvider, 
+        public KnockingScheduleJob(ITimeProvider timeProvider, ITelemetry telemetry,
+                                    IDiscordMessagingClientProvider discordClientProvider,
                                     IKnockingScheduleRepository scheduleRepo,
                                     IWorkflowConfigurationRepository workflowConfig)
         {
@@ -31,7 +31,7 @@ namespace nomoretrolls.Knocking
         public async Task ExecuteAsync()
         {
             var wfConfig = await _workflowConfig.GetWorkflowConfigAsync(IWorkflowConfigurationRepository.KnockingWorkflow);
-            if(wfConfig?.Enabled != true)
+            if (wfConfig?.Enabled != true)
             {
                 _telemetry.Event(new TelemetryTraceEvent() { Message = $"Workflow {IWorkflowConfigurationRepository.KnockingWorkflow} is disabled, aborting." });
                 return;
@@ -45,14 +45,14 @@ namespace nomoretrolls.Knocking
 
             if (tasks.Length > 0)
             {
-                _telemetry.Event(new TelemetryInfoEvent() { Message = $"Found {tasks.Length} user(s) to knock." } );
+                _telemetry.Event(new TelemetryInfoEvent() { Message = $"Found {tasks.Length} user(s) to knock." });
                 try
                 {
                     await Task.WhenAll(tasks);
                 }
                 catch (Exception ex)
                 {
-                    _telemetry.Event(new TelemetryErrorEvent() { Exception = ex } );
+                    _telemetry.Event(new TelemetryErrorEvent() { Exception = ex });
                 }
             }
         }
@@ -60,19 +60,19 @@ namespace nomoretrolls.Knocking
         private bool IsKnockDue(KnockingScheduleEntry entry)
         {
             var cron = Cronos.CronExpression.Parse(entry.Frequency);
-            
+
             var now = _timeProvider.UtcNow();
             var start = now - this.Frequency;
-                        
+
             var occursNext = cron.GetNextOccurrence(start, true);
 
             return (occursNext >= start && occursNext <= now);
         }
 
         private async Task KnockAsync(KnockingScheduleEntry entry)
-        {            
+        {
             try
-            {                
+            {
                 var user = (await _discordClient.GetUsersAsync(new[] { entry.UserId })).FirstOrDefault();
                 if (user != null)
                 {
@@ -84,13 +84,13 @@ namespace nomoretrolls.Knocking
 
                         await msg.DeleteAsync();
 
-                        _telemetry.Event(new TelemetryTraceEvent() { Message = $"Knocked {user.Username}#{user.Discriminator}." } );
+                        _telemetry.Event(new TelemetryTraceEvent() { Message = $"Knocked {user.Username}#{user.Discriminator}." });
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                _telemetry.Event(new TelemetryErrorEvent() { Message = $"Error occured knocking user {entry.UserId}{Environment.NewLine}{ex.Message}", Exception = ex } );
+                _telemetry.Event(new TelemetryErrorEvent() { Message = $"Error occured knocking user {entry.UserId}{Environment.NewLine}{ex.Message}", Exception = ex });
             }
         }
 

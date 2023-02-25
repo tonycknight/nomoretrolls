@@ -68,17 +68,17 @@ namespace nomoretrolls.Workflows
 
             var b3 = new MessageWorkflowBuilder(_serviceProvider).Receiver(_receiver);
             var wfFailure = onFailure(b3).Build("Failure");
-                        
+
             var part = new Parts.IfPart(_serviceProvider.GetService<ITelemetry>(),
                 _serviceProvider.GetService<IMessageWorkflowExecutor>(),
-                wfCondition.Parts.First(), 
+                wfCondition.Parts.First(),
                 wfSuccess,
                 wfFailure);
 
             return this.Part(part);
         }
 
-        public IMessageWorkflowBuilder MessageIsShouting() 
+        public IMessageWorkflowBuilder MessageIsShouting()
             => this.Part(new Parts.MessageIsShoutingFilter(_serviceProvider.GetService<ITelemetry>()));
 
         public IMessageWorkflowBuilder MessageIsAltCaps()
@@ -87,7 +87,7 @@ namespace nomoretrolls.Workflows
         public IMessageWorkflowBuilder Noop()
             => this.Part(new Parts.Noop());
 
-        public IMessageWorkflowBuilder SendReactionEmote() 
+        public IMessageWorkflowBuilder SendReactionEmote()
             => this.Part(new Parts.SendReactionEmote(_serviceProvider.GetService<ITelemetry>()));
 
         public IMessageWorkflowBuilder SendUserReplyMessage()
@@ -108,19 +108,19 @@ namespace nomoretrolls.Workflows
         public IMessageWorkflowBuilder SendDirectUserMessage()
             => this.Part(new Parts.SendDirectMessage(_serviceProvider.GetService<ITelemetry>()));
 
-        public IMessageWorkflowBuilder DeleteUserMessage() 
+        public IMessageWorkflowBuilder DeleteUserMessage()
             => this.Part(new Parts.DeleteUserMessage());
 
-        public IMessageWorkflowBuilder ApplyBlacklistReply() 
+        public IMessageWorkflowBuilder ApplyBlacklistReply()
             => this.Part(new Parts.ApplyBlacklistReplyText(_serviceProvider.GetService<IBlacklistReplyTextGenerator>()));
 
-        public IMessageWorkflowBuilder ApplyShoutingReply() 
+        public IMessageWorkflowBuilder ApplyShoutingReply()
             => this.Part(new Parts.ApplyShoutingReplyText(_serviceProvider.GetService<IShoutingReplyTextGenerator>()));
 
         public IMessageWorkflowBuilder ApplyAltCapsReply()
             => this.Part(new Parts.ApplyAltCapsReplyText(_serviceProvider.GetService<IAltCapsReplyTextGenerator>()));
 
-        public IMessageWorkflowBuilder ApplyReactionEmote(string emotesName) 
+        public IMessageWorkflowBuilder ApplyReactionEmote(string emotesName)
             => this.Part(new Parts.ApplyReactionEmote(_serviceProvider.GetService<IEmoteGenerator>(), emotesName));
 
         public IMessageWorkflowBuilder ApplyDirectMessage(string message)

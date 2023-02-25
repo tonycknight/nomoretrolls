@@ -61,11 +61,11 @@ namespace nomoretrolls.tests.Workflows
             var msgContext = Substitute.For<IDiscordMessageContext>();
             var userMsg = Substitute.For<IMessage>();
             msgContext.Message.Returns(userMsg);
-            
+
             var context = new MessageWorkflowContext(msgContext);
 
             var mention = context.UserMention();
-            
+
             mention.Should().BeEmpty();
         }
 

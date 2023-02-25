@@ -24,7 +24,7 @@ namespace nomoretrolls.tests.Commands
 
             var result = await ctxt.GetUserAsync(userName);
 
-            result.Should().BeNull();            
+            result.Should().BeNull();
         }
 
         [Fact]

@@ -18,7 +18,7 @@ namespace nomoretrolls.tests.Workflows.Parts
             var part = new SendUserReplyMessage(Substitute.For<ITelemetry>());
 
             var channel = Substitute.For<IMessageChannel>();
-            var msg = Substitute.For<IMessage>();       
+            var msg = Substitute.For<IMessage>();
             msg.Channel.Returns(channel);
             var messageContext = Substitute.For<IDiscordMessageContext>();
             messageContext.Message.Returns(msg);
@@ -50,14 +50,14 @@ namespace nomoretrolls.tests.Workflows.Parts
 
             var context = new MessageWorkflowContext(messageContext);
             context.ReplyText("hello world");
-            
+
             var r = await part.ExecuteAsync(context);
 
             r.Should().Be(context);
 
 
             channel.Received(1).SendMessageAsync(Arg.Is<string>(s => !string.IsNullOrWhiteSpace(s)), Arg.Any<bool>(),
-                Arg.Any<Embed>(), Arg.Any<RequestOptions>(), Arg.Any<AllowedMentions>(), 
+                Arg.Any<Embed>(), Arg.Any<RequestOptions>(), Arg.Any<AllowedMentions>(),
                 Arg.Is<MessageReference>(mr => mr.MessageId.Value == msgId));
         }
     }

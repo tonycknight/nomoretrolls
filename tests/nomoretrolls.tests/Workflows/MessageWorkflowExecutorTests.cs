@@ -18,8 +18,8 @@ namespace nomoretrolls.tests.Workflows
             var telemetry = Substitute.For<ITelemetry>();
             var exec = new MessageWorkflowExecutor(telemetry);
 
-            var workflow  = Substitute.For<IMessageWorkflow>();
-            var context = Substitute.For<IDiscordMessageContext>();           
+            var workflow = Substitute.For<IMessageWorkflow>();
+            var context = Substitute.For<IDiscordMessageContext>();
 
             await exec.ExecuteAsync(workflow, context);
         }
@@ -37,7 +37,7 @@ namespace nomoretrolls.tests.Workflows
             var receiver = Substitute.For<IMessageContextReceiver>();
             receiver.ReceiveAsync(Arg.Any<IDiscordMessageContext>()).Returns(Task.FromResult(msgContext));
             workflow.Receiver.Returns(receiver);
-                        
+
 
             await exec.ExecuteAsync(workflow, context);
         }
@@ -51,7 +51,7 @@ namespace nomoretrolls.tests.Workflows
             var context = Substitute.For<IDiscordMessageContext>();
             var msgContext = new MessageWorkflowContext(context);
 
-            
+
             var receiver = Substitute.For<IMessageContextReceiver>();
             var results = new[]
             {
@@ -74,9 +74,9 @@ namespace nomoretrolls.tests.Workflows
 
             await exec.ExecuteAsync(workflow, context);
 
-            foreach(var part in parts)
+            foreach (var part in parts)
             {
-                part.Received(1);                
+                part.Received(1);
             }
         }
 
@@ -96,7 +96,7 @@ namespace nomoretrolls.tests.Workflows
                 Substitute.For<IMessageWorkflowPart>(),
                 Substitute.For<IMessageWorkflowPart>(),
             };
-            
+
             var workflow = Substitute.For<IMessageWorkflow>();
             receiver.ReceiveAsync(Arg.Any<IDiscordMessageContext>()).Returns(Task.FromResult(msgContext));
             workflow.Receiver.Returns(receiver);
@@ -211,12 +211,12 @@ namespace nomoretrolls.tests.Workflows
             {
                 new MessageWorkflowContext(Substitute.For<IDiscordMessageContext>()),
                 new MessageWorkflowContext(Substitute.For<IDiscordMessageContext>()),
-                new MessageWorkflowContext(Substitute.For<IDiscordMessageContext>()),                
+                new MessageWorkflowContext(Substitute.For<IDiscordMessageContext>()),
             };
-            var parts = results.Select((r,i) =>
+            var parts = results.Select((r, i) =>
             {
                 var part = Substitute.For<IMessageWorkflowPart>();
-                if(i > 0) 
+                if (i > 0)
                     part.ExecuteAsync(Arg.Any<MessageWorkflowContext>()).Returns(Task.FromResult((MessageWorkflowContext?)r));
                 return part;
             }).ToArray();
@@ -227,12 +227,12 @@ namespace nomoretrolls.tests.Workflows
                     b => b.Part(parts[1]),
                     b => b.Part(parts[2]))
                 .Build("");
-                        
+
             await exec.ExecuteAsync(wf, context);
 
             await parts[1].DidNotReceive().ExecuteAsync(Arg.Any<MessageWorkflowContext>());
             await parts[2].Received(1).ExecuteAsync(Arg.Any<MessageWorkflowContext>());
-            
+
         }
 
 

@@ -28,7 +28,7 @@ namespace nomoretrolls.tests.Blacklists
 
             var r = await p.GetUserEntryAsync(1);
 
-            
+
             cache.Received(count).SetUserEntryAsync(Arg.Any<UserBlacklistEntry>());
             persist.Received(1).GetUserEntriesAsync();
         }
@@ -41,7 +41,7 @@ namespace nomoretrolls.tests.Blacklists
             var cache = CreateCache();
             cache.GetUserEntryAsync(Arg.Any<ulong>()).Returns(Task.FromResult(entry));
             var persist = CreatePersistent();
-            
+
             var p = new BlacklistProvider(cache, persist);
 
             var r = await p.GetUserEntryAsync(1);
@@ -78,7 +78,7 @@ namespace nomoretrolls.tests.Blacklists
             var persist = CreatePersistent();
 
             var p = new BlacklistProvider(cache, persist);
-            
+
             cache.Received(0).GetUserEntriesAsync();
             persist.Received(0).GetUserEntriesAsync();
 
@@ -140,7 +140,7 @@ namespace nomoretrolls.tests.Blacklists
 
             var cache = CreateCache();
             var persist = CreatePersistent();
-            
+
             var p = new BlacklistProvider(cache, persist);
 
             await p.DeleteUserEntryAsync(entryId);

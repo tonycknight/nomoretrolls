@@ -18,7 +18,7 @@ namespace nomoretrolls.tests.Telemetry
             var w = (string s) => { r = s; };
 
             var t = new ConsoleTelemetry(w);
-            
+
             t.Event(evt);
 
             r.Should().Contain(evt.Message);
@@ -53,12 +53,12 @@ namespace nomoretrolls.tests.Telemetry
             var t = new ConsoleTelemetry(w);
             var msg = "test";
 
-            t.Event(new TelemetryEvent() { Message = msg } );
+            t.Event(new TelemetryEvent() { Message = msg });
 
             r.Should().Contain(msg);
         }
 
-        
+
 
         [Fact]
         public void Error_MessageSent()
@@ -69,7 +69,7 @@ namespace nomoretrolls.tests.Telemetry
             var t = new ConsoleTelemetry(w);
             var msg = "test";
 
-            t.Event(new TelemetryErrorEvent() { Message = msg } );
+            t.Event(new TelemetryErrorEvent() { Message = msg });
 
             r.Should().Contain(msg);
         }

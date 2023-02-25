@@ -9,7 +9,7 @@ namespace nomoretrolls.Workflows.Parts
         private readonly string _statsName = "user_message";
         private readonly TimeSpan _statsExpiry = TimeSpan.FromDays(30 * 6);
 
-        public BumpUserMessage(IUserStatisticsProvider statsProvider) 
+        public BumpUserMessage(IUserStatisticsProvider statsProvider)
         {
             _statsProvider = statsProvider.ArgNotNull(nameof(statsProvider));
         }

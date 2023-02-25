@@ -16,7 +16,7 @@ namespace nomoretrolls.Tests.Scheduling
         {
             var t = CreateMockTelemetry();
 
-            var job = Substitute.For<IJob>();            
+            var job = Substitute.For<IJob>();
             var jobInfo = new JobScheduleInfo(job, TimeSpan.Zero);
 
             var je = new JobExecutor(t);
@@ -51,7 +51,7 @@ namespace nomoretrolls.Tests.Scheduling
             await job.Received(1).ExecuteAsync();
             t.Received(1).Event(Arg.Is<TelemetryTraceEvent>(s => !string.IsNullOrWhiteSpace(s.Message)));
             t.Received(1).Event(Arg.Is<TelemetryErrorEvent>(s => s.Exception != null));
-            
+
         }
 
         private ITelemetry CreateMockTelemetry() => Substitute.For<ITelemetry>();
