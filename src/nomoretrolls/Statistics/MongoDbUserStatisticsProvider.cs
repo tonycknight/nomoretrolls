@@ -20,40 +20,40 @@ namespace nomoretrolls.Statistics
         }
 
         public Task BumpUserStatisticAsync(ulong userId, string statName, TimeSpan expiry)
-        {            
+        {
             var col = _statsCol.Value;
-                        
-            var now = DateTime.UtcNow;            
+
+            var now = DateTime.UtcNow;
             var time = new TimeSpan(now.TimeOfDay.Hours, now.TimeOfDay.Minutes, 0);
             var timeFrame = now.Date + time;
-                        
+
             var expiresOn = timeFrame.AddMinutes(1).Add(expiry);
 
             var filter = CreateEqualityFilter(userId, statName, timeFrame);
 
             var update = Builders<UserStatisticsEntryDto>.Update
-                .Inc(us => us.Count, 1)                
+                .Inc(us => us.Count, 1)
                 .Set(us => us.ExpiryTime, expiresOn);
 
             return col.UpdateOneAsync(filter, update, new UpdateOptions() { IsUpsert = true });
         }
 
-        
+
         public async Task<long> GetUserStatisticCountAsync(ulong userId, string statName, TimeSpan timeFrame)
-        {            
+        {
             var col = _statsCol.Value;
 
             var from = DateTime.UtcNow.Add(-timeFrame);
-            var filter = CreateQueryFilter(userId, statName, from);            
+            var filter = CreateQueryFilter(userId, statName, from);
             var opts = new FindOptions<UserStatisticsEntryDto, BsonDocument>()
             {
                 Projection = Builders<UserStatisticsEntryDto>.Projection.Include(u => u.Count).Exclude(u => u.Id),
             };
 
             var ys = await col.FindAsync(filter, opts);
-            
+
             var sum = 0L;
-            
+
             await ys.ForEachAsync(bd =>
             {
                 var c = bd["count"].ToInt64();
@@ -63,11 +63,11 @@ namespace nomoretrolls.Statistics
             return sum;
         }
 
-        private FilterDefinition<UserStatisticsEntryDto> CreateEqualityFilter(ulong userId, string statName, DateTime timeFrame)        
+        private FilterDefinition<UserStatisticsEntryDto> CreateEqualityFilter(ulong userId, string statName, DateTime timeFrame)
             => Builders<UserStatisticsEntryDto>.Filter.And(
                             Builders<UserStatisticsEntryDto>.Filter.Eq(us => us.UserId, userId),
                             Builders<UserStatisticsEntryDto>.Filter.Eq(us => us.Name, statName),
-                            Builders<UserStatisticsEntryDto>.Filter.Eq(us => us.Time, timeFrame) );
+                            Builders<UserStatisticsEntryDto>.Filter.Eq(us => us.Time, timeFrame));
 
         private FilterDefinition<UserStatisticsEntryDto> CreateQueryFilter(ulong userId, string statName, DateTime timeFrame)
             => Builders<UserStatisticsEntryDto>.Filter.And(
@@ -92,7 +92,7 @@ namespace nomoretrolls.Statistics
             {
                 var opts = new CreateCollectionOptions();
                 db.CreateCollection(config.UserStatsCollectionName, opts);
-            }            
+            }
             col = db.GetCollection<UserStatisticsEntryDto>(config.UserStatsCollectionName);
 
             col.RecreateIndex("unique", (n, c) => CreateUniqueIndex(n, col));
@@ -110,20 +110,20 @@ namespace nomoretrolls.Statistics
                          .Ascending(x => x.Name)
                          .Ascending(x => x.Time),
                     new CreateIndexOptions() { Name = name, Unique = true, Background = false });
-            
+
             col.Indexes.CreateOne(uniqueIndexModel);
         }
-        
+
         private void CreateTtlIndex(string name, IMongoCollection<UserStatisticsEntryDto> col)
         {
             var expiresAfter = TimeSpan.FromMinutes(1);
 
-            var build = Builders<UserStatisticsEntryDto>.IndexKeys;            
+            var build = Builders<UserStatisticsEntryDto>.IndexKeys;
 
             var ttlIndexModel = new CreateIndexModel<UserStatisticsEntryDto>(
                     build.Ascending(x => x.ExpiryTime),
                     new CreateIndexOptions() { Name = name, Unique = false, ExpireAfter = expiresAfter, Background = false });
-            
+
             col.Indexes.CreateOne(ttlIndexModel);
         }
     }

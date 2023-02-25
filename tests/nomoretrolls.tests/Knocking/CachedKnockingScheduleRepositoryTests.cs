@@ -64,7 +64,7 @@ namespace nomoretrolls.tests.Knocking
 
             var result = await repo.GetUserEntriesAsync();
 
-            result.Should().BeEquivalentTo(entries);            
+            result.Should().BeEquivalentTo(entries);
         }
 
         [Fact]
@@ -83,7 +83,7 @@ namespace nomoretrolls.tests.Knocking
 
             var result = await repo.GetUserEntriesAsync();
 
-            result.Should().BeEquivalentTo(entries);            
+            result.Should().BeEquivalentTo(entries);
         }
 
         private IMemoryCache CreateMockMemoryCache() => Substitute.For<IMemoryCache>();

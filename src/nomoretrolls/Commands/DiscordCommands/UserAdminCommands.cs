@@ -31,7 +31,7 @@ namespace nomoretrolls.Commands.DiscordCommands
             _emoteRepo = emoteRepo;
         }
 
-        [Command("deleteblacklist", RunMode = RunMode.Async)]        
+        [Command("deleteblacklist", RunMode = RunMode.Async)]
         [Description("Delete a user's blacklisting.")]
         [CommandForm("<user name>",
                      example: @"""JoeUser#1234""",
@@ -106,7 +106,7 @@ namespace nomoretrolls.Commands.DiscordCommands
                 }
                 else
                 {
-                    await _emoteConfig.DeleteUserEmoteAnnotationEntryAsync(user.Id);                    
+                    await _emoteConfig.DeleteUserEmoteAnnotationEntryAsync(user.Id);
                     await SendMessageAsync($"Done. {userName.ToCode()} has been cleared.");
                 }
             }
@@ -151,11 +151,11 @@ namespace nomoretrolls.Commands.DiscordCommands
         [Command("knock", RunMode = RunMode.Async)]
         [Alias("k")]
         [Description("Set a schedule to knock a user.")]
-        [CommandForm("<user name> <duration in minutes> <cron frequency for UTC>", 
+        [CommandForm("<user name> <duration in minutes> <cron frequency for UTC>",
                      guidelines: "Use double quotes for the user name & CRON expression as Discord may get confused.",
                      example: @"""JoeUser#1234"" 60 ""*/1 * * * 1""",
                      exampleExplanation: "to knock Joe every minute on Mondays for an hour")]
-        public async Task SetKnockScheduleAsync([Summary("The user name")] string userName, int duration = 60, [Remainder]string frequency = "*/3 * * * *")
+        public async Task SetKnockScheduleAsync([Summary("The user name")] string userName, int duration = 60, [Remainder] string frequency = "*/3 * * * *")
         {
             try
             {
@@ -168,7 +168,7 @@ namespace nomoretrolls.Commands.DiscordCommands
                     await SendMessageAsync("The user was not found on any attached servers.".ToCode());
                 }
                 else
-                {                    
+                {
                     var entry = user.CreateScheduleEntry(DateTime.UtcNow, TimeSpan.FromMinutes(duration), frequency);
 
                     _knockingProvider.SetUserEntryAsync(entry);
@@ -197,7 +197,7 @@ namespace nomoretrolls.Commands.DiscordCommands
                     await SendMessageAsync("The user was not found on any attached servers.".ToCode());
                 }
                 else
-                {                    
+                {
                     _knockingProvider.DeleteUserEntryAsync(user.Id);
                     await SendMessageAsync($"Done. {userName.ToCode()} has been cleared.");
                 }
@@ -241,7 +241,7 @@ namespace nomoretrolls.Commands.DiscordCommands
                     return new { userName = u.userName, blacklist = ble, knock = ke, emote = em };
                 });
 
-                var lines = userEntries.OrderBy(a => a.userName)                                        
+                var lines = userEntries.OrderBy(a => a.userName)
                                         .SelectMany(a => new[] { a.userName.ToCode().ToBold(),
                                                                  a.blacklist != null ? $"Blacklisted. Expires {a.blacklist.Expiry.ToString(DateTimeFormat).ToCode()}"  : null,
                                                                  a.emote != null ? $"Emotes with {a.emote.EmoteListName.ToCode()}. Expires {a.emote.Expiry.ToString(DateTimeFormat).ToCode()}" : null,
@@ -271,7 +271,7 @@ namespace nomoretrolls.Commands.DiscordCommands
 
                 var msgLines = new List<string>();
 
-                foreach(var name in names)
+                foreach (var name in names)
                 {
                     var emotes = await _emoteRepo.GetEmotesAsync(name);
 
@@ -279,7 +279,7 @@ namespace nomoretrolls.Commands.DiscordCommands
                     msgLines.Add(emotes.SelectMany(e => e.Emotes).Join(" "));
                     msgLines.Add("");
                 }
-                                
+
                 var msg = msgLines.Join(Environment.NewLine);
 
                 await SendMessageAsync(msg);
@@ -299,7 +299,7 @@ namespace nomoretrolls.Commands.DiscordCommands
             }
             catch (Exception ex)
             {
-                _telemetry.Event(new TelemetryErrorEvent() { Exception = ex } );
+                _telemetry.Event(new TelemetryErrorEvent() { Exception = ex });
                 return Task.CompletedTask;
             }
         }

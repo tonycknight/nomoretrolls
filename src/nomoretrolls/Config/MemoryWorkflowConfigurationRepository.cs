@@ -14,7 +14,7 @@ namespace nomoretrolls.Config
         public Task<WorkflowConfiguration> GetWorkflowConfigAsync(string name)
         {
             _cache.TryGetValue(name, out WorkflowConfiguration config);
-            
+
             return Task.FromResult(config);
         }
 

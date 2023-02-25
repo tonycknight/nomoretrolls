@@ -18,7 +18,7 @@ namespace nomoretrolls.Workflows.Parts
             var config = await _configRepo.GetWorkflowConfigAsync(_name);
 
             var enabled = config != null ? config.Enabled : true;
-            
+
             return enabled ? context : null;
         }
     }

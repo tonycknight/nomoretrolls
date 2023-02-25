@@ -33,7 +33,7 @@ namespace nomoretrolls.tests.Parsing
         [InlineData("  a   B   c   D  ", "a", "B", "c", "D")]
         [InlineData("  12   B   34   D  56  ", "12", "B", "34", "D", "56")]
         [InlineData("aB!", "aB")]
-        [InlineData("!aB!", "aB")]        
+        [InlineData("!aB!", "aB")]
         public void WordSplit_StringIsSplit(string value, params string[] expected)
         {
             var words = value.SplitWords().ToArray();

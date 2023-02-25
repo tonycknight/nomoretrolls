@@ -28,7 +28,7 @@ namespace nomoretrolls.tests.Workflows.Reactions
             return r.Contains(mention.Get);
         }
 
-        [Property(Verbose=true)]
+        [Property(Verbose = true)]
         public bool GenerateReply_InjectedRng_AlwaysReturnsValue(PositiveInt iterations)
         {
             var gen = new BlacklistReplyTextGenerator(x => 0);

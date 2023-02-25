@@ -19,7 +19,7 @@ namespace nomoretrolls.Messaging
         private readonly System.Collections.Concurrent.ConcurrentBag<Func<IUserMessage, Task>> _messageReceivedHandlers;
         private readonly System.Collections.Concurrent.ConcurrentBag<Func<IUser, IMessageChannel, Task>> _userTypingHandlers;
 
-        public DiscordMessagingClient(AppConfiguration config, ITelemetry telemetry, 
+        public DiscordMessagingClient(AppConfiguration config, ITelemetry telemetry,
                                       ulong requiredPermissions,
                                       Func<AppConfiguration, string?> getClientToken, Func<AppConfiguration, string?> getClientId)
         {
@@ -33,10 +33,10 @@ namespace nomoretrolls.Messaging
 
             var clientConfig = new DiscordSocketConfig()
             {
-                AlwaysDownloadUsers = true,                
+                AlwaysDownloadUsers = true,
                 GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.GuildMembers,
             };
-            
+
             _client = new DiscordSocketClient(clientConfig);
 
             _client.Log += client_Log;
@@ -56,12 +56,12 @@ namespace nomoretrolls.Messaging
 
         public string ClientId => _getClientId(_config);
 
-        public string BotRegistrationUri => $"https://discord.com/api/oauth2/authorize?client_id={ClientId}&permissions={_requiredPermissions}&scope=bot";                
+        public string BotRegistrationUri => $"https://discord.com/api/oauth2/authorize?client_id={ClientId}&permissions={_requiredPermissions}&scope=bot";
 
         public async Task StartAsync()
         {
             await _client.LoginAsync(TokenType.Bot, _getClientToken(_config));
-            await _client.StartAsync();            
+            await _client.StartAsync();
         }
 
         public void AddMessageReceivedHandler(Func<IUserMessage, Task> handler)
@@ -100,9 +100,9 @@ namespace nomoretrolls.Messaging
         }
 
         private Task client_MessageReceived(SocketMessage arg)
-        {            
+        {
             var msg = arg as IUserMessage;
-            if(msg != null && !msg.Author.IsBot)
+            if (msg != null && !msg.Author.IsBot)
             {
                 Task.Run(() => HandleMessageAsync(msg));
             }
@@ -122,18 +122,18 @@ namespace nomoretrolls.Messaging
             return Task.CompletedTask;
         }
 
-        private Task client_Log(LogMessage arg) 
+        private Task client_Log(LogMessage arg)
         {
             TelemetryEvent evt = arg.Severity switch
             {
-                LogSeverity.Error => new TelemetryErrorEvent() {  Message = arg.Message },
+                LogSeverity.Error => new TelemetryErrorEvent() { Message = arg.Message },
                 LogSeverity.Warning => new TelemetryWarningEvent() { Message = arg.Message },
                 LogSeverity.Debug => new TelemetryTraceEvent() { Message = arg.Message },
                 _ => new TelemetryInfoEvent() { Message = arg.Message },
             };
-            
+
             _telemetry.Event(evt);
-            
+
             return Task.CompletedTask;
         }
 
@@ -149,7 +149,7 @@ namespace nomoretrolls.Messaging
 
         private Task HandleUserTypingAsync(IUser user, IMessageChannel channel)
         {
-            foreach(var h in _userTypingHandlers)
+            foreach (var h in _userTypingHandlers)
             {
                 _ = Task.Run(() => h(user, channel));
             }
@@ -161,7 +161,7 @@ namespace nomoretrolls.Messaging
         {
             LogMessageContent(msg);
 
-            foreach(var h in _messageReceivedHandlers)
+            foreach (var h in _messageReceivedHandlers)
             {
                 _ = Task.Run(() => h(msg));
             }
@@ -179,9 +179,9 @@ namespace nomoretrolls.Messaging
                 var prefix = guildName != null
                     ? $"[{guildName}] [{msg.Channel.Name}]"
                     : $"[{msg.Channel.Name}]";
-                
+
                 var line = $"{prefix} [Message {msg.Id}] [{UserLogPrefix(msg.Author)}] {msg.Content}";
-                _telemetry.Event(new TelemetryTraceEvent() {  Message = line });
+                _telemetry.Event(new TelemetryTraceEvent() { Message = line });
             }
         }
 

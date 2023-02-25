@@ -16,7 +16,7 @@
         {
             await _persistent.DeleteUserEntryAsync(userId);
             var cache = await _cache.Value;
-            cache.DeleteUserEntryAsync(userId);            
+            cache.DeleteUserEntryAsync(userId);
         }
 
         public async Task<IList<UserBlacklistEntry>> GetUserEntriesAsync()
@@ -41,8 +41,8 @@
         private static async Task<IBlacklistProvider> HydrateCache(IBlacklistProvider cache, IBlacklistProvider source)
         {
             var entries = await source.GetUserEntriesAsync();
-            
-            foreach(var entry in entries)
+
+            foreach (var entry in entries)
             {
                 await cache.SetUserEntryAsync(entry);
             }

@@ -25,10 +25,10 @@ namespace nomoretrolls.tests.Workflows
             var builder = new MessageWorkflowBuilder(sp)
                                     .Receiver(receiver)
                                     .Part(part);
-                        
+
             var result = builder.Build("");
 
-            result.Should().NotBeNull();            
+            result.Should().NotBeNull();
             result.Receiver.Should().Be(receiver);
             result.Parts.Should().BeEquivalentTo(new[] { part });
         }
@@ -52,7 +52,7 @@ namespace nomoretrolls.tests.Workflows
         {
             var sp = CreateMockServiceProvider();
             var receiver = Substitute.For<IMessageContextReceiver>();
-            
+
             var builder = new MessageWorkflowBuilder(sp)
                                     .Receiver(receiver);
 
@@ -122,7 +122,7 @@ namespace nomoretrolls.tests.Workflows
             var usp = Substitute.For<IUserStatisticsProvider>();
             var sp = CreateMockServiceProvider();
             sp.GetService(typeof(IUserStatisticsProvider)).Returns(usp);
-            
+
             var builder = new MessageWorkflowBuilder(sp)
                                     .Receiver(Substitute.For<IMessageContextReceiver>())
                                     .UserWarningsFilter(statName, PeriodRange.AtLeast(limit, timeframe));
@@ -132,7 +132,7 @@ namespace nomoretrolls.tests.Workflows
 
             result.StatsName.Should().Be(statName);
             result.Period.Count.Should().Be(limit);
-            result.Period.Duration.Should().Be(timeframe);            
+            result.Period.Duration.Should().Be(timeframe);
         }
 
 
@@ -160,7 +160,7 @@ namespace nomoretrolls.tests.Workflows
 
         [Fact]
         public void UserBlacklistFilter()
-        {            
+        {
             var sp = CreateMockServiceProvider();
             sp.GetService(typeof(IBlacklistProvider)).Returns(Substitute.For<IBlacklistProvider>());
             sp.GetService(typeof(IShoutingReplyTextGenerator)).Returns(Substitute.For<IShoutingReplyTextGenerator>());
@@ -184,7 +184,7 @@ namespace nomoretrolls.tests.Workflows
             sp.GetService(typeof(ITelemetry)).Returns(Substitute.For<ITelemetry>());
             sp.GetService(typeof(IMessageWorkflowExecutor)).Returns(Substitute.For<IMessageWorkflowExecutor>());
             sp.GetService(typeof(IUserStatisticsProvider)).Returns(usp);
-            
+
             var receiver = Substitute.For<IMessageContextReceiver>();
 
             var builder = new MessageWorkflowBuilder(sp)
@@ -199,12 +199,12 @@ namespace nomoretrolls.tests.Workflows
             var if1 = (IfPart)parts.Single();
             if1.Condition.Should().BeOfType<UserWarningsFilter>();
             if1.OnSuccess.Should().BeOfType<MessageWorkflow>();
-            if1.OnFailure.Should().BeOfType<MessageWorkflow>();            
+            if1.OnFailure.Should().BeOfType<MessageWorkflow>();
         }
 
         [Fact]
         public void If_DoubleTierIfs()
-        {            
+        {
             var sp = CreateMockServiceProvider();
             sp.GetService(typeof(ITelemetry)).Returns(Substitute.For<ITelemetry>());
             sp.GetService(typeof(IMessageWorkflowExecutor)).Returns(Substitute.For<IMessageWorkflowExecutor>());
@@ -220,7 +220,7 @@ namespace nomoretrolls.tests.Workflows
                                 .If(b => b.UserWarningsFilter("blacklisted_user", PeriodRange.AtLeast(3, TimeSpan.FromMinutes(5))),
                                     b => b.If(b1 => b1.UserWarningsFilter("test", PeriodRange.AtLeast(5, TimeSpan.FromMinutes(1))),
                                               b1 => b1.Noop(),
-                                              b1 => b1.DeleteUserMessage()),    
+                                              b1 => b1.DeleteUserMessage()),
                                     b => b.If(b2 => b2.UserIsBlacklisted(),
                                               b2 => b2.DeleteUserMessage(),
                                               b2 => b2.Noop()));
@@ -230,9 +230,9 @@ namespace nomoretrolls.tests.Workflows
 
             var if1 = (IfPart)parts.Single();
             if1.Condition.Should().BeOfType<UserWarningsFilter>();
-            
-            var if21 = (MessageWorkflow)if1.OnSuccess;            
-            var if22 = (MessageWorkflow)if1.OnFailure;            
+
+            var if21 = (MessageWorkflow)if1.OnSuccess;
+            var if22 = (MessageWorkflow)if1.OnFailure;
         }
 
         [Fact]
@@ -263,7 +263,7 @@ namespace nomoretrolls.tests.Workflows
             var if1 = (IfPart)parts.Single();
             if1.Condition.Should().BeOfType<UserWarningsFilter>();
             if1.OnSuccess.Should().BeOfType<MessageWorkflow>();
-            if1.OnFailure.Should().BeOfType<MessageWorkflow>();            
+            if1.OnFailure.Should().BeOfType<MessageWorkflow>();
         }
 
         private IServiceProvider CreateMockServiceProvider() => Substitute.For<IServiceProvider>();

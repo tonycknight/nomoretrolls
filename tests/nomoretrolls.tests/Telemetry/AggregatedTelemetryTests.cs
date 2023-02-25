@@ -10,7 +10,7 @@ namespace nomoretrolls.tests.Telemetry
     {
         [Fact]
         public void Event_EventMessagePropagated()
-        {            
+        {
             var cp = CreateMockConfigurationProvider();
             var telemetries = Enumerable.Range(1, 3)
                 .Select(i => Substitute.For<ITelemetry>())
@@ -22,7 +22,7 @@ namespace nomoretrolls.tests.Telemetry
 
             aggTelemetry.Event(evt);
 
-            foreach(var t in telemetries)
+            foreach (var t in telemetries)
             {
                 t.Received(1).Event(evt);
             }
@@ -52,7 +52,7 @@ namespace nomoretrolls.tests.Telemetry
         [InlineData(true)]
         [InlineData(true, nameof(TelemetryDependencyEvent))]
         [InlineData(true, nameof(TelemetryInfoEvent), nameof(TelemetryDependencyEvent))]
-        [InlineData(false, nameof(TelemetryInfoEvent) )]
+        [InlineData(false, nameof(TelemetryInfoEvent))]
         [InlineData(false, nameof(TelemetryInfoEvent), nameof(TelemetryWarningEvent))]
 
         public void Message_EventMessageFiltered_Propagated(bool received, params string[] eventTypes)
@@ -80,7 +80,7 @@ namespace nomoretrolls.tests.Telemetry
                     t.Received(0).Event(evt);
                 }
             }
-            
+
         }
 
         [Fact]
@@ -105,7 +105,7 @@ namespace nomoretrolls.tests.Telemetry
 
         private IConfigurationProvider CreateMockConfigurationProvider(AppConfiguration appConfig = null, TelemetryConfiguration telemetry = null)
         {
-            var config = appConfig ??new AppConfiguration();
+            var config = appConfig ?? new AppConfiguration();
             config.Telemetry = telemetry ?? new TelemetryConfiguration();
             var cp = Substitute.For<IConfigurationProvider>();
             cp.GetAppConfiguration().Returns(config);

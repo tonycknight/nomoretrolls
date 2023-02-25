@@ -3,7 +3,7 @@
     internal class AltCapsReplyTextGenerator : ReplyTextGenerator, IAltCapsReplyTextGenerator
     {
         private readonly string[] _formats;
-        
+
         public AltCapsReplyTextGenerator() : this(PickRandom())
         {
         }

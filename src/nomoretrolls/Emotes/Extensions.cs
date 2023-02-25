@@ -18,7 +18,7 @@ namespace nomoretrolls.Emotes
             };
         }
 
-        public static UserEmoteAnnotationEntryDto ToDto(this UserEmoteAnnotationEntry value) 
+        public static UserEmoteAnnotationEntryDto ToDto(this UserEmoteAnnotationEntry value)
             => new UserEmoteAnnotationEntryDto()
             {
                 UserId = value.UserId,
@@ -27,7 +27,7 @@ namespace nomoretrolls.Emotes
                 EmoteListName = value.EmoteListName,
             };
 
-        public static UserEmoteAnnotationEntry FromDto(this UserEmoteAnnotationEntryDto value) 
+        public static UserEmoteAnnotationEntry FromDto(this UserEmoteAnnotationEntryDto value)
             => new UserEmoteAnnotationEntry()
             {
                 UserId = value.UserId,

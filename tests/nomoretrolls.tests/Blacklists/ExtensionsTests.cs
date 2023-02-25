@@ -25,7 +25,7 @@ namespace nomoretrolls.tests.Blacklists
         public bool CreateBlacklistEntry_StartTime_Mapped(DateTime start)
         {
             var user = Substitute.For<Discord.IUser>();
-            
+
             var result = user.CreateBlacklistEntry(start, TimeSpan.Zero);
 
             return result.Start == start;
@@ -35,7 +35,7 @@ namespace nomoretrolls.tests.Blacklists
         public bool CreateBlacklistEntry_Duration_Mapped(DateTime start, PositiveInt duration)
         {
             var user = Substitute.For<Discord.IUser>();
-            
+
             var result = user.CreateBlacklistEntry(start, TimeSpan.FromMinutes(duration.Get));
 
             return result.Expiry == start.AddMinutes(duration.Get);

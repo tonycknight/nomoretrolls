@@ -20,7 +20,7 @@ namespace nomoretrolls.Commands
         }
 
         public IMessageWorkflow CreateStatCountWorkflow()
-        {            
+        {
             return _wfFactory.CreateBuilder()
                     .Receiver(new MessageReceiver())
                     .IfNotDmChannel()
@@ -29,7 +29,7 @@ namespace nomoretrolls.Commands
         }
 
         public IMessageWorkflow CreateBlacklistedUserWorkflow()
-        {        
+        {
             var duration = TimeSpan.FromMinutes(1);
 
             return _wfFactory.CreateBuilder()
@@ -114,7 +114,7 @@ namespace nomoretrolls.Commands
 
 
         public IMessageWorkflow CreateShoutingPersonalReplyWorkflow()
-        {            
+        {
             var window = TimeSpan.FromDays(1);
 
             return _wfFactory.CreateBuilder()
@@ -146,7 +146,7 @@ namespace nomoretrolls.Commands
                     .Build("Alt caps user DM");
         }
 
-        public IMessageWorkflow CreateAutoEmoteWorkflow() 
+        public IMessageWorkflow CreateAutoEmoteWorkflow()
             => _wfFactory.CreateBuilder()
                     .Receiver(new MessageReceiver())
                     .IfEmoteAnnotationWorkflowEnabled()

@@ -69,7 +69,7 @@ namespace nomoretrolls.Emotes
         private IMongoCollection<UserEmoteAnnotationEntryDto> InitialiseDb(IConfigurationProvider configProvider)
         {
             var config = configProvider.GetValidateConfig();
-            
+
             var db = config.MongoDb.GetDb(_telemetry);
 
             return CreateCollection(config.MongoDb, db);

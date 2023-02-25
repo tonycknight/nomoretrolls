@@ -6,13 +6,13 @@ namespace nomoretrolls.Workflows.Parts
     {
         private readonly ITelemetry _telemetry;
 
-        public SendDirectMessage(ITelemetry telemetry) 
+        public SendDirectMessage(ITelemetry telemetry)
         {
             _telemetry = telemetry;
         }
 
         public async Task<MessageWorkflowContext?> ExecuteAsync(MessageWorkflowContext context)
-        {            
+        {
             var replyText = context.ReplyText();
 
             if (!string.IsNullOrWhiteSpace(replyText))

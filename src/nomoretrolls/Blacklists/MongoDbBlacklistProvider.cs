@@ -48,7 +48,7 @@ namespace nomoretrolls.Blacklists
                 .Set(us => us.UserId, dto.UserId)
                 .Set(us => us.Start, dto.Start)
                 .Set(us => us.Expiry, dto.Expiry);
-                
+
             var col = _blacklistCol.Value;
 
             var result = await col.UpdateOneAsync(filter, update, new UpdateOptions() { IsUpsert = true });

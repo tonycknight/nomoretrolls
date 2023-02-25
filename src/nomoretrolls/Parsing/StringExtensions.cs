@@ -5,26 +5,26 @@ namespace nomoretrolls.Parsing
     internal static class StringExtensions
     {
         public static bool IsAllCapitals(this string word) => word.Length > 0 && word.All(char.IsUpper);
-                
+
         public static IEnumerable<string> SplitWords(this string value)
         {
             var sb = new StringBuilder();
-            foreach(var c in value)
+            foreach (var c in value)
             {
                 if (char.IsLetterOrDigit(c))
                 {
                     sb.Append(c);
                 }
-                else if(sb.Length > 0)
+                else if (sb.Length > 0)
                 {
                     yield return sb.ToString();
                     sb = new StringBuilder();
-                }                
+                }
             }
 
             if (sb.Length > 0)
             {
-                yield return sb.ToString();                
+                yield return sb.ToString();
             }
         }
 
@@ -34,7 +34,7 @@ namespace nomoretrolls.Parsing
             int capitalsCount = 0;
             int maxWordLength = 0;
 
-            foreach(var word in words)
+            foreach (var word in words)
             {
                 wordCount++;
                 if (word.IsAllCapitals())
@@ -47,11 +47,11 @@ namespace nomoretrolls.Parsing
                     maxWordLength = word.Length;
                 }
             }
-            
+
             return (wordCount, capitalsCount, maxWordLength);
 
         }
-        
+
         public static TextCapitalsAnalysis AnalyseCapitals(this string value)
         {
             var letters = value.LetterCount();
@@ -72,7 +72,7 @@ namespace nomoretrolls.Parsing
         public static double CapitalCount(this string value)
             => value.Count(c => char.IsLetter(c) && char.IsUpper(c));
 
-        public static double CapitalGiniImpurity(this string value) 
+        public static double CapitalGiniImpurity(this string value)
             => value.Where(char.IsLetter)
                     .Select(char.IsUpper)
                     .GiniImpurity();
@@ -82,14 +82,14 @@ namespace nomoretrolls.Parsing
         public static (string?, string?) DeconstructDiscordName(this string userName)
         {
             var idx = userName.IndexOf("#");
-            if(idx == -1)
+            if (idx == -1)
             {
                 return (null, null);
             }
             var un = userName.Substring(0, idx).EmptyWhitespaceToNull();
             var discrim = userName.Substring(idx + 1).EmptyWhitespaceToNull();
 
-            if(un == null || discrim == null)
+            if (un == null || discrim == null)
             {
                 return (null, null);
             }

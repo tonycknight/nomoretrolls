@@ -17,7 +17,7 @@ namespace nomoretrolls.tests.Workflows.Parts
         public async Task ExecuteAsync_StatsQueried()
         {
             var authorId = 1234uL;
-            
+
             var blacklists = Substitute.For<IBlacklistProvider>();
             var part = new UserBlacklistFilter(blacklists);
 
@@ -58,7 +58,7 @@ namespace nomoretrolls.tests.Workflows.Parts
             var context = new MessageWorkflowContext(messageContext);
             var r = await part.ExecuteAsync(context);
 
-            r.Should().NotBeNull(); 
+            r.Should().NotBeNull();
 
             blacklists.Received(1).GetUserEntryAsync(authorId);
 
@@ -85,7 +85,7 @@ namespace nomoretrolls.tests.Workflows.Parts
             var context = new MessageWorkflowContext(messageContext);
             var r = await part.ExecuteAsync(context);
 
-            r.Should().NotBeNull();            
+            r.Should().NotBeNull();
         }
 
         [Fact]

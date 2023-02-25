@@ -14,7 +14,7 @@
 
         public AppConfiguration GetAppConfiguration()
         {
-            if(_filePath != null)
+            if (_filePath != null)
             {
                 return _fileProvider.SetFilePath(_filePath)
                                     .GetAppConfiguration();

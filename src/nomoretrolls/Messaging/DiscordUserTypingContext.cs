@@ -6,7 +6,7 @@ namespace nomoretrolls.Messaging
     {
         public DiscordUserTypingContext(Cacheable<IUser, ulong> user, Cacheable<IMessageChannel, ulong> channel)
         {
-            User = user;        
+            User = user;
             Channel = channel;
         }
 

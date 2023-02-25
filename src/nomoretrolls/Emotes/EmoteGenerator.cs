@@ -6,7 +6,7 @@ namespace nomoretrolls.Emotes
     {
         private readonly Func<int, int> _picker;
         private readonly IEmoteRepository _emoteRepo;
-        
+
         public EmoteGenerator(IEmoteRepository emoteRepo) : this(PickRandom(), emoteRepo)
         {
         }

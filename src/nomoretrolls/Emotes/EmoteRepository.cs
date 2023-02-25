@@ -15,14 +15,14 @@ namespace nomoretrolls.Emotes
         {
             IList<EmoteInfo> result = null;
 
-            if(_emotes.TryGetValue(name, out var emotes))
+            if (_emotes.TryGetValue(name, out var emotes))
             {
                 result = emotes;
             }
             return result.ToTaskResult();
         }
 
-        public Task<IList<string>> GetEmoteNamesAsync() 
+        public Task<IList<string>> GetEmoteNamesAsync()
             => _emotes.Keys.ToList().ToTaskResult<IList<string>>();
 
         private Dictionary<string, IList<EmoteInfo>> CreateEmotes() =>

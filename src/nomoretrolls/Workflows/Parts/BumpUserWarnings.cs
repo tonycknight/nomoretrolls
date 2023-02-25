@@ -20,7 +20,7 @@ namespace nomoretrolls.Workflows.Parts
         public async Task<MessageWorkflowContext?> ExecuteAsync(MessageWorkflowContext context)
         {
             var userId = context.AuthorId();
-            
+
             await _statsProvider.BumpUserStatisticAsync(userId, _statsName, _statsExpiry);
 
             return context;

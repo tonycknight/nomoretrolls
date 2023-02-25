@@ -32,16 +32,16 @@ namespace nomoretrolls.tests.Emotes
         public async Task GetEmotesAsync_AllEmotesAreUnique(string emoteName)
         {
             var repo = new EmoteRepository();
-                        
+
             var emotes = await repo.GetEmotesAsync(emoteName);
 
-            emotes.Should().NotBeEmpty();                
-                
+            emotes.Should().NotBeEmpty();
+
             var emoteTexts = emotes.SelectMany(e => e.Emotes).ToList();
             emoteTexts.All(s => s.Length > 0).Should().BeTrue();
 
             var uniqueEmoteTexts = emoteTexts.Distinct().ToList();
-            uniqueEmoteTexts.Count().Should().Be(emoteTexts.Count);            
+            uniqueEmoteTexts.Count().Should().Be(emoteTexts.Count);
         }
 
         [Property(Verbose = true)]

@@ -5,6 +5,6 @@ namespace nomoretrolls
     internal static class Extensions
     {
         [DebuggerStepThrough]
-        public static int ToReturnCode(this bool value) => value ? 0 : 2;      
+        public static int ToReturnCode(this bool value) => value ? 0 : 2;
     }
 }

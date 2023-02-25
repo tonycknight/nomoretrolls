@@ -11,7 +11,7 @@ namespace nomoretrolls.tests.Workflows.Parts
 {
     public class MessageIsShoutingFilterTests
     {
-        
+
         [Fact]
         public async Task ExecuteAsync_NullContent_ReturnsNull()
         {
@@ -71,7 +71,7 @@ namespace nomoretrolls.tests.Workflows.Parts
         [InlineData("SHOUT")]
         [InlineData(" SHOUTing SHOUTing  ")]
         [InlineData(" will you STOP SHOUTING")]
-        [InlineData(" TESt TeST TEsT")]        
+        [InlineData(" TESt TeST TEsT")]
         public async Task ExecuteAsync_Shouting_ReturnsNonNull(string content)
         {
             var f = new MessageIsShoutingFilter(Substitute.For<ITelemetry>());

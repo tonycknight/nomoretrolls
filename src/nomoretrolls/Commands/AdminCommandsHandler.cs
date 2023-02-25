@@ -18,7 +18,7 @@ namespace nomoretrolls.Commands
         private readonly ITelemetry _telemetry;
         private readonly IServiceProvider _serviceProvider;
 
-        public AdminCommandsHandler(DiscordSocketClient client, CommandService commandService, 
+        public AdminCommandsHandler(DiscordSocketClient client, CommandService commandService,
                                     ITelemetry telemetry,
                                     IServiceProvider serviceProvider)
         {
@@ -29,7 +29,7 @@ namespace nomoretrolls.Commands
         }
 
         public async Task InstallCommandsAsync()
-        {            
+        {
             _client.MessageReceived += HandleCommandAsync;
             var sp = CreateServiceProvider();
 
@@ -60,7 +60,7 @@ namespace nomoretrolls.Commands
 
         private IServiceProvider CreateServiceProvider() => new ServiceCollection()
                 .AddSingleton(_telemetry)
-                .AddSingleton(_serviceProvider.GetService(typeof(IBlacklistProvider)) as IBlacklistProvider)                
+                .AddSingleton(_serviceProvider.GetService(typeof(IBlacklistProvider)) as IBlacklistProvider)
                 .AddSingleton(_serviceProvider.GetService(typeof(Knocking.IKnockingScheduleRepository)) as Knocking.IKnockingScheduleRepository)
                 .AddSingleton(_serviceProvider.GetService(typeof(IWorkflowConfigurationRepository)) as IWorkflowConfigurationRepository)
                 .AddSingleton(_serviceProvider.GetService(typeof(IEmoteConfigProvider)) as IEmoteConfigProvider)

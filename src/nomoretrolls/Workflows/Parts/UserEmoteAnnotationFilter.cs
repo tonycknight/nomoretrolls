@@ -19,7 +19,7 @@ namespace nomoretrolls.Workflows.Parts
                 return context.EmoteListName(emotes);
             }
 
-            return null;            
+            return null;
         }
 
         private async Task<(bool, string)> IsCharacterMatch(MessageWorkflowContext context)
@@ -29,7 +29,7 @@ namespace nomoretrolls.Workflows.Parts
             var result = await _emoteConfig.GetUserEmoteAnnotationEntryAsync(userId);
 
             if (result == null) return (false, null);
-            
+
             return (true, result.EmoteListName);
         }
     }

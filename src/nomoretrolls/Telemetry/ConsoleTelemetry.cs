@@ -18,7 +18,7 @@ namespace nomoretrolls.Telemetry
         public void Event(TelemetryEvent evt)
         {
             var time = evt.Time.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            
+
             var line = $"[{time}] {Colourise(evt)(Message(evt))}";
 
             _writeMessage(line);
@@ -34,12 +34,12 @@ namespace nomoretrolls.Telemetry
         private Func<string, string> Colourise(TelemetryEvent evt)
             => evt switch
             {
-                TelemetryErrorEvent error =>    Output.Bright.Red,
-                TelemetryTraceEvent trace =>    Output.Dim().White,
+                TelemetryErrorEvent error => Output.Bright.Red,
+                TelemetryTraceEvent trace => Output.Dim().White,
                 TelemetryDependencyEvent dep => Output.Dim().White,
-                TelemetryWarningEvent warn =>   Output.Bright.Yellow,
-                TelemetryHeadlineEvent head =>  Output.Bright.Cyan,
-                _ =>                            Output.Bright.White,
+                TelemetryWarningEvent warn => Output.Bright.Yellow,
+                TelemetryHeadlineEvent head => Output.Bright.Cyan,
+                _ => Output.Bright.White,
             };
     }
 }

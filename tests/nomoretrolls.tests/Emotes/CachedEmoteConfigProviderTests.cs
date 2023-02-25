@@ -51,7 +51,7 @@ namespace nomoretrolls.tests.Emotes
         public async Task<bool> GetUserEmoteAnnotationEntryAsync_DependenciesInvoked(ulong userId, DateTime expiry)
         {
             var cache = CreateMockMemoryCache();
-            
+
             var sourceRepo = Substitute.For<IEmoteConfigProvider>();
             var e = new UserEmoteAnnotationEntry() { UserId = userId, Expiry = expiry };
             sourceRepo.GetUserEmoteAnnotationEntryAsync(userId).Returns(e.ToTaskResult());
@@ -67,7 +67,7 @@ namespace nomoretrolls.tests.Emotes
 
         [Property(Verbose = true)]
         public async Task<bool> DeleteUserEmoteAnnotationEntryAsync_DependenciesInvoked(ulong userId, DateTime expiry)
-        {            
+        {
             var cache = CreateMockMemoryCache();
             var sourceRepo = Substitute.For<IEmoteConfigProvider>();
 
@@ -77,7 +77,7 @@ namespace nomoretrolls.tests.Emotes
 
             sourceRepo.Received(1).DeleteUserEmoteAnnotationEntryAsync(userId);
             cache.Received(1).Remove(Arg.Any<object>());
-            
+
             return true;
         }
 

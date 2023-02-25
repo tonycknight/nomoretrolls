@@ -5,7 +5,7 @@ using Tk.Extensions.Guards;
 namespace nomoretrolls.Workflows.Parts
 {
     internal class MessageReceiver : IMessageContextReceiver
-    {        
+    {
         public Task<MessageWorkflowContext> ReceiveAsync(IDiscordMessageContext context)
         {
             context.ArgNotNull(nameof(context));
@@ -15,7 +15,7 @@ namespace nomoretrolls.Workflows.Parts
             {
                 return Task.FromResult((MessageWorkflowContext)null);
             }
-            
+
             var result = new MessageWorkflowContext(context);
 
             return Task.FromResult(result);

@@ -107,7 +107,7 @@ namespace nomoretrolls.tests.Workflows.Parts
             var stats = Substitute.For<IUserStatisticsProvider>();
             stats.GetUserStatisticCountAsync(authorId, name, timeframe).Returns(bumps);
 
-            
+
 
             var author = Substitute.For<IUser>();
             author.Id.Returns(authorId);

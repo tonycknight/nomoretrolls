@@ -8,10 +8,10 @@ namespace nomoretrolls.Workflows.Parts
         private readonly ITelemetry _telemetry;
         private readonly IMessageWorkflowExecutor _exec;
 
-        public IfPart(ITelemetry telemetry, 
-                    IMessageWorkflowExecutor exec,    
-                    IMessageWorkflowPart condition, 
-                    IMessageWorkflow onSuccess, 
+        public IfPart(ITelemetry telemetry,
+                    IMessageWorkflowExecutor exec,
+                    IMessageWorkflowPart condition,
+                    IMessageWorkflow onSuccess,
                     IMessageWorkflow onFailure)
         {
             _telemetry = telemetry.ArgNotNull(nameof(telemetry));
@@ -33,19 +33,19 @@ namespace nomoretrolls.Workflows.Parts
                 var c = await Condition.ExecuteAsync(context);
                 if (c != null)
                 {
-                    _telemetry.Event(new TelemetryTraceEvent() { Message = $"[{logPrefix}] Executing workflow {OnSuccess.GetType().Name}..." } );
+                    _telemetry.Event(new TelemetryTraceEvent() { Message = $"[{logPrefix}] Executing workflow {OnSuccess.GetType().Name}..." });
                     await _exec.ExecuteAsync(OnSuccess, c.DiscordContext);
                 }
                 else
                 {
-                    _telemetry.Event(new TelemetryTraceEvent() { Message = $"[{logPrefix}] Executing workflow {OnFailure.GetType().Name}..." } );
+                    _telemetry.Event(new TelemetryTraceEvent() { Message = $"[{logPrefix}] Executing workflow {OnFailure.GetType().Name}..." });
                     await _exec.ExecuteAsync(OnFailure, context.DiscordContext);
                 }
                 return c;
             }
             catch (Exception ex)
             {
-                _telemetry.Event(new TelemetryErrorEvent() { Exception = ex } );
+                _telemetry.Event(new TelemetryErrorEvent() { Exception = ex });
                 return null;
             }
         }

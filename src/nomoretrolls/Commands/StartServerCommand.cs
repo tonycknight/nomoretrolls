@@ -22,12 +22,12 @@ namespace nomoretrolls.Commands
         private readonly IServiceProvider _serviceProvider;
         private readonly IJobScheduler _jobScheduler;
 
-        public StartServerCommand(Config.IConfigurationProvider configProvider, Telemetry.ITelemetry telemetry, 
+        public StartServerCommand(Config.IConfigurationProvider configProvider, Telemetry.ITelemetry telemetry,
                                   Workflows.IMessageWorkflowFactory wfFactory, Workflows.IMessageWorkflowExecutor workflowExecutor,
                                   IServiceProvider serviceProvider, IJobScheduler jobScheduler)
         {
             _configProvider = configProvider.ArgNotNull(nameof(configProvider));
-            _telemetry = telemetry.ArgNotNull(nameof(telemetry));            
+            _telemetry = telemetry.ArgNotNull(nameof(telemetry));
             _workflowExecutor = workflowExecutor.ArgNotNull(nameof(workflowExecutor));
             _serviceProvider = serviceProvider.ArgNotNull(nameof(serviceProvider));
             _jobScheduler = jobScheduler;
@@ -38,7 +38,7 @@ namespace nomoretrolls.Commands
         public string ConfigurationFile { get; set; }
 
         public async Task<int> OnExecuteAsync()
-        {            
+        {
             var config = GetConfig();
             EchoServiceMetadata();
             var client = CreateDiscordClient(config);
@@ -55,20 +55,20 @@ namespace nomoretrolls.Commands
 
             Console.CancelKeyPress += async (object? sender, ConsoleCancelEventArgs e) =>
             {
-                _telemetry.Event(new TelemetryInfoEvent() { Message = "Shutting down job scheduler..." } );
+                _telemetry.Event(new TelemetryInfoEvent() { Message = "Shutting down job scheduler..." });
                 _jobScheduler.Stop();
                 if (_jobScheduler is IDisposable disposable)
                 {
                     disposable.Dispose();
                 }
-                _telemetry.Event(new TelemetryInfoEvent() { Message = "Job scheduler shutdown." } );
+                _telemetry.Event(new TelemetryInfoEvent() { Message = "Job scheduler shutdown." });
 
-                _telemetry.Event(new TelemetryInfoEvent() { Message = "Shutting down services..." } );
+                _telemetry.Event(new TelemetryInfoEvent() { Message = "Shutting down services..." });
                 await client.StopAsync();
                 client.Dispose();
                 client = null;
                 cts.Cancel();
-                _telemetry.Event(new TelemetryInfoEvent() { Message = "Services shutdown" } );
+                _telemetry.Event(new TelemetryInfoEvent() { Message = "Services shutdown" });
                 e.Cancel = true;
             };
 
@@ -101,17 +101,17 @@ namespace nomoretrolls.Commands
 
         private void CreateJobScheduler()
         {
-            _telemetry.Event(new TelemetryInfoEvent() { Message = "Starting job scheduler..." } );
+            _telemetry.Event(new TelemetryInfoEvent() { Message = "Starting job scheduler..." });
             var jobs = GetJobSchedules().ToList();
-            _telemetry.Event(new TelemetryInfoEvent() { Message = $"Found {jobs.Count} scheduled job(s)." } );
+            _telemetry.Event(new TelemetryInfoEvent() { Message = $"Found {jobs.Count} scheduled job(s)." });
             _jobScheduler.Register(jobs);
             _jobScheduler.Start();
-            _telemetry.Event(new TelemetryInfoEvent() { Message = "Finished creating job scheduler." } );
+            _telemetry.Event(new TelemetryInfoEvent() { Message = "Finished creating job scheduler." });
         }
 
         private Messaging.DiscordMessagingClient CreateDiscordClient(AppConfiguration config)
         {
-            _telemetry.Event(new TelemetryInfoEvent() { Message = "Starting client..." } );
+            _telemetry.Event(new TelemetryInfoEvent() { Message = "Starting client..." });
             const ulong requiredPermissions = 395338442822;
             var client = new Messaging.DiscordMessagingClient(config, _telemetry,
                                                                 requiredPermissions,
@@ -134,7 +134,7 @@ namespace nomoretrolls.Commands
         private AppConfiguration GetConfig()
         {
             new StartServerCommandValidator().Validate(this);
-            
+
             var config = this.ConfigurationFile.Pipe(_configProvider.SetFilePath)
                                                .Pipe(c => c.GetAppConfiguration());
             new StartServerCommandValidator().Validate(this, config);
@@ -143,9 +143,9 @@ namespace nomoretrolls.Commands
         }
 
         private async Task<AdminCommandsHandler> CreateAdminCommandHandler(Messaging.DiscordMessagingClient client)
-        {            
+        {
             var adminHandler = new Commands.AdminCommandsHandler(client.Client, new Discord.Commands.CommandService(), _telemetry, _serviceProvider);
-            
+
             await adminHandler.InstallCommandsAsync();
 
             return adminHandler;

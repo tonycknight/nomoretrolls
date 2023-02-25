@@ -34,18 +34,18 @@ namespace nomoretrolls
                 .AddSingleton<Blacklists.IBlacklistProvider>((IServiceProvider sp) => new Blacklists.CachedBlacklistProvider(sp.GetRequiredService<IMemoryCache>(),
                                                                                                                              sp.GetRequiredService<Blacklists.MongoDbBlacklistProvider>()))
 
-                .AddSingleton<MongoDbEmoteConfigProvider>()                
-                .AddSingleton<IEmoteConfigProvider>((IServiceProvider sp) => new CachedEmoteConfigProvider(sp.GetRequiredService<IMemoryCache>(), 
+                .AddSingleton<MongoDbEmoteConfigProvider>()
+                .AddSingleton<IEmoteConfigProvider>((IServiceProvider sp) => new CachedEmoteConfigProvider(sp.GetRequiredService<IMemoryCache>(),
                                                                                                            sp.GetRequiredService<MongoDbEmoteConfigProvider>()))
-                
+
                 .AddSingleton<Config.MemoryWorkflowConfigurationRepository>()
                 .AddSingleton<Config.MongoDbWorkflowConfigurationRepository>()
-                .AddSingleton<Config.IWorkflowConfigurationRepository>(sp => 
-                    new Config.WorkflowConfigurationRepository(sp.GetService<Config.MemoryWorkflowConfigurationRepository>(), 
+                .AddSingleton<Config.IWorkflowConfigurationRepository>(sp =>
+                    new Config.WorkflowConfigurationRepository(sp.GetService<Config.MemoryWorkflowConfigurationRepository>(),
                                                                sp.GetService<Config.MongoDbWorkflowConfigurationRepository>()))
 
                 .AddSingleton<Knocking.MongoDbKnockingScheduleRepository>()
-                .AddSingleton<Knocking.IKnockingScheduleRepository>((IServiceProvider sp) 
+                .AddSingleton<Knocking.IKnockingScheduleRepository>((IServiceProvider sp)
                 => new Knocking.CachedKnockingScheduleRepository(sp.GetRequiredService<IMemoryCache>(),
                                                                  sp.GetRequiredService<Knocking.MongoDbKnockingScheduleRepository>(),
                                                                  sp.GetRequiredService<ITimeProvider>()))
@@ -60,7 +60,7 @@ namespace nomoretrolls
             return new[]
                 {
                     attrs.GetAttributeValue<AssemblyProductAttribute>(a => a.Product),
-                    attrs.GetAttributeValue<AssemblyDescriptionAttribute>(a => a.Description),                    
+                    attrs.GetAttributeValue<AssemblyDescriptionAttribute>(a => a.Description),
             };
         }
 

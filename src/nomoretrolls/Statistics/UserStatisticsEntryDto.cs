@@ -8,8 +8,8 @@ namespace nomoretrolls.Statistics
         [BsonElement("_id")]
         public ObjectId Id { get; set; }
 
-        [BsonElement("userId")]        
-        public ulong UserId {  get; set; }
+        [BsonElement("userId")]
+        public ulong UserId { get; set; }
 
         [BsonElement("name")]
         public string? Name { get; set; }

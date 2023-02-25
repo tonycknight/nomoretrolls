@@ -34,7 +34,7 @@
         {
             var configs = await persistent.GetWorkflowConfigsAsync();
 
-            foreach(var c in configs)
+            foreach (var c in configs)
             {
                 await cache.SetWorkflowConfigAsync(c);
             }

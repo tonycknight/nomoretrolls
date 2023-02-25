@@ -7,10 +7,10 @@ using Xunit;
 namespace nomoretrolls.tests.Messaging
 {
     public class DiscordMessagingClientProviderTests
-    {        
+    {
         [Fact]
         public void GetClient_NoValueSet_ExceptionThrown()
-        {            
+        {
             var f = () => new DiscordMessagingClientProvider().GetClient();
 
             f.Should().Throw<InvalidOperationException>().WithMessage("?*");

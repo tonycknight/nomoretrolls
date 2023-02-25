@@ -16,7 +16,7 @@ namespace nomoretrolls.Blacklists
         }
 
         public async Task DeleteUserEntryAsync(ulong userId)
-        {            
+        {
             await _sourceProvider.DeleteUserEntryAsync(userId);
 
             var key = CacheEntryKey(userId);
@@ -28,7 +28,7 @@ namespace nomoretrolls.Blacklists
         public async Task<UserBlacklistEntry?> GetUserEntryAsync(ulong userId)
         {
             var key = CacheEntryKey(userId);
-            var result = await _cache.GetOrCreateAsync(key, async e => 
+            var result = await _cache.GetOrCreateAsync(key, async e =>
             {
                 var r = await _sourceProvider.GetUserEntryAsync(userId);
                 if (r != null)

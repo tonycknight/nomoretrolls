@@ -21,8 +21,8 @@ namespace nomoretrolls.tests.Workflows.Parts
 
             condition.ExecuteAsync(Arg.Any<MessageWorkflowContext>())
                 .Returns(ci => Task.FromResult((MessageWorkflowContext)ci.Args()[0]));
-                
-            var success = Substitute.For<IMessageWorkflow>();            
+
+            var success = Substitute.For<IMessageWorkflow>();
             var failure = Substitute.For<IMessageWorkflow>();
 
             var if1 = new IfPart(telemetry, exec, condition, success, failure);
@@ -35,7 +35,7 @@ namespace nomoretrolls.tests.Workflows.Parts
 
             exec.Received(0).ExecuteAsync(failure, Arg.Any<IDiscordMessageContext>());
             exec.Received(1).ExecuteAsync(success, Arg.Any<IDiscordMessageContext>());
-            
+
             telemetry.Received(1).Event(Arg.Is<TelemetryEvent>(s => !string.IsNullOrEmpty(s.Message)));
             telemetry.Received(1).Event(Arg.Is<TelemetryEvent>(s => s.Message.StartsWith("[Message ")));
 
@@ -53,7 +53,7 @@ namespace nomoretrolls.tests.Workflows.Parts
 
             var success = Substitute.For<IMessageWorkflow>();
             var failure = Substitute.For<IMessageWorkflow>();
-                
+
 
             var if1 = new IfPart(telemetry, exec, condition, success, failure);
 

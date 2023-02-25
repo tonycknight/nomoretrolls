@@ -38,7 +38,7 @@ namespace nomoretrolls.Commands.DiscordCommands
                 return ReplyAsync(ex.Message);
             }
         }
-              
+
 
         [Command("servers", RunMode = RunMode.Async)]
         [Description("List all servers that the bot watches.")]
@@ -85,7 +85,7 @@ namespace nomoretrolls.Commands.DiscordCommands
 
                 return SendMessageAsync(line);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return SendMessageAsync(ex.Message);
             }
@@ -99,7 +99,7 @@ namespace nomoretrolls.Commands.DiscordCommands
             }
             catch (Exception ex)
             {
-                _telemetry.Event(new TelemetryErrorEvent() { Exception = ex } );
+                _telemetry.Event(new TelemetryErrorEvent() { Exception = ex });
                 return Task.CompletedTask;
             }
         }

@@ -5,7 +5,7 @@ namespace nomoretrolls.Commands
 {
     [Command("version", Description = "Get the bot's version info.")]
     internal class VersionCommand
-    {        
+    {
         public Task<int> OnExecuteAsync()
         {
             var line = GetDescriptionLines();

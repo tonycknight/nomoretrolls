@@ -18,9 +18,9 @@ namespace nomoretrolls
 
             try
             {
-                return app.Execute(args);                
+                return app.Execute(args);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.Error.WriteLine(ex.Message);
                 return false.ToReturnCode();

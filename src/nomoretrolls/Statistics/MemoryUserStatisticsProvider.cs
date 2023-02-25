@@ -9,10 +9,10 @@ namespace nomoretrolls.Statistics
 
         public MemoryUserStatisticsProvider()
             : this(() => DateTime.UtcNow)
-        {            
+        {
         }
 
-        internal MemoryUserStatisticsProvider(Func<DateTime> getTime)            
+        internal MemoryUserStatisticsProvider(Func<DateTime> getTime)
         {
             _getTime = getTime;
             _userStats = new ConcurrentDictionary<(ulong, string), UserStatistics>();
@@ -42,7 +42,7 @@ namespace nomoretrolls.Statistics
             var key = GetMapKey(userId, statName);
             long result = 0;
 
-            if(_userStats.TryGetValue(key, out var userStats))
+            if (_userStats.TryGetValue(key, out var userStats))
             {
                 var earliest = _getTime() - timeFrame;
 

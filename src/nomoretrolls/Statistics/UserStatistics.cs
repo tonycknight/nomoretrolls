@@ -10,8 +10,8 @@ namespace nomoretrolls.Statistics
             Entries = new ConcurrentBag<UserStatisticsEntry>();
         }
 
-        public ConcurrentBag<UserStatisticsEntry> Entries { get; init; } 
-        
+        public ConcurrentBag<UserStatisticsEntry> Entries { get; init; }
+
         public UserStatistics Add(UserStatisticsEntry entry)
         {
             Entries.Add(entry);
