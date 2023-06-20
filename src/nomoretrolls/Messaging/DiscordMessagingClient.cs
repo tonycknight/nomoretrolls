@@ -34,7 +34,7 @@ namespace nomoretrolls.Messaging
             var clientConfig = new DiscordSocketConfig()
             {
                 AlwaysDownloadUsers = true,
-                GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.GuildMembers,
+                GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.GuildMembers | GatewayIntents.MessageContent,
             };
 
             _client = new DiscordSocketClient(clientConfig);
