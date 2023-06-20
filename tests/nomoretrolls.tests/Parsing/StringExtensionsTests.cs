@@ -59,8 +59,8 @@ namespace nomoretrolls.tests.Parsing
         }
 
         [Theory]
-        [InlineData("", null, null)]
-        [InlineData("aaa", null, null)]
+        [InlineData("", "", "0000")]
+        [InlineData("aaa", "aaa", "0000")]
         [InlineData("aaa#", null, null)]
         [InlineData("aaa##", "aaa", "#")]
         [InlineData("aaa## ", "aaa", "# ")]

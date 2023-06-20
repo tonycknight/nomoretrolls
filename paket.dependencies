@@ -7,7 +7,7 @@ nuget coverlet.msbuild 3.1.2
 nuget crayon 2.0.64
 nuget CronExpressionDescriptor
 nuget cronos
-nuget Discord.Net 3.3.2
+nuget Discord.Net
 nuget FluentAssertions
 nuget FsCheck.Xunit 3.0.0-beta2 beta
 nuget McMaster.Extensions.CommandLineUtils 4.0.1

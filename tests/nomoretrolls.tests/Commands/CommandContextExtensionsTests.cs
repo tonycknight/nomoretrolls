@@ -43,18 +43,18 @@ namespace nomoretrolls.tests.Commands
         }
 
         [Fact]
-        public async Task GetUserAsync_UserName_InvalidUserName_ReturnsNull()
+        public async Task GetUserAsync_UserName_UserNameWithoutDiscriminator_ReturnsUser()
         {
             var userName = "unknown1234";
-            IUser user = null;
+            IUser user = Substitute.For<IUser>();
 
             var ctxt = Substitute.For<ICommandContext>();
 
-            ctxt.GetUserAsync((string)null, (string)null).Returns(Task.FromResult(user));
+            ctxt.GetUserAsync("unknown", "0000").Returns(Task.FromResult(user));
 
             var result = await ctxt.GetUserAsync(userName);
 
-            result.Should().BeNull();
+            result.Should().NotBeNull();
         }
 
         [Fact]

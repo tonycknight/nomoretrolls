@@ -84,7 +84,7 @@ namespace nomoretrolls.Parsing
             var idx = userName.IndexOf("#");
             if (idx == -1)
             {
-                return (null, null);
+                return (userName, "0000");
             }
             var un = userName.Substring(0, idx).EmptyWhitespaceToNull();
             var discrim = userName.Substring(idx + 1).EmptyWhitespaceToNull();
