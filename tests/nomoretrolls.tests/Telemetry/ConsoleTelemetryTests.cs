@@ -107,7 +107,7 @@ namespace nomoretrolls.tests.Telemetry
             r.Should().Contain(msg1);
         }
 
-        private static IEnumerable<object[]> GetTelemetryEvents(string message)
+        public static IEnumerable<object[]> GetTelemetryEvents(string message)
         {
             return new[] { new TelemetryEvent() { Message = message },
                 new TelemetryTraceEvent() { Message = message },

@@ -92,9 +92,10 @@ namespace nomoretrolls.Commands
 
         private void EchoServiceMetadata()
         {
-            var attrs = typeof(ProgramBootstrap).Assembly.GetCustomAttributes();
-            var product = attrs.GetAttributeValue<AssemblyProductAttribute>(a => a.Product);
-            var version = attrs.GetAttributeValue<AssemblyInformationalVersionAttribute>(a => a.InformationalVersion);
+            var attrs = this.GetAssemblyCustomAttributes();
+
+            var product = attrs.GetAttributeValue<AssemblyProductAttribute, string>(a => a.Product);
+            var version = attrs.GetAttributeValue<AssemblyInformationalVersionAttribute, string>(a => a.InformationalVersion);
 
             _telemetry.Event(new TelemetryHeadlineEvent() { Message = $"{product} Version {version}" });
         }

@@ -29,7 +29,7 @@ namespace nomoretrolls.tests.Workflows
         [InlineData(null)]
         [InlineData("")]
         [InlineData("aaa")]
-        public void EmoteCode_Applied(string value)
+        public void EmoteCode_Applied(string? value)
         {
             var msgContext = Substitute.For<IDiscordMessageContext>();
             var context = new MessageWorkflowContext(msgContext);
@@ -44,7 +44,7 @@ namespace nomoretrolls.tests.Workflows
         [InlineData(null)]
         [InlineData("")]
         [InlineData("aaa")]
-        public void ReplyText_Applied(string value)
+        public void ReplyText_Applied(string? value)
         {
             var msgContext = Substitute.For<IDiscordMessageContext>();
             var context = new MessageWorkflowContext(msgContext);

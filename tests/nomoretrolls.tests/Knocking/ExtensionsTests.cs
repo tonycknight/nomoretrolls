@@ -14,7 +14,7 @@ namespace nomoretrolls.tests.Knocking
         [InlineData(null)]
         [InlineData("")]
         [InlineData(" ")]
-        public void CreateScheduleEntry_Cron_EmptyCron_ExceptionThrown(string cron)
+        public void CreateScheduleEntry_Cron_EmptyCron_ExceptionThrown(string? cron)
         {
             var f = () => nomoretrolls.Knocking.Extensions.CreateScheduleEntry(Substitute.For<IUser>(), DateTime.Now, TimeSpan.Zero, cron);
 
