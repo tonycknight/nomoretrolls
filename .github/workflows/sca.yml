@@ -26,6 +26,4 @@ jobs:
           dotnet restore
 
       - name: Run SCA
-        uses: tonycknight/pkgchk-action@v1.0.12
-        with:
-          project-path: src/nomoretrolls/nomoretrolls.csproj
+        run: dotnet pkgchk
