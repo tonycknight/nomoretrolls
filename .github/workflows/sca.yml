@@ -28,4 +28,4 @@ jobs:
       - name: Run SCA
         uses: tonycknight/pkgchk-action@v1.0.12
         with:
-          project-path: src/TubeScan/TubeScan.csproj
+          project-path: src/nomoretrolls/nomoretrolls.csproj
