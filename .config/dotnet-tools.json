@@ -3,27 +3,27 @@
   "isRoot": true,
   "tools": {
     "paket": {
-      "version": "6.2.1",
+      "version": "8.0.3",
       "commands": [
         "paket"
       ]
     },
-    "fake-cli": {
-      "version": "6.0.0",
-      "commands": [
-        "fake"
-      ]
-    },
     "dotnet-reportgenerator-globaltool": {
-      "version": "5.0.4",
+      "version": "5.2.2",
       "commands": [
         "reportgenerator"
       ]
     },
     "dotnet-stryker": {
-      "version": "3.10.0",
+      "version": "4.0.0",
       "commands": [
         "dotnet-stryker"
+      ]
+    },
+    "pkgchk-cli": {
+      "version": "0.2.350",
+      "commands": [
+        "pkgchk"
       ]
     }
   }
