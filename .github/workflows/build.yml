@@ -73,7 +73,7 @@ jobs:
         if: always()
         with:
           name: unit test results
-          path: ${{ github.workspace }}/tests/nomoretrolls.Tests/TestResults/test_results.trx
+          path: ${{ github.workspace }}/tests/nomoretrolls.tests/TestResults/test_results.trx
           reporter: dotnet-trx
           token: ${{ secrets.GITHUB_TOKEN }}
 
