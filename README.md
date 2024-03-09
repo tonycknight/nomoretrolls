@@ -24,14 +24,12 @@ Details on features and their configuration can be found [here](./docs/bot_actio
 
 * To build, run
 
-  ``build.bat``
-
-  or 
-
-  ``dotnet tool restore``
-
-  ``dotnet fake run "build.fsx"``
-
+  ```
+  dotnet tool restore
+  dotnet restore
+  dotnet build
+  ```
+  
 * To run from the command line using environment variables :
 
   ``.\nomoretrolls.exe start``
