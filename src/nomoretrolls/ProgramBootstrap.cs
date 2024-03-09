@@ -59,8 +59,8 @@ namespace nomoretrolls
 
             return new[]
                 {
-                    attrs.GetAttributeValue<AssemblyProductAttribute>(a => a.Product),
-                    attrs.GetAttributeValue<AssemblyDescriptionAttribute>(a => a.Description),
+                    attrs.GetAttributeValue<AssemblyProductAttribute, string>(a => a.Product),
+                    attrs.GetAttributeValue<AssemblyDescriptionAttribute, string>(a => a.Description),
             };
         }
 
@@ -68,7 +68,7 @@ namespace nomoretrolls
         {
             var attrs = typeof(ProgramBootstrap).Assembly.GetCustomAttributes();
 
-            yield return $"{attrs.GetAttributeValue<AssemblyInformationalVersionAttribute>(a => a.InformationalVersion).Format("Version {0} beta")}";
+            yield return $"{attrs.GetAttributeValue<AssemblyInformationalVersionAttribute, string>(a => a.InformationalVersion).Format("Version {0} beta")}";
         }
 
         public static IEnumerable<string> GetCopyrightDescriptions()
@@ -77,7 +77,7 @@ namespace nomoretrolls
 
             return new[]
                 {
-                    attrs.GetAttributeValue<AssemblyCopyrightAttribute>(a => a.Copyright),
+                    attrs.GetAttributeValue<AssemblyCopyrightAttribute, string>(a => a.Copyright),
                     "You can find the repository at https://github.com/tonycknight/nomoretrolls",
                 };
         }

@@ -31,7 +31,7 @@ namespace nomoretrolls.tests.Io
         [InlineData(null)]
         [InlineData("")]
         [InlineData(" ")]
-        public void GetValidateConfig_NonNullMongoDb_BadConnection_ThrowsException(string cn)
+        public void GetValidateConfig_NonNullMongoDb_BadConnection_ThrowsException(string? cn)
         {
             var c = new AppConfiguration()
             {
@@ -54,7 +54,7 @@ namespace nomoretrolls.tests.Io
         [InlineData(null)]
         [InlineData("")]
         [InlineData(" ")]
-        public void GetValidateConfig_NonNullMongoDb_BadDatabaseName_ThrowsException(string value)
+        public void GetValidateConfig_NonNullMongoDb_BadDatabaseName_ThrowsException(string? value)
         {
             var c = new AppConfiguration()
             {
@@ -78,8 +78,9 @@ namespace nomoretrolls.tests.Io
         [InlineData(null)]
         [InlineData("")]
         [InlineData(" ")]
-        public void GetValidateConfig_NonNullMongoDb_BadUserStatsCollectionName_ThrowsException(string value)
+        public void GetValidateConfig_NonNullMongoDb_BadUserStatsCollectionName_ThrowsException(string? value)
         {
+#pragma warning disable CS8601 // Possible null reference assignment.
             var c = new AppConfiguration()
             {
                 MongoDb = new MongoDbConfiguration()
@@ -88,6 +89,7 @@ namespace nomoretrolls.tests.Io
                     UserStatsCollectionName = value,
                 }
             };
+#pragma warning restore CS8601 // Possible null reference assignment.
 
             var cp = Substitute.For<IConfigurationProvider>();
             cp.GetAppConfiguration().Returns(c);
@@ -102,8 +104,9 @@ namespace nomoretrolls.tests.Io
         [InlineData(null)]
         [InlineData("")]
         [InlineData(" ")]
-        public void GetValidateConfig_NonNullMongoDb_BadUserBlacklistCollectionName_ThrowsException(string value)
+        public void GetValidateConfig_NonNullMongoDb_BadUserBlacklistCollectionName_ThrowsException(string? value)
         {
+#pragma warning disable CS8601 // Possible null reference assignment.
             var c = new AppConfiguration()
             {
                 MongoDb = new MongoDbConfiguration()
@@ -112,6 +115,7 @@ namespace nomoretrolls.tests.Io
                     UserBlacklistCollectionName = value,
                 }
             };
+#pragma warning restore CS8601 // Possible null reference assignment.
 
             var cp = Substitute.For<IConfigurationProvider>();
             cp.GetAppConfiguration().Returns(c);

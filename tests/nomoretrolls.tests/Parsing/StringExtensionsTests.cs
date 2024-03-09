@@ -72,7 +72,7 @@ namespace nomoretrolls.tests.Parsing
         [InlineData("#", null, null)]
         [InlineData("##", null, null)]
         [InlineData(" # ", null, null)]
-        public void DeconstructDiscordName_NameSplit(string value, string expectedName, string expectedDiscriminator)
+        public void DeconstructDiscordName_NameSplit(string value, string? expectedName, string? expectedDiscriminator)
         {
             var (un, d) = value.DeconstructDiscordName();
 
