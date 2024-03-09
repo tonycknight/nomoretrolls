@@ -8,7 +8,7 @@ on:
 
 env:
   build-version-number: 0.2.${{ github.run_number }}  
-  docker-image-name: ghcr.io/tonycknight/nomoretrolls:v0.1.${{ github.run_number }}
+  docker-image-name: ghcr.io/tonycknight/nomoretrolls:v0.2.${{ github.run_number }}
   
 jobs:
   sca:
