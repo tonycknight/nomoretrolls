@@ -23,7 +23,7 @@ RUN dotnet build "nomoretrolls.csproj" -c Release -o /app/build /p:AssemblyInfor
 
 FROM build AS publish
 ARG BuildVersion
-RUN dotnet publish "nomoretrolls.csproj" -c Release -o /app/publish /p:UseAppHost=false /p:AssemblyInformationalVersion=${BuildVersion} /p:AssemblyFileVersion=${BuildVersion} /p:Version=${BuildVersion} --os linux --arch x64 --self-contained
+RUN dotnet publish "nomoretrolls.csproj" -c Release -o /app/publish /p:AssemblyInformationalVersion=${BuildVersion} /p:AssemblyFileVersion=${BuildVersion} /p:Version=${BuildVersion} --os linux --arch x64 --self-contained
 
 FROM base AS final
 WORKDIR /app
