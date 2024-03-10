@@ -19,12 +19,6 @@
       "commands": [
         "dotnet-stryker"
       ]
-    },
-    "pkgchk-cli": {
-      "version": "0.2.350",
-      "commands": [
-        "pkgchk"
-      ]
     }
   }
 }
