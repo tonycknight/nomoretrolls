@@ -10,6 +10,7 @@
         IMessageWorkflowBuilder IfKnockingWorkflowEnabled();
         IMessageWorkflowBuilder IfBlacklistWorkflowEnabled();
         IMessageWorkflowBuilder IfEmoteAnnotationWorkflowEnabled();
+        IMessageWorkflowBuilder IfCallingEveryoneWorkflowEnabled();
         IMessageWorkflowBuilder IfNotDmChannel();
 
         IMessageWorkflowBuilder If(Func<IMessageWorkflowBuilder, IMessageWorkflowBuilder> part, Func<IMessageWorkflowBuilder, IMessageWorkflowBuilder> onSuccess, Func<IMessageWorkflowBuilder, IMessageWorkflowBuilder> onFailure);

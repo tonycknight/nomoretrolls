@@ -7,6 +7,7 @@
         public const string EmoteAnnotationWorkflow = "emotes";
         public const string AltCapsWorkflow = "altcaps";
         public const string KnockingWorkflow = "knocking";
+        public const string EveryoneWorkflow = "everyone";
 
         public Task<IList<WorkflowConfiguration>> GetWorkflowConfigsAsync();
 

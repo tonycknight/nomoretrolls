@@ -34,7 +34,8 @@ namespace nomoretrolls.Config
                 IWorkflowConfigurationRepository.BlacklistWorkflow,
                 IWorkflowConfigurationRepository.EmoteAnnotationWorkflow,
                 IWorkflowConfigurationRepository.AltCapsWorkflow,
-                IWorkflowConfigurationRepository.KnockingWorkflow
+                IWorkflowConfigurationRepository.KnockingWorkflow,
+                IWorkflowConfigurationRepository.EveryoneWorkflow
             };
 
             foreach (var n in names)

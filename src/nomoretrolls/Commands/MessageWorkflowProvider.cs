@@ -167,6 +167,7 @@ namespace nomoretrolls.Commands
             => _wfFactory.CreateBuilder()
             .Receiver(new MessageReceiver())
             .IfNotDmChannel()
+            .IfCallingEveryoneWorkflowEnabled()
             .CallingEveryone()
             .ApplyCallingEveryoneReply()
             .SendUserReplyMessage()
