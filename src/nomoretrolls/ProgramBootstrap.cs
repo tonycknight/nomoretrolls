@@ -34,6 +34,7 @@ namespace nomoretrolls
                 .AddSingleton<Blacklists.IBlacklistProvider>((IServiceProvider sp) => new Blacklists.CachedBlacklistProvider(sp.GetRequiredService<IMemoryCache>(),
                                                                                                                              sp.GetRequiredService<Blacklists.MongoDbBlacklistProvider>()))
 
+                .AddSingleton<Replies.IReplyProvider, Replies.MongoDbReplyProvider>()
                 .AddSingleton<MongoDbEmoteConfigProvider>()
                 .AddSingleton<IEmoteConfigProvider>((IServiceProvider sp) => new CachedEmoteConfigProvider(sp.GetRequiredService<IMemoryCache>(),
                                                                                                            sp.GetRequiredService<MongoDbEmoteConfigProvider>()))

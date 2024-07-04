@@ -5,9 +5,9 @@ using nomoretrolls.Emotes;
 using nomoretrolls.Io;
 using nomoretrolls.Telemetry;
 
-
 namespace nomoretrolls.Replies
 {
+    [ExcludeFromCodeCoverage]
     internal class MongoDbReplyProvider : IReplyProvider
     {
         private readonly Lazy<IMongoCollection<UserReplyEntryDto>> _col;
@@ -23,18 +23,14 @@ namespace nomoretrolls.Replies
         {
             var filter = CreateEqualityFilter(userId);
 
-            var col = _col.Value;
-
-            await col.DeleteOneAsync(filter);
+            await _col.Value.DeleteOneAsync(filter);
         }
 
         public async Task<IList<UserReplyEntry>> GetUserEntriesAsync()
         {
             var filter = Builders<UserReplyEntryDto>.Filter.Gt(us => us.UserId, 0);
-
-            var col = _col.Value;
-
-            var result = await col.FindAsync(filter);
+                        
+            var result = await _col.Value.FindAsync(filter);
 
             return result.ToList().Select(r => r.FromDto()).ToList();
         }
@@ -48,11 +44,10 @@ namespace nomoretrolls.Replies
             var update = Builders<UserReplyEntryDto>.Update
                 .Set(us => us.UserId, dto.UserId)
                 .Set(us => us.Start, dto.Start)
+                .Set(us => us.Message, dto.Message)
                 .Set(us => us.Expiry, dto.Expiry);
 
-            var col = _col.Value;
-
-            var result = await col.UpdateOneAsync(filter, update, new UpdateOptions() { IsUpsert = true });
+            var result = await _col.Value.UpdateOneAsync(filter, update, new UpdateOptions() { IsUpsert = true });
 
         }
 
@@ -73,7 +68,7 @@ namespace nomoretrolls.Replies
                 var opts = new CreateCollectionOptions();
                 db.CreateCollection(config.UserReplyCollectionName, opts);
             }
-            col = db.GetCollection<UserReplyEntryDto>(config.UserBlacklistCollectionName);
+            col = db.GetCollection<UserReplyEntryDto>(config.UserReplyCollectionName);
 
             col.RecreateIndex("unique", (n, c) => CreateUniqueIndex(n, col));
             col.RecreateIndex("ttl", (n, c) => CreateTtlIndex(n, col));
