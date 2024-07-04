@@ -1,4 +1,5 @@
-﻿using Tk.Extensions.Guards;
+﻿using nomoretrolls.Replies;
+using Tk.Extensions.Guards;
 
 namespace nomoretrolls.Emotes
 {
@@ -34,6 +35,24 @@ namespace nomoretrolls.Emotes
                 Start = value.Start,
                 Expiry = value.Expiry,
                 EmoteListName = value.EmoteListName,
+            };
+
+        public static UserReplyEntry FromDto(this UserReplyEntryDto value)
+            => new UserReplyEntry()
+            {
+                UserId = value.UserId,
+                Message = value.Message,
+                Start = value.Start,
+                Expiry = value.Expiry
+            };
+
+        public static UserReplyEntryDto ToDto(this UserReplyEntry value)
+            => new UserReplyEntryDto()
+            {
+                UserId = value.UserId,
+                Message = value.Message,
+                Start = value.Start,
+                Expiry = value.Expiry
             };
 
         public static IList<EmoteInfo> ToEmotes(this IEnumerable<string> emotes)
