@@ -88,6 +88,7 @@ namespace nomoretrolls.Commands
                             wfProvider.CreateAltCapsWorkflow(),
                             wfProvider.CreateAltCapsPersonalReplyWorkflow(),
                             wfProvider.CreateUserReplyWorkflow(),
+                            wfProvider.CreateEveryoneCalloutWorkflow(),
                             wfProvider.CreateStatCountWorkflow()};
         }
 

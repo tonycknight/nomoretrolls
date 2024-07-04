@@ -55,6 +55,9 @@ namespace nomoretrolls.Workflows
         public IMessageWorkflowBuilder IfEmoteAnnotationWorkflowEnabled()
             => this.Part(new Parts.WorkflowConfigEnabled(_serviceProvider.GetService<Config.IWorkflowConfigurationRepository>(), Config.IWorkflowConfigurationRepository.EmoteAnnotationWorkflow));
 
+        public IMessageWorkflowBuilder IfCallingEveryoneWorkflowEnabled()
+            => this.Part(new Parts.WorkflowConfigEnabled(_serviceProvider.GetService<Config.IWorkflowConfigurationRepository>(), Config.IWorkflowConfigurationRepository.EveryoneWorkflow));
+
         public IMessageWorkflowBuilder IfNotDmChannel()
             => this.Part(new Parts.NonDmChannelFilter());
 
@@ -108,6 +111,9 @@ namespace nomoretrolls.Workflows
         public IMessageWorkflowBuilder UserHasReplies()
             => this.Part(new Parts.UserReplyFilter(_serviceProvider.GetService<Replies.IReplyProvider>()));
 
+        public IMessageWorkflowBuilder CallingEveryone()
+            => this.Part(new Parts.CallingEveryoneFilter());
+
         public IMessageWorkflowBuilder SendDirectUserMessage()
             => this.Part(new Parts.SendDirectMessage(_serviceProvider.GetService<ITelemetry>()));
 
@@ -122,6 +128,9 @@ namespace nomoretrolls.Workflows
 
         public IMessageWorkflowBuilder ApplyAltCapsReply()
             => this.Part(new Parts.ApplyAltCapsReplyText(_serviceProvider.GetService<IAltCapsReplyTextGenerator>()));
+
+        public IMessageWorkflowBuilder ApplyCallingEveryoneReply()
+            => this.Part(new Parts.ApplyCallingEveryoneReplyText(new CallingEveryoneReplyTextGenerator()));
 
         public IMessageWorkflowBuilder ApplyReply()
             => this.Part(new Parts.SendUserReplyMessage(_serviceProvider.GetService<ITelemetry>()));
