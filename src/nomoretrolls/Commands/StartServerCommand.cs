@@ -87,6 +87,7 @@ namespace nomoretrolls.Commands
                             wfProvider.CreateAutoEmoteWorkflow(),
                             wfProvider.CreateAltCapsWorkflow(),
                             wfProvider.CreateAltCapsPersonalReplyWorkflow(),
+                            wfProvider.CreateUserReplyWorkflow(),
                             wfProvider.CreateStatCountWorkflow()};
         }
 

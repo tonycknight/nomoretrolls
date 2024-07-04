@@ -73,24 +73,6 @@ namespace nomoretrolls.Commands.DiscordCommands
             }
         }
 
-        [Command("about", RunMode = RunMode.Async)]
-        [Description("About this bot.")]
-        public Task ShowAboutAsync()
-        {
-            try
-            {
-                var line = ProgramBootstrap.GetProductDescription()
-                    .Concat(ProgramBootstrap.GetVersionDescription())
-                    .Join(Environment.NewLine).ToCode().ToBold();
-
-                return SendMessageAsync(line);
-            }
-            catch (Exception ex)
-            {
-                return SendMessageAsync(ex.Message);
-            }
-        }
-
         private Task SendMessageAsync(string message)
         {
             try

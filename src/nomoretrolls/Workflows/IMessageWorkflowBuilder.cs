@@ -19,6 +19,7 @@
         IMessageWorkflowBuilder MessageIsAltCaps();
         IMessageWorkflowBuilder UserIsBlacklisted();
         IMessageWorkflowBuilder UserIsEmoteAnnotated();
+        IMessageWorkflowBuilder UserHasReplies();
         IMessageWorkflowBuilder SendReactionEmote();
         IMessageWorkflowBuilder SendUserReplyMessage();
         IMessageWorkflowBuilder SendDirectUserMessage();

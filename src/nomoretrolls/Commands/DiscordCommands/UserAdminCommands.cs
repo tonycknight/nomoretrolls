@@ -5,6 +5,7 @@ using nomoretrolls.Blacklists;
 using nomoretrolls.Emotes;
 using nomoretrolls.Formatting;
 using nomoretrolls.Knocking;
+using nomoretrolls.Replies;
 using nomoretrolls.Telemetry;
 using Tk.Extensions;
 
@@ -19,16 +20,19 @@ namespace nomoretrolls.Commands.DiscordCommands
         private readonly IKnockingScheduleRepository _knockingProvider;
         private readonly IEmoteConfigProvider _emoteConfig;
         private readonly IEmoteRepository _emoteRepo;
+        private readonly IReplyProvider _replyProvider;
+
         private const string DateTimeFormat = "dd MMM yyyy HH:mm:ss UTC";
 
         public UserAdminCommands(ITelemetry telemetry, IBlacklistProvider blacklistProvider, IKnockingScheduleRepository knockingProvider,
-            IEmoteConfigProvider emoteConfig, IEmoteRepository emoteRepo)
+            IEmoteConfigProvider emoteConfig, IEmoteRepository emoteRepo, IReplyProvider replyProvider)
         {
             _telemetry = telemetry;
             _blacklistProvider = blacklistProvider;
             _knockingProvider = knockingProvider;
             _emoteConfig = emoteConfig;
             _emoteRepo = emoteRepo;
+            _replyProvider = replyProvider;
         }
 
         [Command("deleteblacklist", RunMode = RunMode.Async)]
@@ -217,10 +221,12 @@ namespace nomoretrolls.Commands.DiscordCommands
                 var blacklistEntries = (await _blacklistProvider.GetUserEntriesAsync()).ToDictionary(e => e.UserId);
                 var knockEntries = (await _knockingProvider.GetUserEntriesAsync()).ToDictionary(e => e.UserId);
                 var emoteEntries = (await _emoteConfig.GetUserEmoteAnnotationEntriesAsync()).ToDictionary(e => e.UserId);
+                var replyEntries = (await _replyProvider.GetUserEntriesAsync()).ToDictionary(e => e.UserId);
 
                 var users1 = blacklistEntries.Keys
                     .Concat(knockEntries.Keys)
                     .Concat(emoteEntries.Keys)
+                    .Concat(replyEntries.Keys)
                     .Distinct()
                     .Select(userId => Context.GetUserAsync(userId))
                     .ToArray();
@@ -237,8 +243,9 @@ namespace nomoretrolls.Commands.DiscordCommands
                     var ble = blacklistEntries.GetValueOrDefault(u.user.Id);
                     var ke = knockEntries.GetValueOrDefault(u.user.Id);
                     var em = emoteEntries.GetValueOrDefault(u.user.Id);
+                    var rep = replyEntries.GetValueOrDefault(u.user.Id);
 
-                    return new { userName = u.userName, blacklist = ble, knock = ke, emote = em };
+                    return new { userName = u.userName, blacklist = ble, knock = ke, emote = em, reply = rep };
                 });
 
                 var lines = userEntries.OrderBy(a => a.userName)
@@ -246,6 +253,7 @@ namespace nomoretrolls.Commands.DiscordCommands
                                                                  a.blacklist != null ? $"Blacklisted. Expires {a.blacklist.Expiry.ToString(DateTimeFormat).ToCode()}"  : null,
                                                                  a.emote != null ? $"Emotes with {a.emote.EmoteListName.ToCode()}. Expires {a.emote.Expiry.ToString(DateTimeFormat).ToCode()}" : null,
                                                                  a.knock != null ? $"Knocking - with frequency {a.knock.Frequency.ToCode()} - {CronExpressionDescriptor.ExpressionDescriptor.GetDescription(a.knock.Frequency).ToCode()}. Expires {a.knock.Expiry.ToString(DateTimeFormat).ToCode()} " : null,
+                                                                 a.reply != null ? $"Reply with {a.reply.Message.ToCode()}." : null,
                                                                })
                                         .Where(l => l != null)
                                         .Join(Environment.NewLine);
@@ -290,6 +298,64 @@ namespace nomoretrolls.Commands.DiscordCommands
             }
         }
 
+
+        [Command("reply", RunMode = RunMode.Async)]
+        [Description("Set a reply message for a user.")]
+        public async Task CustomReplyAsync([Summary("The user name")] string userName, [Remainder] string message)
+        {
+            try
+            {
+                userName = userName.Trim('"');
+                var user = await Context.GetUserAsync(userName);
+                if (user == null)
+                {
+                    await SendMessageAsync("The user was not found on any attached servers.".ToCode());
+                }
+                else
+                {
+                    var entry = new UserReplyEntry()
+                    {
+                        UserId = user.Id,
+                        Message = message,
+                        Start = DateTime.UtcNow,
+                        Expiry = DateTime.UtcNow.AddHours(1),
+                    };
+                    await _replyProvider.SetUserEntryAsync(entry);
+
+
+                    SendMessageAsync($"Done. User: {user.Username} Message: {message}");
+                }
+            }
+            catch (Exception ex)
+            {
+                await SendMessageAsync(ex.Message.ToCode());
+            }
+        }
+
+        [Command("deletereply", RunMode = RunMode.Async)]
+        [Description("Delete a user's set reply message.")]
+        public async Task RemoveReplyAsync([Summary("The user name")] string userName)
+        {
+            try
+            {
+                userName = userName.Trim('"');
+                var user = await Context.GetUserAsync(userName);
+                if (user == null)
+                {
+                    await SendMessageAsync("The user was not found on any attached servers.".ToCode());
+                }
+                else
+                {
+                    await _replyProvider.DeleteUserEntryAsync(user.Id);
+
+                    SendMessageAsync($"Done.");
+                }
+            }
+            catch (Exception ex)
+            {
+                await SendMessageAsync(ex.Message.ToCode());
+            }
+        }
 
         private Task SendMessageAsync(string message)
         {

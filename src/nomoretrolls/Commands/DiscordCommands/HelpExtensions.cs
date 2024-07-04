@@ -49,10 +49,6 @@ namespace nomoretrolls.Commands.DiscordCommands
                     ? $"``{cmd}``: {helpInfo.Description.Description}"
                     : $"``{cmd}``";
 
-                if (aliases.Any())
-                {
-                    yield return $"Command aliases: {joinAliases(aliases)}";
-                }
 
                 if (helpInfo.Form != null)
                 {

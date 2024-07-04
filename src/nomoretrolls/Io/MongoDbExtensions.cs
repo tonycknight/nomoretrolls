@@ -46,6 +46,7 @@ namespace nomoretrolls.Io
             config.MongoDb?.UserStatsCollectionName.InvalidOpArg(string.IsNullOrWhiteSpace, "Missing user stats collection name.");
             config.MongoDb?.UserBlacklistCollectionName.InvalidOpArg(string.IsNullOrWhiteSpace, "Missing user blacklist collection name.");
             config.MongoDb?.UserKnockingScheduleCollectionName.InvalidOpArg(string.IsNullOrWhiteSpace, "Missing user knocking schedule collection name.");
+            config.MongoDb?.UserReplyCollectionName.InvalidOpArg(string.IsNullOrWhiteSpace, "Missing user reply collection name.");
 
             return config;
         }
