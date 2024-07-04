@@ -72,7 +72,7 @@ namespace nomoretrolls.Commands.DiscordCommands
                 await SendMessageAsync(ex.Message);
             }
         }
-        
+
         private Task SendMessageAsync(string message)
         {
             try
