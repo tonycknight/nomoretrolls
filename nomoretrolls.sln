@@ -16,11 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{F4D6324A-E
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{9BCCB933-30FC-455B-AD78-5ED71577BE00}"
 	ProjectSection(SolutionItems) = preProject
-		build.bat = build.bat
-		build.fsx = build.fsx
-		build.ps1 = build.ps1
 		.github\workflows\build.yml = .github\workflows\build.yml
-		.github\workflows\clean-builds.yaml = .github\workflows\clean-builds.yaml
 		.github\workflows\codeql-analysis.yml = .github\workflows\codeql-analysis.yml
 		docker-compose.debug.yml = docker-compose.debug.yml
 		docker-compose.yml = docker-compose.yml

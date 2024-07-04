@@ -105,6 +105,9 @@ namespace nomoretrolls.Workflows
         public IMessageWorkflowBuilder UserIsEmoteAnnotated()
             => this.Part(new Parts.UserEmoteAnnotationFilter(_serviceProvider.GetService<IEmoteConfigProvider>()));
 
+        public IMessageWorkflowBuilder UserHasReplies()
+            => this.Part(new Parts.UserReplyFilter(_serviceProvider.GetService<Replies.IReplyProvider>()));
+
         public IMessageWorkflowBuilder SendDirectUserMessage()
             => this.Part(new Parts.SendDirectMessage(_serviceProvider.GetService<ITelemetry>()));
 
@@ -119,6 +122,9 @@ namespace nomoretrolls.Workflows
 
         public IMessageWorkflowBuilder ApplyAltCapsReply()
             => this.Part(new Parts.ApplyAltCapsReplyText(_serviceProvider.GetService<IAltCapsReplyTextGenerator>()));
+
+        public IMessageWorkflowBuilder ApplyReply()
+            => this.Part(new Parts.SendUserReplyMessage(_serviceProvider.GetService<ITelemetry>()));
 
         public IMessageWorkflowBuilder ApplyReactionEmote(string emotesName)
             => this.Part(new Parts.ApplyReactionEmote(_serviceProvider.GetService<IEmoteGenerator>(), emotesName));

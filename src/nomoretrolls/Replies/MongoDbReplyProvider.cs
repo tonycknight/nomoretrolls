@@ -29,7 +29,7 @@ namespace nomoretrolls.Replies
         public async Task<IList<UserReplyEntry>> GetUserEntriesAsync()
         {
             var filter = Builders<UserReplyEntryDto>.Filter.Gt(us => us.UserId, 0);
-                        
+
             var result = await _col.Value.FindAsync(filter);
 
             return result.ToList().Select(r => r.FromDto()).ToList();

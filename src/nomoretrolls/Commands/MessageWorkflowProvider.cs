@@ -155,5 +155,13 @@ namespace nomoretrolls.Commands
                     .SendReactionEmote()
                     .Build("Emote Annotation");
 
+        public IMessageWorkflow CreateUserReplyWorkflow()
+            => _wfFactory.CreateBuilder()
+            .Receiver(new MessageReceiver())
+            .IfNotDmChannel()
+            .UserHasReplies()
+            .SendUserReplyMessage()
+            .Build("User Reply");
+
     }
 }
