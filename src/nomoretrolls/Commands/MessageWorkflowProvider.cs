@@ -163,5 +163,13 @@ namespace nomoretrolls.Commands
             .SendUserReplyMessage()
             .Build("User Reply");
 
+        public IMessageWorkflow CreateEveryoneCalloutWorkflow()
+            => _wfFactory.CreateBuilder()
+            .Receiver(new MessageReceiver())
+            .IfNotDmChannel()
+            .CallingEveryone()
+            .ApplyCallingEveryoneReply()
+            .SendUserReplyMessage()
+            .Build("Everyone callout");
     }
 }

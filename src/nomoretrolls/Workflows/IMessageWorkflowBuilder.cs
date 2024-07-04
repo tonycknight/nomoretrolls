@@ -20,6 +20,7 @@
         IMessageWorkflowBuilder UserIsBlacklisted();
         IMessageWorkflowBuilder UserIsEmoteAnnotated();
         IMessageWorkflowBuilder UserHasReplies();
+        IMessageWorkflowBuilder CallingEveryone();
         IMessageWorkflowBuilder SendReactionEmote();
         IMessageWorkflowBuilder SendUserReplyMessage();
         IMessageWorkflowBuilder SendDirectUserMessage();
@@ -27,6 +28,7 @@
         IMessageWorkflowBuilder ApplyBlacklistReply();
         IMessageWorkflowBuilder ApplyShoutingReply();
         IMessageWorkflowBuilder ApplyAltCapsReply();
+        IMessageWorkflowBuilder ApplyCallingEveryoneReply();
         IMessageWorkflowBuilder ApplyReactionEmote(string emotesName);
         IMessageWorkflowBuilder ApplyDirectMessage(string message);
         IMessageWorkflowBuilder BumpUserMessage();
