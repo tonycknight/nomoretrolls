@@ -35,6 +35,14 @@ namespace nomoretrolls.Replies
             return result.ToList().Select(r => r.FromDto()).ToList();
         }
 
+        public async Task<UserReplyEntry> GetUserEntriesAsync(ulong userId)
+        {
+            var filter = CreateEqualityFilter(userId);
+            var result = (await _col.Value.FindAsync(filter)).FirstOrDefault();
+
+            return result?.FromDto();
+        }
+
         public async Task SetUserEntryAsync(UserReplyEntry entry)
         {
             var dto = entry.ToDto();
