@@ -54,7 +54,7 @@ namespace nomoretrolls.Workflows
 
         public IMessageWorkflowBuilder IfEmoteAnnotationWorkflowEnabled()
             => this.Part(new Parts.WorkflowConfigEnabled(_serviceProvider.GetService<Config.IWorkflowConfigurationRepository>(), Config.IWorkflowConfigurationRepository.EmoteAnnotationWorkflow));
-        
+
         public IMessageWorkflowBuilder IfCallingEveryoneWorkflowEnabled()
             => this.Part(new Parts.WorkflowConfigEnabled(_serviceProvider.GetService<Config.IWorkflowConfigurationRepository>(), Config.IWorkflowConfigurationRepository.EveryoneWorkflow));
 
