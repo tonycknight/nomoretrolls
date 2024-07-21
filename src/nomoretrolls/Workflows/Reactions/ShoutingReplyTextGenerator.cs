@@ -12,10 +12,11 @@
         {
             _formats = new[]
             {
-                "{0} Stop shouting please.",
-                "{0} Please - STOP SHOUTING",
                 "Heard you the first time {0}.",
-                "Yell if you like but if you keep it up, we'll ban you {0}."
+                "The entire server heard you {0}.",
+                "Calm down {0}, calm down", 
+                "Have you gone deaf {0}?",
+                "Yell if you like {0} but if you keep it up, we'll ban you."
             };
         }
 
