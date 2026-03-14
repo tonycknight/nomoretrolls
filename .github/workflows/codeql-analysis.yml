@@ -1,5 +1,13 @@
 name: "CodeQL"
 
+permissions:
+  actions: read
+  pull-requests: write
+  security-events: write
+  contents: write
+  checks: write
+  issues: write
+
 on:
   workflow_call:
     inputs:
