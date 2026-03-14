@@ -153,6 +153,7 @@ jobs:
           password: ${{ secrets.GHCR }}
 
       - name: Push docker image
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && github.actor != 'dependabot[bot]' }}
         run: docker push ${{ env.docker-image-name }}
 
   create-gh-release:
