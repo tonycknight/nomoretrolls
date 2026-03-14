@@ -18,7 +18,6 @@ RUN dotnet restore "src/nomoretrolls/nomoretrolls.csproj"
 COPY . .
 WORKDIR "/src/src/nomoretrolls"
 RUN dotnet tool restore
-RUN dotnet paket restore
 RUN dotnet build "nomoretrolls.csproj" -c Release -o /app/build /p:AssemblyInformationalVersion=${BuildVersion} /p:AssemblyFileVersion=${BuildVersion}
 
 FROM build AS publish
